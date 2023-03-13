@@ -15,6 +15,7 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.idCheckButton.setOnClickListener {
             // TODO: 아이디 중복 검사
+            // TODO: 서버와 연동
         }
 
         binding.signUpButton.setOnClickListener {
