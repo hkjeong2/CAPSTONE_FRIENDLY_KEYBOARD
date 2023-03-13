@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -59,6 +60,15 @@
         android:layout_marginTop="70dp"
         android:layout_marginRight="40dp"
         android:hint="아이디"
+        android:textColorHint="@color/black"
+        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="10sp"
+        app:boxCornerRadiusBottomStart="10sp"
+        app:boxCornerRadiusTopEnd="10sp"
+        app:boxCornerRadiusTopStart="10sp"
+        app:boxStrokeColor="@color/teal_700"
+        app:hintTextColor="@color/teal_700"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/intro_subContent"
@@ -80,6 +90,15 @@
         android:layout_marginTop="30dp"
         android:layout_marginRight="40dp"
         android:hint="비밀번호"
+        android:textColorHint="@color/black"
+        app:boxBackgroundColor="@color/white"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="10sp"
+        app:boxCornerRadiusBottomStart="10sp"
+        app:boxCornerRadiusTopEnd="10sp"
+        app:boxCornerRadiusTopStart="10sp"
+        app:boxStrokeColor="@color/teal_700"
+        app:hintTextColor="@color/teal_700"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_id_container"
@@ -96,26 +115,28 @@
         android:id="@+id/checkbox_saveID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:checked="false"
         android:text="ID 저장"
+        android:buttonTint="@color/white"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="@id/edit_pwd_container"
-        app:layout_constraintTop_toBottomOf="@id/edit_pwd_container" />
+        app:layout_constraintTop_toBottomOf="@id/edit_pwd_container"/>
 
     <CheckBox
         android:id="@+id/checkbox_auto_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
         android:checked="false"
         android:text="자동로그인"
+        android:buttonTint="@color/white"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toEndOf="@id/checkbox_saveID"
-        app:layout_constraintTop_toTopOf="@id/checkbox_saveID" />
+        app:layout_constraintTop_toTopOf="@id/checkbox_saveID"/>
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="40dp"
@@ -131,7 +152,7 @@
     <Button
         android:id="@+id/sign_up_button"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="40dp"
