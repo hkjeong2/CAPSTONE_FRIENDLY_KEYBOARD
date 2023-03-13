@@ -13,7 +13,7 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.signUpButton2.setOnClickListener {
+        binding.signUpButton.setOnClickListener {
             // TODO: 입력한 값이 정확하면 RESULT_OK, 아니면 RESULT_CANCELED
             val intent = Intent(this, LoginActivity::class.java).apply {
                 putExtra("id", "<생성된 아이디>")
