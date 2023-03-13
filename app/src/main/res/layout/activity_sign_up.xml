@@ -31,8 +31,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginRight="20dp"
         android:hint="아이디를 입력해주세요"
-        android:textColorHint="@color/teal_700"
-        app:boxBackgroundColor="#80FFFFFF"
+        android:textColorHint="@color/black"
+        app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="10sp"
         app:boxCornerRadiusBottomStart="10sp"
@@ -48,7 +48,7 @@
             android:id="@+id/edit_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/teal_700" />
+            android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,8 +61,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginRight="40dp"
         android:hint="비밀번호를 입력해주세요"
-        android:textColorHint="@color/teal_700"
-        app:boxBackgroundColor="#80FFFFFF"
+        android:textColorHint="@color/black"
+        app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="10sp"
         app:boxCornerRadiusBottomStart="10sp"
         app:boxCornerRadiusTopEnd="10sp"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:textColor="@color/teal_700" />
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -90,8 +90,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginRight="40dp"
         android:hint="비밀번호를 한 번 더 입력해주세요"
-        android:textColorHint="@color/teal_700"
-        app:boxBackgroundColor="#80FFFFFF"
+        android:textColorHint="@color/black"
+        app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="10sp"
         app:boxCornerRadiusBottomStart="10sp"
         app:boxCornerRadiusTopEnd="10sp"
@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:textColor="@color/teal_700" />
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
 

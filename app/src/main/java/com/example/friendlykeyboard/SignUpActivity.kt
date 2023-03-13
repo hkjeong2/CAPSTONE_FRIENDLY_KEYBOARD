@@ -13,15 +13,25 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.idCheckButton.setOnClickListener {
+            // TODO: 아이디 중복 검사
+        }
+
         binding.signUpButton.setOnClickListener {
+            // TODO: 아이디 중복 검사, 비밀번호 2차 검사가 잘되었는지 확인해야 함.
+            
             val id = binding.editId.text.toString()
             val password = binding.editPwd.text.toString()
-            // TODO: 입력한 값이 정확하면 RESULT_OK, 아니면 RESULT_CANCELED
             val intent = Intent(this, LoginActivity::class.java).apply {
                 putExtra("id", id)
                 putExtra("password", password)
             }
             setResult(RESULT_OK, intent)
+            finish()
+        }
+
+        binding.signInTextView.setOnClickListener {
+            setResult(RESULT_CANCELED)
             finish()
         }
     }
