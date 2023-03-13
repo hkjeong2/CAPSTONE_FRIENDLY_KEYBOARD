@@ -14,10 +14,12 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.signUpButton.setOnClickListener {
+            val id = binding.editId.text.toString()
+            val password = binding.editPwd.text.toString()
             // TODO: 입력한 값이 정확하면 RESULT_OK, 아니면 RESULT_CANCELED
             val intent = Intent(this, LoginActivity::class.java).apply {
-                putExtra("id", "<생성된 아이디>")
-                putExtra("password", "<생성된 비밀번호>")
+                putExtra("id", id)
+                putExtra("password", password)
             }
             setResult(RESULT_OK, intent)
             finish()

@@ -133,7 +133,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="회원가입"
-            android:textColor="@color/teal_700" />
+            android:textColor="@color/black" />
 
     </androidx.cardview.widget.CardView>
 
@@ -157,7 +157,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="중복 확인"
-            android:textColor="@color/teal_700" />
+            android:textColor="@color/black" />
 
     </androidx.cardview.widget.CardView>
 
