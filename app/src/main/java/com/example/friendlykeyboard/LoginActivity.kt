@@ -16,6 +16,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        autoFillInfo()
+        initClickListener()
+    }
+
+    private fun autoFillInfo(){
         resultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) {
@@ -30,9 +35,13 @@ class LoginActivity : AppCompatActivity() {
                 binding.editPwd.setText("")
             }
         }
+    }
 
+    private fun initClickListener(){
         binding.signUpButton.setOnClickListener {
             resultLauncher.launch(Intent(this, SignUpActivity::class.java))
         }
     }
+
+
 }
