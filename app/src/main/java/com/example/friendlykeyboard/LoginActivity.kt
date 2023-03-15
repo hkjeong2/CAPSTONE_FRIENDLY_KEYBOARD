@@ -1,11 +1,14 @@
 package com.example.friendlykeyboard
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.friendlykeyboard.databinding.ActivityLoginBinding
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
@@ -16,8 +19,34 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setUpPreference()
         autoFillInfo()
         initClickListener()
+    }
+
+    private fun setUpPreference(){
+        //자동로그인 체크돼 있을 시 바로 메인 화면으로 전환
+        val spfAuto = getSharedPreferences("cbAuto", 0)
+        if (spfAuto.getBoolean("check", false)){
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+        //화면 setup 후 ID저장 checkbox 값 확인
+        val spfID = getSharedPreferences("cbID", 0)
+        //checkbox on 일 시 저장된 id 및 pwd로 editbox set up
+        if (spfID.getBoolean("check", false)){
+            binding.checkboxSaveID.isChecked = true
+            val id = spfID.getString("id", null)
+            val pwd = spfID.getString("pwd", null)
+
+            if (id == null || pwd == null)
+                return
+
+            binding.editId.setText(id)
+            binding.editPwd.setText(pwd)
+        }
+
+
     }
 
     private fun autoFillInfo(){
@@ -41,7 +70,72 @@ class LoginActivity : AppCompatActivity() {
         binding.signUpButton.setOnClickListener {
             resultLauncher.launch(Intent(this, SignUpActivity::class.java))
         }
+
+        binding.loginButton.setOnClickListener {
+            //로그인 성공 시 main 화면으로 이동
+            if (isValidLogin()){
+                //ID 저장 checkbox 눌려 있는 상태로 로그인 성공 --> 정보 저장
+                if (binding.checkboxSaveID.isChecked){
+                    editSPF("cbID", true, binding.editId.text.toString(), binding.editPwd.text.toString())
+                }
+                //자동 로그인 checkbox 눌린 상태 로그인 성공 --> 자동 로그인 정보 저장
+                if (binding.checkboxAutoLogin.isChecked){
+                    editSPF("cbAuto", true, "", "")
+                }
+                //본격적으로 main 화면 시작
+                Toast.makeText(this, "로그인에 성공하였습니다", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }
+
+        binding.checkboxSaveID.setOnClickListener {
+            //ID 저장 한 번이라도 해제 시 내용 삭제
+            if (!binding.checkboxSaveID.isChecked){
+                editSPF("cbID", false, "", "")
+            }
+        }
+
+        binding.checkboxAutoLogin.setOnClickListener{
+            //자동로그인 한 번이라도 해제 시 내용 삭제
+            if (!binding.checkboxAutoLogin.isChecked){
+                editSPF("cbAuto", false, "", "")
+            }
+        }
+
+
     }
+
+    private fun editSPF(name : String, check : Boolean, id : String, pwd : String){
+        val spfID = getSharedPreferences(name, 0)
+        val editor = spfID.edit()
+        editor.putBoolean("check", check)
+        editor.putString("id", id)
+        editor.putString("pwd", pwd)
+        editor.apply()
+    }
+
+    private fun isValidLogin() : Boolean{
+        val id = binding.editId.text.toString()
+        val pwd = binding.editPwd.text.toString()
+
+        if (id.isEmpty()){
+            binding.editId.error = "아이디를 입력해주세요"
+            return false
+        }
+        else if (pwd.isEmpty()){
+            binding.editPwd.error = "패스워드를 입력해주세요"
+            return false
+        }
+//        else if (){
+//            //존재하는 아이디 비밀번호가 db에 없을 시 toast message "일치하는 정보가 없습니다"
+//            return false
+//        }
+        else
+            return true
+    }
+
+
 
 
 }
