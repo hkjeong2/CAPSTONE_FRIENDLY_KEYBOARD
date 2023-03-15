@@ -52,8 +52,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
     // Gson 변환기 라이브러리
+    // Gson Converter: JSON 타입의 응답결과를 객체로 매핑(변환)해주는 Converter
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // Scalars 변환기 라이브러리
+    // Scalars Converter: 응답 결과를 String 자체로 받아서 보여주는 Converter
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
 }
