@@ -3,12 +3,16 @@ package com.example.friendlykeyboard
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.friendlykeyboard.databinding.ActivitySignUpBinding
+import com.example.friendlykeyboard.retrofit_util.DataModel
+import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private var idCheck = false
+    private val service = RetrofitClient.getApiService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,15 +67,54 @@ class SignUpActivity : AppCompatActivity() {
         if (id.isEmpty()) {
             binding.editId.error = "아이디를 입력해주세요."
             return false
-        } else {
-            // TODO: 아이디 중복 검사
-            // TODO: 서버와 연동
-            // TODO: 해당 블록을 else if로 수정할 것.
-            // TODO: 해당 블록은 아이디가 중복된 경우
-            binding.editId.error = "중복된 아이디입니다."
         }
 
-        return true
+        // binding.editId.error = "중복된 아이디입니다."
+
+        val result: DataModel?
+        val hashMap = hashMapOf(
+            "id" to id
+        )
+
+        try {
+            val response = service.getAccount(hashMap).execute()
+            if (response.isSuccessful) {
+                result = response.body()
+                Toast.makeText(
+                    applicationContext,
+                    result?.responseText,
+                    Toast.LENGTH_SHORT).show()
+                
+                when (result?.responseText) {
+                    "중복된 아이디입니다." -> {
+                        binding.editId.error = result.responseText
+                        return false
+                    }
+                    "사용가능한 아이디입니다." -> {
+                        return true
+                    }
+                }
+            } else {
+                // 통신이 실패한 경우
+                Toast.makeText(
+                    applicationContext,
+                    "오류가 발생하였습니다.",
+                    Toast.LENGTH_SHORT).show()
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        } catch (e: Exception) {
+            // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유
+            e.printStackTrace()
+            Toast.makeText(
+                applicationContext,
+                "서버와의 통신이 실패하였습니다.",
+                Toast.LENGTH_SHORT).show()
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+
+        return false
     }
 
     // 비밀번호 검사
