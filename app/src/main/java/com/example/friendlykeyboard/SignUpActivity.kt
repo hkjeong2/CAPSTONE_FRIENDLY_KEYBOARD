@@ -1,13 +1,18 @@
 package com.example.friendlykeyboard
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.example.friendlykeyboard.databinding.ActivitySignUpBinding
 import com.example.friendlykeyboard.retrofit_util.DataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
+
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -18,6 +23,11 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT > 9) {
+            val policy = ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+        }
         
         // 아이디 중복 검사 후 수정하면 idCheck 값을 false 로 재설정 
         binding.editId.addTextChangedListener {
@@ -69,8 +79,6 @@ class SignUpActivity : AppCompatActivity() {
             return false
         }
 
-        // binding.editId.error = "중복된 아이디입니다."
-
         val result: DataModel?
         val hashMap = hashMapOf(
             "id" to id
@@ -84,7 +92,7 @@ class SignUpActivity : AppCompatActivity() {
                     applicationContext,
                     result?.responseText,
                     Toast.LENGTH_SHORT).show()
-                
+
                 when (result?.responseText) {
                     "중복된 아이디입니다." -> {
                         binding.editId.error = result.responseText
@@ -95,6 +103,7 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 }
             } else {
+                Log.d("SignUpActivity", response.message())
                 // 통신이 실패한 경우
                 Toast.makeText(
                     applicationContext,
