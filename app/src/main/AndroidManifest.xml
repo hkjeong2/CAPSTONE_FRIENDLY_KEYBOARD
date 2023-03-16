@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -16,6 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendlyKeyboard"
         tools:targetApi="31">
+        <service
+            android:name=".keyboard.KeyBoardService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="FriendlyKeyboard"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/keyboard"/>
+
+            <intent-filter>
+                <action android:name="android.view.InputMethod"/>
+            </intent-filter>
+        </service>
         <activity
             android:name=".SplashActivity"
             android:exported="true">
