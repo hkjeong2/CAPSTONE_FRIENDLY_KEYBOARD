@@ -24,11 +24,6 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (Build.VERSION.SDK_INT > 9) {
-            val policy = ThreadPolicy.Builder().permitAll().build()
-            StrictMode.setThreadPolicy(policy)
-        }
-
         // 실시간으로 비밀번호 일치 여부 확인
         binding.editPwd2.addTextChangedListener {
             if (binding.editPwd.text.toString() != binding.editPwd2.text.toString()) {
