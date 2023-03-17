@@ -127,14 +127,6 @@ class SignUpActivity : AppCompatActivity() {
                 result = response.body()
 
                 when (result?.responseText) {
-                    "Unavailable" -> {
-                        binding.editId.error = "중복된 아이디입니다."
-                        Toast.makeText(
-                            applicationContext,
-                            "중복된 아이디입니다.",
-                            Toast.LENGTH_SHORT).show()
-                        return false
-                    }
                     "Available" -> {
                         Toast.makeText(
                             applicationContext,
@@ -145,11 +137,12 @@ class SignUpActivity : AppCompatActivity() {
                         return true
                     }
                     else -> {
+                        binding.editId.error = "중복된 아이디입니다."
                         Toast.makeText(
                             applicationContext,
-                            "?",
+                            "중복된 아이디입니다.",
                             Toast.LENGTH_SHORT).show()
-                        return true
+                        return false
                     }
                 }
             } else {
