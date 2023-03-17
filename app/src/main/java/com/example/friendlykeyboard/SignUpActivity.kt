@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.example.friendlykeyboard.databinding.ActivitySignUpBinding
+import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.DataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
-
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -28,7 +28,7 @@ class SignUpActivity : AppCompatActivity() {
             val policy = ThreadPolicy.Builder().permitAll().build()
             StrictMode.setThreadPolicy(policy)
         }
-        
+
         // 아이디 중복 검사 후 수정하면 idCheck 값을 false 로 재설정 
         binding.editId.addTextChangedListener {
             idCheck = false
@@ -52,12 +52,56 @@ class SignUpActivity : AppCompatActivity() {
                 if (validatePassword()) {
                     val id = binding.editId.text.toString()
                     val password = binding.editPwd.text.toString()
-                    val intent = Intent(this, LoginActivity::class.java).apply {
-                        putExtra("id", id)
-                        putExtra("password", password)
+
+                    val result: DataModel?
+                    val account = Account(id, password)
+
+                    try {
+                        val response = service.signUp(account).execute()
+                        if (response.isSuccessful) {
+                            result = response.body()
+
+                            when (result?.responseText) {
+                                "Success" -> {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "회원가입이 완료되었습니다.",
+                                        Toast.LENGTH_SHORT).show()
+
+                                    val intent = Intent(this, LoginActivity::class.java).apply {
+                                        putExtra("id", id)
+                                        putExtra("password", password)
+                                    }
+                                    setResult(RESULT_OK, intent)
+                                    finish()
+                                }
+                                else -> {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "회원가입이 실패하였습니다.",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else {
+                            Log.d("SignUpActivity", response.message())
+                            // 통신이 실패한 경우
+                            Toast.makeText(
+                                applicationContext,
+                                "오류가 발생하였습니다.",
+                                Toast.LENGTH_SHORT).show()
+                            setResult(RESULT_CANCELED)
+                            finish()
+                        }
+                    } catch (e: Exception) {
+                        // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유
+                        e.printStackTrace()
+                        Toast.makeText(
+                            applicationContext,
+                            "서버와의 통신이 실패하였습니다.",
+                            Toast.LENGTH_SHORT).show()
+                        setResult(RESULT_CANCELED)
+                        finish()
                     }
-                    setResult(RESULT_OK, intent)
-                    finish()
                 }
             } else {
                 binding.editId.error = "아이디 중복 여부를 확인해주세요."
@@ -80,25 +124,34 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         val result: DataModel?
-        val hashMap = hashMapOf(
-            "id" to id
-        )
+        val account = Account(id, "?")
 
         try {
-            val response = service.getAccount(hashMap).execute()
+            val response = service.getAccount(account).execute()
             if (response.isSuccessful) {
                 result = response.body()
-                Toast.makeText(
-                    applicationContext,
-                    result?.responseText,
-                    Toast.LENGTH_SHORT).show()
 
                 when (result?.responseText) {
-                    "중복된 아이디입니다." -> {
-                        binding.editId.error = result.responseText
+                    "Unavailable" -> {
+                        binding.editId.error = "중복된 아이디입니다."
+                        Toast.makeText(
+                            applicationContext,
+                            "중복된 아이디입니다.",
+                            Toast.LENGTH_SHORT).show()
                         return false
                     }
-                    "사용가능한 아이디입니다." -> {
+                    "Available" -> {
+                        Toast.makeText(
+                            applicationContext,
+                            "사용가능한 아이디입니다.",
+                            Toast.LENGTH_SHORT).show()
+                        return true
+                    }
+                    else -> {
+                        Toast.makeText(
+                            applicationContext,
+                            "?",
+                            Toast.LENGTH_SHORT).show()
                         return true
                     }
                 }
@@ -119,8 +172,8 @@ class SignUpActivity : AppCompatActivity() {
                 applicationContext,
                 "서버와의 통신이 실패하였습니다.",
                 Toast.LENGTH_SHORT).show()
-            setResult(RESULT_CANCELED)
-            finish()
+            //setResult(RESULT_CANCELED)
+            //finish()
         }
 
         return false
