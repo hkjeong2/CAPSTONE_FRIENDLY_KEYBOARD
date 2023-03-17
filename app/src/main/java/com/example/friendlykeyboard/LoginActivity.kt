@@ -1,18 +1,21 @@
 package com.example.friendlykeyboard
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.friendlykeyboard.databinding.ActivityLoginBinding
+import com.example.friendlykeyboard.retrofit_util.Account
+import com.example.friendlykeyboard.retrofit_util.DataModel
+import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private val service = RetrofitClient.getApiService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,15 +130,46 @@ class LoginActivity : AppCompatActivity() {
             binding.editPwd.error = "패스워드를 입력해주세요"
             return false
         }
-//        else if (){
-//            //존재하는 아이디 비밀번호가 db에 없을 시 toast message "일치하는 정보가 없습니다"
-//            return false
-//        }
-        else
-            return true
+        else {
+            val result: DataModel?
+            val account = Account(id, pwd)
+
+            try {
+                val response = service.signIn(account).execute()
+                if (response.isSuccessful) {
+                    result = response.body()
+
+                    when (result?.responseText) {
+                        "Available" -> {
+                            return true
+                        }
+                        else -> {
+                            Toast.makeText(
+                                applicationContext,
+                                "일치하는 정보가 없습니다.",
+                                Toast.LENGTH_SHORT).show()
+                            binding.editId.setText("")
+                            binding.editPwd.setText("")
+                            return false
+                        }
+                    }
+                } else {
+                    // 통신이 실패한 경우
+                    Toast.makeText(
+                        applicationContext,
+                        "오류가 발생하였습니다.",
+                        Toast.LENGTH_SHORT).show()
+                    return false
+                }
+            } catch (e: Exception) {
+                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유
+                e.printStackTrace()
+                Toast.makeText(
+                    applicationContext,
+                    "서버와의 통신이 실패하였습니다.",
+                    Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
     }
-
-
-
-
 }

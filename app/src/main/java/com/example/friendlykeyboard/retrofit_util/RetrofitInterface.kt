@@ -9,4 +9,7 @@ interface RetrofitInterface {
 
     @POST("sign-up")
     fun signUp(@Body account: Account): Call<DataModel>
+
+    @POST("sign-in")
+    fun signIn(@Body account: Account): Call<DataModel>
 }
