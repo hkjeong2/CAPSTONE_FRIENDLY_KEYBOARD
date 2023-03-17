@@ -29,11 +29,6 @@ class SignUpActivity : AppCompatActivity() {
             StrictMode.setThreadPolicy(policy)
         }
 
-        // 아이디 중복 검사 후 수정하면 idCheck 값을 false 로 재설정 
-        binding.editId.addTextChangedListener {
-            idCheck = false
-        }
-
         // 실시간으로 비밀번호 일치 여부 확인
         binding.editPwd2.addTextChangedListener {
             if (binding.editPwd.text.toString() != binding.editPwd2.text.toString()) {
@@ -145,6 +140,8 @@ class SignUpActivity : AppCompatActivity() {
                             applicationContext,
                             "사용가능한 아이디입니다.",
                             Toast.LENGTH_SHORT).show()
+                        binding.editId.isFocusable = false
+                        binding.idCheckButton.isClickable = false
                         return true
                     }
                     else -> {
