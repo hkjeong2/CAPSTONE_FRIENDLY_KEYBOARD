@@ -75,8 +75,8 @@ class SignUpActivity : AppCompatActivity() {
                                     }
                                 }
                             } else {
-                                Log.d("SignUpActivity", response.message())
                                 // 통신이 실패한 경우
+                                Log.d("SignUpActivity", response.message())
                                 Toast.makeText(
                                     applicationContext,
                                     "오류가 발생하였습니다.",
@@ -148,8 +148,8 @@ class SignUpActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    Log.d("SignUpActivity", response.message())
                     // 통신이 실패한 경우
+                    Log.d("SignUpActivity", response.message())
                     Toast.makeText(
                         applicationContext,
                         "오류가 발생하였습니다.",

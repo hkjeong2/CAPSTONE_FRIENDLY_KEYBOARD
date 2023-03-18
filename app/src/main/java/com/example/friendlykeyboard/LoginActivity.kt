@@ -2,6 +2,7 @@ package com.example.friendlykeyboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -153,6 +154,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     } else {
                         // 통신이 실패한 경우
+                        Log.d("LoginActivity", response.message())
                         Toast.makeText(
                             applicationContext,
                             "오류가 발생하였습니다.",
