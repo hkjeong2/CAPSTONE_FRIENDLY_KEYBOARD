@@ -1,11 +1,9 @@
 package com.example.friendlykeyboard
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.StrictMode
 import com.example.friendlykeyboard.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {

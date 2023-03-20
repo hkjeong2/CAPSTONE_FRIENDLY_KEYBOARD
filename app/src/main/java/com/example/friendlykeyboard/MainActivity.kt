@@ -19,9 +19,5 @@ class MainActivity : AppCompatActivity() {
         val settingHeader = findViewById<ConstraintLayout>(R.id.setting_header)
         val submitButton = settingHeader.findViewById<TextView>(R.id.submit_text)
         submitButton.visibility = View.GONE
-
-
     }
-
-
 }

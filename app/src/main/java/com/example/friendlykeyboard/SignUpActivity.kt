@@ -177,17 +177,17 @@ class SignUpActivity : AppCompatActivity() {
         val password1 = binding.editPwd.text.toString()
         val password2 = binding.editPwd2.text.toString()
 
-        if (password1.isEmpty()) {
+        return if (password1.isEmpty()) {
             binding.editPwd.error = "비밀번호를 입력해주세요."
-            return false
+            false
         } else if (password2.isEmpty()) {
             binding.editPwd2.error = "비밀번호를 한 번 더 입력해주세요."
-            return false
+            false
         } else if (password1 != password2) {
             binding.editPwd2.error = "비밀번호가 일치하지 않습니다."
-            return false
+            false
         } else {
-            return true
+            true
         }
     }
 }
