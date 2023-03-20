@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/keyboardBackground">
+<!-- 키보드 자판들이 들어갈 프레임 (한글, 영어, 숫자 등) -->
     <FrameLayout
         android:id="@+id/keyboard_frame"
         android:layout_width="match_parent"

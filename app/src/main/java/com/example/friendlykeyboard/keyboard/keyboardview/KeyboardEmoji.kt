@@ -49,7 +49,7 @@ class KeyboardEmoji{
             val children = fourthLine.children.toList()
             for(item in children.indices){
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
-                val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
+                val specialKey = children[item].findViewById<ImageView>(R.id.special_key)
                 if(fourthLineText[item].equals("DEL")){
                     actionButton.setBackgroundResource(R.drawable.del)
                     val myOnClickListener = getDeleteAction()
