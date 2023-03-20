@@ -8,9 +8,31 @@
     tools:context=".fragments.SettingsFragment">
 
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="키보드 설정" />
+        android:padding="8dp"
+        android:text="키보드 설정"
+        android:textColor="@color/teal_700"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <include
+        layout="@layout/settings_item"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <include
+        layout="@layout/settings_item"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="기능 설정"
+        android:textColor="@color/teal_700"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
