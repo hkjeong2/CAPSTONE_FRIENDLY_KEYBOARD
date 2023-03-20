@@ -47,9 +47,25 @@ class MainActivity : AppCompatActivity() {
     private fun initClickListener() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.tab_home -> changeFragment(homeFragment)
-                R.id.tab_notification -> changeFragment(notificationFragment)
-                R.id.tab_settings -> changeFragment(settingsFragment)
+                R.id.tab_home -> {
+                    // TODO: headerTitle 을 나중에 수정할 것!
+                    changeFragment(homeFragment)
+                    runOnUiThread {
+                        binding.settingHeader.headerTitle.text = "키보드 설정"
+                    }
+                }
+                R.id.tab_notification -> {
+                    changeFragment(notificationFragment)
+                    runOnUiThread {
+                        binding.settingHeader.headerTitle.text = "알림"
+                    }
+                }
+                R.id.tab_settings -> {
+                    changeFragment(settingsFragment)
+                    runOnUiThread {
+                        binding.settingHeader.headerTitle.text = "설정"
+                    }
+                }
             }
             true
         }
