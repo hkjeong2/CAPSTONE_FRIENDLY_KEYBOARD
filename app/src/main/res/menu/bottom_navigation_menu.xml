@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_home"
         android:title="홈" />
     <item
-        android:id="@+id/tab_bell"
+        android:id="@+id/tab_notification"
         app:showAsAction="always"
         android:enabled="true"
         android:icon="@drawable/ic_notification"

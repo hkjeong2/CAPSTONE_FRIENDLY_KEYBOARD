@@ -5,11 +5,17 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import com.example.friendlykeyboard.databinding.ActivityMainBinding
+import com.example.friendlykeyboard.fragments.HomeFragment
+import com.example.friendlykeyboard.fragments.NotificationFragment
+import com.example.friendlykeyboard.fragments.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding : ActivityMainBinding
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var notificationFragment: NotificationFragment
+    private lateinit var settingsFragment: SettingsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,5 +25,33 @@ class MainActivity : AppCompatActivity() {
         val settingHeader = findViewById<ConstraintLayout>(R.id.setting_header)
         val submitButton = settingHeader.findViewById<TextView>(R.id.submit_text)
         submitButton.visibility = View.GONE
+
+        initFragments()
+        initClickListener()
+    }
+
+    private fun initFragments() {
+        homeFragment = HomeFragment()
+        notificationFragment = NotificationFragment()
+        settingsFragment = SettingsFragment()
+        changeFragment(homeFragment)
+    }
+
+    private fun changeFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragmentContainerView, fragment)
+            commit()
+        }
+    }
+
+    private fun initClickListener() {
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.tab_home -> changeFragment(homeFragment)
+                R.id.tab_notification -> changeFragment(notificationFragment)
+                R.id.tab_settings -> changeFragment(settingsFragment)
+            }
+            true
+        }
     }
 }
