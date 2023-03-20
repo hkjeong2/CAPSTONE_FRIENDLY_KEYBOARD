@@ -213,32 +213,32 @@ class KeyboardChunjiin{
                 val myText = myKeysText[line]
                 for(item in children.indices){
                     val actionButton = children[item].findViewById<Button>(R.id.key_button)
-                    val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
+                    val specialKey = children[item].findViewById<ImageView>(R.id.special_key)
                     var myOnClickListener:View.OnClickListener? = null
                     when(myText[item]){
                         "space" -> {
-                            spacialKey.setImageResource(R.drawable.ic_space_bar)
-                            spacialKey.visibility = View.VISIBLE
+                            specialKey.setImageResource(R.drawable.ic_space_bar)
+                            specialKey.visibility = View.VISIBLE
                             actionButton.visibility = View.GONE
                             myOnClickListener = getSpaceAction()
-                            spacialKey.setOnClickListener(myOnClickListener)
-                            spacialKey.setBackgroundResource(R.drawable.key_background)
+                            specialKey.setOnClickListener(myOnClickListener)
+                            specialKey.setBackgroundResource(R.drawable.key_background)
                         }
                         "DEL" -> {
-                            spacialKey.setImageResource(R.drawable.del)
-                            spacialKey.visibility = View.VISIBLE
+                            specialKey.setImageResource(R.drawable.del)
+                            specialKey.visibility = View.VISIBLE
                             actionButton.visibility = View.GONE
                             myOnClickListener = getDeleteAction()
-                            spacialKey.setOnClickListener(myOnClickListener)
-                            spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                            specialKey.setOnClickListener(myOnClickListener)
+                            specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                         }
                         "Enter" -> {
-                            spacialKey.setImageResource(R.drawable.ic_enter)
-                            spacialKey.visibility = View.VISIBLE
+                            specialKey.setImageResource(R.drawable.ic_enter)
+                            specialKey.visibility = View.VISIBLE
                             actionButton.visibility = View.GONE
                             myOnClickListener = getEnterAction()
-                            spacialKey.setOnClickListener(myOnClickListener)
-                            spacialKey.setBackgroundResource(R.drawable.key_background)
+                            specialKey.setOnClickListener(myOnClickListener)
+                            specialKey.setBackgroundResource(R.drawable.key_background)
                         }
                         else -> {
                             actionButton.text = myText[item]

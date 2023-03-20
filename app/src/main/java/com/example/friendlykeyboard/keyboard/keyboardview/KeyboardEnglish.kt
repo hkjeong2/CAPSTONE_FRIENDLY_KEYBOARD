@@ -29,6 +29,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
 
+    //keyboard layout의 네 줄의 각 문자 item을 바인딩 시키기 위한 item 준비
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
     val firstLineText = listOf<String>("q","w","e","r","t","y","u","i","o","p")
     val secondLineText = listOf<String>("a","s","d","f","g","h","j","k","l")
@@ -40,11 +41,13 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     val myKeysText = ArrayList<List<String>>()
     val myLongClickKeysText = ArrayList<List<String>>()
     val layoutLines = ArrayList<LinearLayout>()
+
     var downView: View? = null
     var sound = 0
     var vibrate = 0
     var capsView: ImageView? = null
 
+    //키보드 (view) 및 (클릭 시 기능) 초기화
     fun init() {
         englishLayout = layoutInflater.inflate(R.layout.keyboard_action, null) as LinearLayout
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -72,6 +75,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             R.id.fourth_line
         )
 
+        //키보드 높이 설정 (각 layout 별 설정 가능)
         if(config.orientation == Configuration.ORIENTATION_LANDSCAPE){
             firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
             secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
@@ -82,6 +86,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
         }
 
+        //keyboard 위치별 각 문자
         myKeysText.clear()
         myKeysText.add(numpadText)
         myKeysText.add(firstLineText)
@@ -89,11 +94,13 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         myKeysText.add(thirdLineText)
         myKeysText.add(fourthLineText)
 
+        //특정 위치의 keyboard 길게 눌렀을 때의 문자
         myLongClickKeysText.clear()
         myLongClickKeysText.add(firstLongClickText)
         myLongClickKeysText.add(secondLongClickText)
         myLongClickKeysText.add(thirdLongClickText)
 
+        //keyboard의 각 줄 layout
         layoutLines.clear()
         layoutLines.add(numpadLine)
         layoutLines.add(firstLine)
@@ -108,22 +115,25 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         return englishLayout
     }
 
-
+    //Caps 클릭 시 변경
     fun modeChange(){
         if(isCaps){
             isCaps = false
+            capsView?.setImageResource(R.drawable.ic_caps_unlock)
             for(button in buttons){
                 button.setText(button.text.toString().toLowerCase())
             }
         }
         else{
             isCaps = true
+            capsView?.setImageResource(R.drawable.ic_caps_lock)
             for(button in buttons){
                 button.setText(button.text.toString().toUpperCase())
             }
         }
     }
 
+    // 타이핑 소리 효과
     private fun playClick(i: Int) {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
         when (i) {
@@ -144,6 +154,8 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     }
 
     private fun getMyLongClickListener(textView: TextView): View.OnLongClickListener{
+        //아래 getMyClickListener와 동일한 방식
+        //다만 길게 눌렸을 때 케이스
         val longClickListener = object: View.OnLongClickListener{
             override fun onLongClick(p0: View?): Boolean {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -186,6 +198,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     }
 
     private fun getMyClickListener(actionButton: Button): View.OnClickListener{
+        //각각의 키 이벤트를 전송하여 어플리케이션으로 텍스트 전송
         val clickListener = (View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
@@ -281,62 +294,71 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         return onTouchListener
     }
 
+    //준비된 개별 문자(item)들의 클릭 리스너 및 view를 keyboard에 적용
     private fun setLayoutComponents(){
+        //keyboard의 각 줄, layout들을 iterate
         for(line in layoutLines.indices){
+            //각 줄의 layout이 include 했던 view 들을 children으로 정의
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
             var longClickIndex = 0
+
+            //각 줄 즉 layout의 각각의 item들 iterate
             for(item in children.indices){
+                // keyboard의 개별 item 버튼
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
-                val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
+                // 문자 대신 image가 필요한 자판 (space, DEL, CAPS)
+                val specialKey = children[item].findViewById<ImageView>(R.id.special_key)
                 var myOnClickListener: View.OnClickListener? = null
                 when(myText[item]){
                     "space" -> {
-                        spacialKey.setImageResource(R.drawable.ic_space_bar)
-                        spacialKey.visibility = View.VISIBLE
+                        specialKey.setImageResource(R.drawable.ic_space_bar)
+                        specialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
                         myOnClickListener = getSpaceAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
-                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                        specialKey.setOnClickListener(myOnClickListener)
+                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        specialKey.setBackgroundResource(R.drawable.key_background)
                     }
                     "DEL" -> {
-                        spacialKey.setImageResource(R.drawable.del)
-                        spacialKey.visibility = View.VISIBLE
+                        specialKey.setImageResource(R.drawable.del)
+                        specialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
                         myOnClickListener = getDeleteAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        specialKey.setOnClickListener(myOnClickListener)
+                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                     }
                     "CAPS" -> {
-                        spacialKey.setImageResource(R.drawable.ic_caps_unlock)
-                        spacialKey.visibility = View.VISIBLE
+                        specialKey.setImageResource(R.drawable.ic_caps_unlock)
+                        specialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
-                        capsView = spacialKey
+                        capsView = specialKey
                         myOnClickListener = getCapsAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
-                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                        specialKey.setOnClickListener(myOnClickListener)
+                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        specialKey.setBackgroundResource(R.drawable.key_background)
                     }
                     "Enter" -> {
-                        spacialKey.setImageResource(R.drawable.ic_enter)
-                        spacialKey.visibility = View.VISIBLE
+                        specialKey.setImageResource(R.drawable.ic_enter)
+                        specialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
                         myOnClickListener = getEnterAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
-                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                        specialKey.setOnClickListener(myOnClickListener)
+                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        specialKey.setBackgroundResource(R.drawable.key_background)
                     }
                     else -> {
+                        //특수 key들 제외한 일반 문자들 대상
                         val longClickTextView = children[item].findViewById<TextView>(R.id.text_long_click)
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
                         myOnClickListener = getMyClickListener(actionButton)
-                        if(line > 0 && line < 4){//특수기호가 삽입될 수 있는 라인
+                        if(line > 0 && line < 4){//특수기호가 삽입될 수 있는 layout의 라인 (1~3번째 키보드 줄)
+                            //길게 눌렸을 때
                             longClickTextView.setText(myLongClickKeysText[line - 1].get(longClickIndex++))
                             longClickTextView.bringToFront()
-                            longClickTextView.setOnClickListener(myOnClickListener)
-                            actionButton.setOnLongClickListener(getMyLongClickListener(longClickTextView))
+//                            longClickTextView.setOnClickListener(myOnClickListener)
+//                            actionButton.setOnLongClickListener(getMyLongClickListener(longClickTextView))
                             longClickTextView.setOnLongClickListener(getMyLongClickListener(longClickTextView))
                         }
                     }

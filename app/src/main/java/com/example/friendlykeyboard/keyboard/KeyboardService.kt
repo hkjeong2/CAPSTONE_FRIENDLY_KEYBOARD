@@ -19,7 +19,10 @@ class KeyBoardService : InputMethodService(){
     val keyboardInterationListener = object:KeyboardInteractionListener{
         //inputconnection이 null일경우 재요청하는 부분 필요함
         override fun modechange(mode: Int) {
+            //작성 중인 텍스트를 commit
             currentInputConnection.finishComposingText()
+
+            //mode 별로 keyboard frame 변환
             when(mode){
                 0 ->{
                     keyboardFrame.removeAllViews()
@@ -52,11 +55,13 @@ class KeyBoardService : InputMethodService(){
 
     override fun onCreate() {
         super.onCreate()
+        //keyboard가 될 전체 레이아웃과 입력방식에 따라 다르게 채워질 framelayout 정의
         keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
         keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
     }
 
     override fun onCreateInputView(): View {
+        //각 type의 keyboard 생성
         keyboardKorean = KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardEnglish = KeyboardEnglish(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardSymbols = KeyboardSymbols(applicationContext, layoutInflater, keyboardInterationListener)
@@ -67,12 +72,15 @@ class KeyBoardService : InputMethodService(){
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
 
+        //EditText에 포커스가 갈 경우 호출되는 View
         return keyboardView
     }
 
     override fun updateInputViewShown() {
+        //현재 필요한 키보드를 결정하고 수정
         super.updateInputViewShown()
         currentInputConnection.finishComposingText()
+        //숫자 입력 editText일 시 Numpad로 변환
         if(currentInputEditorInfo.inputType == EditorInfo.TYPE_CLASS_NUMBER){
             keyboardFrame.removeAllViews()
             keyboardFrame.addView(KeyboardNumpad.newInstance(applicationContext, layoutInflater, currentInputConnection, keyboardInterationListener))
@@ -81,5 +89,11 @@ class KeyBoardService : InputMethodService(){
             keyboardInterationListener.modechange(1)
         }
     }
+
+//    override fun onCreateCandidatesView(): View {
+//        return super.onCreateCandidatesView()
+//    }
+
+
 
 }
