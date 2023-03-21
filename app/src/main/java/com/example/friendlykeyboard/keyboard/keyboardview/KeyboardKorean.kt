@@ -6,16 +6,19 @@ import android.content.res.Configuration
 import android.inputmethodservice.Keyboard
 import android.media.AudioManager
 import android.os.*
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
+import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
@@ -41,11 +44,11 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     val secondLineText = listOf<String>("ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ")
     val thirdLineText = listOf<String>("CAPS","ㅋ","ㅌ","ㅊ","ㅍ","ㅠ","ㅜ","ㅡ","DEL")
     val fourthLineText = listOf<String>("!#1","한/영",",","space",".","Enter")
-    val firstLongClickText = listOf("!","@","#","$","%","^","&","*","(",")")
-    val secondLongClickText = listOf<String>("~","+","-","×","♥",":",";","'","\"")
-    val thirdLongClickText = listOf("","_","<",">","/",",","?")
+//    val firstLongClickText = listOf("!","@","#","$","%","^","&","*","(",")")
+//    val secondLongClickText = listOf<String>("~","+","-","×","♥",":",";","'","\"")
+//    val thirdLongClickText = listOf("","_","<",">","/",",","?")
     val myKeysText = ArrayList<List<String>>()
-    val myLongClickKeysText = ArrayList<List<String>>()
+//    val myLongClickKeysText = ArrayList<List<String>>()
     val layoutLines = ArrayList<LinearLayout>()
     var downView:View? = null
     var capsView:ImageView? = null
@@ -95,10 +98,10 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         myKeysText.add(thirdLineText)
         myKeysText.add(fourthLineText)
 
-        myLongClickKeysText.clear()
-        myLongClickKeysText.add(firstLongClickText)
-        myLongClickKeysText.add(secondLongClickText)
-        myLongClickKeysText.add(thirdLongClickText)
+//        myLongClickKeysText.clear()
+//        myLongClickKeysText.add(firstLongClickText)
+//        myLongClickKeysText.add(secondLongClickText)
+//        myLongClickKeysText.add(thirdLongClickText)
 
         layoutLines.clear()
         layoutLines.add(numpadLine)
@@ -234,6 +237,9 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                     if(isCaps){
                         modeChange()
                     }
+                    val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+                    keyboardInterationListener.sendText(text?.text.toString())
+
                 }
             }
         })
@@ -382,6 +388,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             else{
                 hangulMaker.delete()
             }
+            val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+            keyboardInterationListener.sendText(text?.text.toString())
         }
     }
 

@@ -5,10 +5,12 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.media.AudioManager
 import android.os.*
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
@@ -189,6 +191,9 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                     else -> {
                         playClick(textView.text.toString().toCharArray().get(0).toInt())
                         inputConnection?.commitText(textView.text.toString(), 1)
+
+                        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+                        keyboardInterationListener.sendText(text?.text.toString())
                     }
                 }
                 return true
@@ -198,7 +203,9 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     }
 
     private fun getMyClickListener(actionButton: Button): View.OnClickListener{
-        //각각의 키 이벤트를 전송하여 어플리케이션으로 텍스트 전송
+        // 아래의 두 방법을 통해 write text
+        // 1) 각각의 키 이벤트를 전송하여 어플리케이션으로 텍스트 전송 (두 문자 이상의 문장을 꾹 눌러서 텍스트 블락 생성 시)
+        // 2) inputConnection을 통해 직접 textfield 수정
         val clickListener = (View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
@@ -207,6 +214,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             val cursorcs:CharSequence? =  inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
             if(cursorcs != null && cursorcs.length >= 2){
 
+                // 1)선택중인 블럭이 존재한다면 해당 블럭을 삭제하고 텍스트를 입력할 수 있도록
                 val eventTime = SystemClock.uptimeMillis()
                 inputConnection?.finishComposingText()
                 inputConnection?.sendKeyEvent(
@@ -233,24 +241,26 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                 )
 
             }
-            else{
-                when (actionButton.text.toString()) {
-                    "한/영" -> {
-                        keyboardInterationListener.modechange(1)
-                    }
-                    "!#1" -> {
-                        keyboardInterationListener.modechange(2)
-                    }
-                    else -> {
-                        playClick(
-                            actionButton.text.toString().toCharArray().get(
-                                0
-                            ).toInt()
-                        )
-                        inputConnection?.commitText(actionButton.text,1)
-                    }
+            when (actionButton.text.toString()) {
+                "한/영" -> {
+                    keyboardInterationListener.modechange(1)
+                }
+                "!#1" -> {
+                    keyboardInterationListener.modechange(2)
+                }
+                else -> {
+                    playClick(
+                        actionButton.text.toString().toCharArray().get(
+                            0
+                        ).toInt()
+                    )
+                    inputConnection?.commitText(actionButton.text,1)
+
+                    val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+                    keyboardInterationListener.sendText(text?.text.toString())
                 }
             }
+
         })
         actionButton.setOnClickListener(clickListener)
         return clickListener
@@ -298,7 +308,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     private fun setLayoutComponents(){
         //keyboard의 각 줄, layout들을 iterate
         for(line in layoutLines.indices){
-            //각 줄의 layout이 include 했던 view 들을 children으로 정의
+            //각 줄의 layout이 include 했던 view들의 집합을 children으로 정의
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
             var longClickIndex = 0
@@ -357,8 +367,8 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                             //길게 눌렸을 때
                             longClickTextView.setText(myLongClickKeysText[line - 1].get(longClickIndex++))
                             longClickTextView.bringToFront()
-//                            longClickTextView.setOnClickListener(myOnClickListener)
-//                            actionButton.setOnLongClickListener(getMyLongClickListener(longClickTextView))
+                            longClickTextView.setOnClickListener(myOnClickListener)
+                            actionButton.setOnLongClickListener(getMyLongClickListener(longClickTextView))
                             longClickTextView.setOnLongClickListener(getMyLongClickListener(longClickTextView))
                         }
                     }
@@ -383,6 +393,8 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             }else{
                 inputConnection?.deleteSurroundingText(1,0)
             }
+            val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+            keyboardInterationListener.sendText(text?.text.toString())
         }
     }
 

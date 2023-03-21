@@ -1,6 +1,7 @@
 package com.example.friendlykeyboard.keyboard
 
 import android.inputmethodservice.InputMethodService
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
@@ -50,6 +51,11 @@ class KeyBoardService : InputMethodService(){
                     keyboardFrame.addView(KeyboardEmoji.newInstance(applicationContext, layoutInflater, currentInputConnection, this))
                 }
             }
+        }
+
+        override fun sendText(text: String) {
+            //Textfield에 typing된 text를 AI모델로 전송 작업
+            Log.d("시험 : ", text)
         }
     }
 
