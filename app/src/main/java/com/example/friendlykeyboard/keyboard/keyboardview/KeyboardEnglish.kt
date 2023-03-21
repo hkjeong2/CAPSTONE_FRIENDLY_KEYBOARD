@@ -206,7 +206,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         // 아래의 두 방법을 통해 write text
         // 1) 각각의 키 이벤트를 전송하여 어플리케이션으로 텍스트 전송 (두 문자 이상의 문장을 꾹 눌러서 텍스트 블락 생성 시)
         // 2) inputConnection을 통해 직접 textfield 수정
-        
+
         val clickListener = (View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
@@ -310,6 +310,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         //keyboard의 각 줄, layout들을 iterate
         for(line in layoutLines.indices){
             //각 줄의 layout이 include 했던 view들의 집합을 children으로 정의
+
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
             var longClickIndex = 0
