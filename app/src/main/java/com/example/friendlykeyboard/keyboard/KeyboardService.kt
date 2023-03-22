@@ -1,10 +1,13 @@
 package com.example.friendlykeyboard.keyboard
 
+import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
@@ -78,6 +81,7 @@ class KeyBoardService : InputMethodService(){
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
 
+        setCandidatesViewShown(true);
         //EditText에 포커스가 갈 경우 호출되는 View
         return keyboardView
     }
@@ -96,9 +100,22 @@ class KeyBoardService : InputMethodService(){
         }
     }
 
-//    override fun onCreateCandidatesView(): View {
-//        return super.onCreateCandidatesView()
-//    }
+    //화면이 위로 스크롤 되면서 candidate view도 자리를 차지
+    override fun onComputeInsets(outInsets: Insets?) {
+        super.onComputeInsets(outInsets)
+        if (!isFullscreenMode()) {
+            outInsets?.contentTopInsets = outInsets?.visibleTopInsets
+        }
+    }
+
+    override fun onCreateCandidatesView(): View {
+
+        val scrollingKeyboard = HorizontalScrollView(this);
+        scrollingKeyboard.setBackgroundColor(Color.parseColor("#dddddd"))
+        scrollingKeyboard.addView(Button(this));
+        return scrollingKeyboard;
+        
+    }
 
 
 
