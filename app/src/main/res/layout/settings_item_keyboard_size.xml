@@ -28,7 +28,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:padding="15dp"
-                app:srcCompat="@drawable/height"
+                app:srcCompat="@drawable/ic_height"
                 app:tint="@color/teal_200" />
 
             <LinearLayout

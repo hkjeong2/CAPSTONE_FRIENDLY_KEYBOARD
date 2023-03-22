@@ -13,7 +13,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="60dp"
         android:text="안녕하세요"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_700"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Friendly Keyboard"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_700"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/intro"
@@ -34,8 +34,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" 입니다."
-        android:textColor="@color/black"
+        android:textColor="@color/teal_700"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/intro_title"
         app:layout_constraintStart_toEndOf="@id/intro_title"
         app:layout_constraintTop_toTopOf="@id/intro_title" />
 
@@ -45,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="서비스 이용을 위해 로그인 해주세요."
-        android:textColor="@color/black"
+        android:textColor="@color/teal_700"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@id/intro_title"
         app:layout_constraintTop_toBottomOf="@id/intro_title" />
@@ -115,54 +116,74 @@
         android:id="@+id/checkbox_saveID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:buttonTint="@color/white"
         android:checked="false"
         android:text="ID 저장"
-        android:buttonTint="@color/white"
-        android:layout_marginTop="15dp"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/edit_pwd_container"
-        app:layout_constraintTop_toBottomOf="@id/edit_pwd_container"/>
+        app:layout_constraintTop_toBottomOf="@id/edit_pwd_container" />
 
     <CheckBox
         android:id="@+id/checkbox_auto_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:buttonTint="@color/white"
         android:checked="false"
         android:text="자동로그인"
-        android:buttonTint="@color/white"
-        android:layout_marginStart="15dp"
+        android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@id/checkbox_saveID"
-        app:layout_constraintTop_toTopOf="@id/checkbox_saveID"/>
+        app:layout_constraintTop_toTopOf="@id/checkbox_saveID" />
 
-    <Button
+    <androidx.cardview.widget.CardView
         android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginLeft="40dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="40dp"
-        android:backgroundTint="#75CC60"
-        android:gravity="center"
-        android:text="로그인"
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        android:layout_marginEnd="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_saveID" />
+        app:layout_constraintTop_toBottomOf="@id/checkbox_auto_login">
 
-    <Button
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="로그인"
+            android:textColor="@color/black" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/sign_up_button"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginLeft="40dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="40dp"
-        android:backgroundTint="#75CC60"
-        android:gravity="center"
-        android:text="회원가입"
-        android:textColor="@color/white"
-        android:textSize="18sp"
+        android:layout_marginEnd="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_button" />
+        app:layout_constraintTop_toBottomOf="@id/login_button">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="회원가입"
+            android:textColor="@color/black" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

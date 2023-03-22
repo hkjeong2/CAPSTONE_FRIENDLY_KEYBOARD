@@ -17,12 +17,26 @@
         android:textStyle="bold" />
 
     <include
-        layout="@layout/settings_item"
+        layout="@layout/settings_item_keyboard_size"
+        android:id="@+id/settings_item_keyboard_size"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 
     <include
-        layout="@layout/settings_item"
+        android:id="@+id/settings_item_font"
+        layout="@layout/settings_item_font"
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
+
+    <include
+        android:id="@+id/settings_item_keyboard_color"
+        layout="@layout/settings_item_keyboard_color"
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
+
+    <include
+        android:id="@+id/settings_item_keyboard_background"
+        layout="@layout/settings_item_keyboard_background"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 
