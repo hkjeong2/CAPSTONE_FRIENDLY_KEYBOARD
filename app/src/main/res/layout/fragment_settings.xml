@@ -10,21 +10,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="16dp"
         android:text="키보드 설정"
         android:textColor="@color/teal_700"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <include
-        layout="@layout/settings_item_keyboard_size"
         android:id="@+id/settings_item_keyboard_size"
+        layout="@layout/settings_item_keyboard_size"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 
     <include
-        android:id="@+id/settings_item_font"
-        layout="@layout/settings_item_font"
+        android:id="@+id/settings_item_keyboard_font"
+        layout="@layout/settings_item_keyboard_font"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 
@@ -43,7 +43,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="16dp"
         android:text="기능 설정"
         android:textColor="@color/teal_700"
         android:textSize="16sp"

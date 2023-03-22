@@ -4,11 +4,9 @@
     package="com.example.friendlykeyboard">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -17,11 +15,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendlyKeyboard"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-<!--   editText 클릭 시 custom keyboard 나오도록 service 추가    -->
+        <activity
+            android:name=".SettingsKeyboardBackgroundActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsKeyboardColorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsKeyboardFontActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsKeyboardSizeActivity"
+            android:exported="false" /> <!-- editText 클릭 시 custom keyboard 나오도록 service 추가 -->
         <service
-
             android:name=".keyboard.KeyBoardService"
             android:enabled="true"
             android:exported="true"
@@ -29,10 +37,10 @@
             android:permission="android.permission.BIND_INPUT_METHOD">
             <meta-data
                 android:name="android.view.im"
-                android:resource="@xml/keyboard"/>
+                android:resource="@xml/keyboard" />
 
             <intent-filter>
-                <action android:name="android.view.InputMethod"/>
+                <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
 
@@ -53,8 +61,7 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>

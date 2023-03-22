@@ -60,7 +60,7 @@ class SignUpActivity : AppCompatActivity() {
                                             "회원가입이 완료되었습니다.",
                                             Toast.LENGTH_SHORT).show()
 
-                                        val intent = Intent(this@SignUpActivity, LoginActivity::class.java).apply {
+                                        val intent = Intent().apply {
                                             putExtra("id", id)
                                             putExtra("password", password)
                                         }
