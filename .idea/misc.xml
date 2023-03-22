@@ -18,6 +18,8 @@
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/activity_main.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/activity_sign_up.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/emoji_item.xml" value="0.297008547008547" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/fragment_home.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/fragment_notification.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/fragment_settings.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_action.xml" value="0.3609375" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_chunjiin.xml" value="0.3619791666666667" />
@@ -27,6 +29,8 @@
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_symbols.xml" value="0.29615384615384616" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_view.xml" value="0.33" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/setting_header.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/settings_item_keyboard_background.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/settings_item_keyboard_color.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/xml/keyboard.xml" value="0.1574074074074074" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/xml/keyboard_xml.xml" value="0.14473684210526316" />

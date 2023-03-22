@@ -367,8 +367,8 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                             //길게 눌렸을 때
                             longClickTextView.setText(myLongClickKeysText[line - 1].get(longClickIndex++))
                             longClickTextView.bringToFront()
-//                            longClickTextView.setOnClickListener(myOnClickListener)
-//                            actionButton.setOnLongClickListener(getMyLongClickListener(longClickTextView))
+                            longClickTextView.setOnClickListener(myOnClickListener)
+                            actionButton.setOnLongClickListener(getMyLongClickListener(longClickTextView))
                             longClickTextView.setOnLongClickListener(getMyLongClickListener(longClickTextView))
                         }
                     }

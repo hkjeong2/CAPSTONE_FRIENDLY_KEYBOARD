@@ -5,6 +5,8 @@ import android.inputmethodservice.InputMethodService
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.ExtractedTextRequest
+import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
@@ -100,6 +102,7 @@ class KeyBoardService : InputMethodService(){
         }
     }
 
+
     //화면이 위로 스크롤 되면서 candidate view도 자리를 차지
     override fun onComputeInsets(outInsets: Insets?) {
         super.onComputeInsets(outInsets)
@@ -114,7 +117,7 @@ class KeyBoardService : InputMethodService(){
         scrollingKeyboard.setBackgroundColor(Color.parseColor("#dddddd"))
         scrollingKeyboard.addView(Button(this));
         return scrollingKeyboard;
-        
+
     }
 
 
