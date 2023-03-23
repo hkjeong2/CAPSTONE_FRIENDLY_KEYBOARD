@@ -22,9 +22,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*
         val settingHeader = findViewById<ConstraintLayout>(R.id.setting_header)
         val submitButton = settingHeader.findViewById<TextView>(R.id.submit_text)
         submitButton.visibility = View.GONE
+        */
 
         initFragments()
         initClickListener()
@@ -50,21 +52,27 @@ class MainActivity : AppCompatActivity() {
                 R.id.tab_home -> {
                     // TODO: headerTitle 을 나중에 수정할 것!
                     changeFragment(homeFragment)
+                    /*
                     runOnUiThread {
                         binding.settingHeader.headerTitle.text = "키보드 설정"
                     }
+                    */
                 }
                 R.id.tab_notification -> {
                     changeFragment(notificationFragment)
+                    /*
                     runOnUiThread {
                         binding.settingHeader.headerTitle.text = "알림"
                     }
+                    */
                 }
                 R.id.tab_settings -> {
                     changeFragment(settingsFragment)
+                    /*
                     runOnUiThread {
                         binding.settingHeader.headerTitle.text = "설정"
                     }
+                    */
                 }
             }
             true
