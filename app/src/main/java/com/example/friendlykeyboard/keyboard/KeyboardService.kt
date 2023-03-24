@@ -20,6 +20,7 @@ class KeyBoardService : InputMethodService(){
     lateinit var keyboardKorean:KeyboardKorean
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
+    lateinit var mCandidateView: CandidateView
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
@@ -59,8 +60,10 @@ class KeyBoardService : InputMethodService(){
         }
 
         override fun sendText(text: String) {
-            //Textfield에 typing된 text를 AI모델로 전송 작업
+            //text field에 typing된 text를 AI모델로 전송 작업
+            //type될 때마다 call back
             Log.d("시험 : ", text)
+            mCandidateView.createView(text)
         }
     }
 
@@ -88,6 +91,39 @@ class KeyBoardService : InputMethodService(){
         return keyboardView
     }
 
+
+    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
+        super.onStartInput(attribute, restarting)
+        //focus onto text field --> keyboard 올라올 때
+        Log.d("IMEstart", "1")
+    }
+
+    override fun onFinishInput() {
+        super.onFinishInput()
+        //focus out of text field --> keyboard 내려갈 때
+       Log.d("IMEfinish", "0")
+    }
+
+    override fun onUpdateSelection(
+        oldSelStart: Int, oldSelEnd: Int,
+        newSelStart: Int, newSelEnd: Int,
+        candidatesStart: Int, candidatesEnd: Int
+    ) {
+        super.onUpdateSelection(
+            oldSelStart, oldSelEnd,
+            newSelStart, newSelEnd,
+            candidatesStart, candidatesEnd
+        )
+        //text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다,
+        //text 추가될 때마다 call back
+        Log.d("IMEupdateindex olds", oldSelStart.toString())
+        Log.d("IMEupdateindex olde", oldSelEnd.toString())
+        Log.d("IMEupdateindex news", newSelStart.toString())
+        Log.d("IMEupdateindex newe", newSelEnd.toString())
+    }
+
+
+
     override fun updateInputViewShown() {
         //현재 필요한 키보드를 결정하고 수정
         super.updateInputViewShown()
@@ -113,10 +149,8 @@ class KeyBoardService : InputMethodService(){
 
     override fun onCreateCandidatesView(): View {
 
-        val scrollingKeyboard = HorizontalScrollView(this);
-        scrollingKeyboard.setBackgroundColor(Color.parseColor("#dddddd"))
-        scrollingKeyboard.addView(Button(this));
-        return scrollingKeyboard;
+        mCandidateView = CandidateView(this, layoutInflater,12, "#dddddd", "#ffffff")
+        return mCandidateView.getCandidate()
 
     }
 
