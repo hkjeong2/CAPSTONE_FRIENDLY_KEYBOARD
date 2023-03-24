@@ -2,7 +2,6 @@ package com.example.friendlykeyboard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.friendlykeyboard.databinding.ActivityMainBinding
 import com.example.friendlykeyboard.fragments.HomeFragment
@@ -14,21 +13,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var homeFragment: HomeFragment
     private lateinit var notificationFragment: NotificationFragment
     private lateinit var settingsFragment: SettingsFragment
-    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        toolbar = binding.toolbar
-        setSupportActionBar(toolbar)
-
-        /*
-        val settingHeader = findViewById<ConstraintLayout>(R.id.setting_header)
-        val submitButton = settingHeader.findViewById<TextView>(R.id.submit_text)
-        submitButton.visibility = View.GONE
-        */
+        setSupportActionBar(binding.toolbar)
 
         initFragments()
         initClickListener()
@@ -54,19 +45,19 @@ class MainActivity : AppCompatActivity() {
                 R.id.tab_home -> {
                     changeFragment(homeFragment)
                     runOnUiThread {
-                        toolbar.title = "홈"
+                        supportActionBar?.title = "홈"
                     }
                 }
                 R.id.tab_notification -> {
                     changeFragment(notificationFragment)
                     runOnUiThread {
-                        toolbar.title = "알림"
+                        supportActionBar?.title = "알림"
                     }
                 }
                 R.id.tab_settings -> {
                     changeFragment(settingsFragment)
                     runOnUiThread {
-                        toolbar.title = "설정"
+                        supportActionBar?.title = "설정"
                     }
                 }
             }

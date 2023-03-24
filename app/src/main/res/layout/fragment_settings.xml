@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context=".fragments.SettingsFragment">
 
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="키보드 설정"
-        android:textColor="@color/teal_700"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -20,32 +21,40 @@
         android:id="@+id/settings_item_keyboard_size"
         layout="@layout/settings_item_keyboard_size"
         android:layout_width="match_parent"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp" />
 
     <include
         android:id="@+id/settings_item_keyboard_font"
         layout="@layout/settings_item_keyboard_font"
         android:layout_width="match_parent"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp" />
 
     <include
         android:id="@+id/settings_item_keyboard_color"
         layout="@layout/settings_item_keyboard_color"
         android:layout_width="match_parent"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp" />
 
     <include
         android:id="@+id/settings_item_keyboard_background"
         layout="@layout/settings_item_keyboard_background"
         android:layout_width="match_parent"
-        android:layout_height="80dp" />
+        android:layout_height="80dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="기능 설정"
-        android:textColor="@color/teal_700"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
