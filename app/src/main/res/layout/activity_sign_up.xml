@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/background"
     android:padding="10dp"
     tools:context=".SignUpActivity">
 
@@ -181,7 +181,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:background="@drawable/custom_ripple_border"
-        android:backgroundTint="#8FABFE"
+        android:backgroundTint="#E1E8C6"
         android:clickable="true"
         android:focusable="true"
         android:text="Sign In"
