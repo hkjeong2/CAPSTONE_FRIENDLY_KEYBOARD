@@ -17,4 +17,5 @@
     <color name="setting_header_background">#0099ff</color>
     <color name="gray">#808080</color>
     <drawable name="screen_background_holo_light">#fff3f3f3</drawable>
+    <color name="background_blue">#2BC0E4</color>
 </resources>
