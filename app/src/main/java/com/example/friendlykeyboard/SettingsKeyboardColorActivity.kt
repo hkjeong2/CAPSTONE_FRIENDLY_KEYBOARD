@@ -1,6 +1,5 @@
 package com.example.friendlykeyboard
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -21,6 +20,34 @@ class SettingsKeyboardColorActivity : AppCompatActivity() {
             title = "키보드 색상"
         }
 
+
+        val colorPicker = binding.colorPicker
+        val saturationBar = binding.saturationBar
+        val opacityBar = binding.opacityBar
+
+        with(colorPicker) {
+            addSaturationBar(saturationBar)
+            addOpacityBar(opacityBar)
+            showOldCenterColor = false
+        }
+
+        // To set the old selected color you can do it like this
+        // colorPicker.oldCenterColor = colorPicker.color
+
+        // adds listener to the colorpicker which is implemented in the activity
+        colorPicker.setOnColorChangedListener {
+            // TODO
+        }
+
+        // adding onChangeListeners to bars
+        saturationBar.setOnSaturationChangedListener {
+            // TODO
+        }
+        opacityBar.setOnOpacityChangedListener {
+            // TODO
+        }
+
+        /*
         binding.button.setOnClickListener {
             val intent = Intent().apply {
                 putExtra("color", "색상 #FFFFFF")
@@ -28,6 +55,7 @@ class SettingsKeyboardColorActivity : AppCompatActivity() {
             setResult(300, intent)
             finish()
         }
+        */
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
