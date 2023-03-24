@@ -1,10 +1,8 @@
 package com.example.friendlykeyboard
 
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.friendlykeyboard.databinding.ActivityMainBinding
 import com.example.friendlykeyboard.fragments.HomeFragment
@@ -16,11 +14,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var homeFragment: HomeFragment
     private lateinit var notificationFragment: NotificationFragment
     private lateinit var settingsFragment: SettingsFragment
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
 
         /*
         val settingHeader = findViewById<ConstraintLayout>(R.id.setting_header)
@@ -50,29 +52,22 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.tab_home -> {
-                    // TODO: headerTitle 을 나중에 수정할 것!
                     changeFragment(homeFragment)
-                    /*
                     runOnUiThread {
-                        binding.settingHeader.headerTitle.text = "키보드 설정"
+                        toolbar.title = "홈"
                     }
-                    */
                 }
                 R.id.tab_notification -> {
                     changeFragment(notificationFragment)
-                    /*
                     runOnUiThread {
-                        binding.settingHeader.headerTitle.text = "알림"
+                        toolbar.title = "알림"
                     }
-                    */
                 }
                 R.id.tab_settings -> {
                     changeFragment(settingsFragment)
-                    /*
                     runOnUiThread {
-                        binding.settingHeader.headerTitle.text = "설정"
+                        toolbar.title = "설정"
                     }
-                    */
                 }
             }
             true
