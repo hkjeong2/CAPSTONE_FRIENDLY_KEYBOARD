@@ -148,8 +148,10 @@ class KeyBoardService : InputMethodService(){
     }
 
     override fun onCreateCandidatesView(): View {
-
-        mCandidateView = CandidateView(this, layoutInflater,12, "#dddddd", "#ffffff")
+        //sharedPreference로 textSize, colorBackground, colorText 지정 가능
+        //키보드 생성시 함께 1회만 생성되는 듯 (동적으로 바꾸고자 할 시 다른 곳에서 mCandidateView 수정해주면 어떨지?)
+        mCandidateView = CandidateView(this, layoutInflater)
+        mCandidateView.setting(12.0f, "#dddddd", "#ffffff")
         return mCandidateView.getCandidate()
 
     }

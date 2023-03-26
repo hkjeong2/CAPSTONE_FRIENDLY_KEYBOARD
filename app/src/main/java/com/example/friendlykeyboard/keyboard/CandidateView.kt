@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
 
-class CandidateView(context: Context, layoutInflater: LayoutInflater, textSize: Int, colorBackground: String, colorText: String) : View(context) {
+class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(context) {
 
     private var mCandidateView : View
     private var mCandidateItem : View
@@ -20,6 +20,9 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, textSize: 
     private var mCandidateLL : LinearLayout
     private var mSuggestion = HashMap<String, ArrayList<String>>()
     private var layoutInflater = layoutInflater
+    private lateinit var mColorBackground : String
+    private lateinit var mColorText : String
+    private var mTextSize : Float = 0.0f
 
     init{
         loadDic()
@@ -33,18 +36,19 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, textSize: 
         mCandidateHSV = mCandidateView.findViewById(R.id.candidate_horizontal_view)
         mCandidateLL = mCandidateView.findViewById(R.id.candidate_linear_layout)
 
-        mCandidateHSV.setBackgroundColor(Color.parseColor(colorBackground))
-
     }
 
     //대체어 UI 생성
     fun createView(text: String){
+        // Hashmap에 typing된 text 존재 시 UI 생성
         if (mSuggestion.containsKey(text)){
             for(i in 0 until mSuggestion[text]!!.size){
 
                 mCandidateItem = layoutInflater.inflate(R.layout.keyboard_candidate_item, null)
                 val child = mCandidateItem.findViewById<Button>(R.id.candidate_word)
                 child.text = mSuggestion[text]!!.get(i)
+                child.setTextColor(Color.parseColor(mColorText))
+                child.setTextSize(2, mTextSize)
 
                 mCandidateLL.addView(child)
 
@@ -63,7 +67,11 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, textSize: 
     }
 
     // 추후 설정 관련
-    fun setting(textSize: Int, colorBackground: String, colorText: Int){
+    fun setting(textSize: Float, colorBackground: String, colorText: String){
+        mColorBackground = colorBackground
+        mColorText = colorText
+        mTextSize = textSize
+        mCandidateHSV.setBackgroundColor(Color.parseColor(mColorBackground))
     }
 
 
