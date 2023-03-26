@@ -21,6 +21,7 @@ class KeyBoardService : InputMethodService(){
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
+    var idx = 0
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
@@ -59,12 +60,76 @@ class KeyBoardService : InputMethodService(){
             }
         }
 
+        //text type될 때마다 call back
+        //후보뷰 삭제 및 생성
         override fun sendText(text: String) {
-            //text field에 typing된 text를 AI모델로 전송 작업
-            //type될 때마다 call back
-            Log.d("시험 : ", text)
-            mCandidateView.createView(text)
+            if (::mCandidateView.isInitialized){
+                //새로운 문자가 들어왔으므로 이전 후보뷰 모두 삭제
+                mCandidateView.eraseViews()
+
+                // 문장을 띄어쓰기 기준으로 토큰화
+                // 현재 커서를 중심으로
+                // 1) 왼쪽 방향으로
+                // 2) 오른쪽 방향으로
+                // 토큰들을 조합하며 대체어 존재 유무 알기위해 사전 검색 (있으면 후보뷰 생성)
+
+                var token : List<String> = text.replace("\n", " ").split(" ")
+                var tokenIdxRange = ArrayList<ArrayList<Int>>()
+                //현재 커서가 위치한 토큰의 Idx 탐색
+                var tokenIdx = findCursorPos(token, tokenIdxRange)
+
+                //커서의 현재위치 기준에서 양방향으로 토큰 append하며 검색
+                createCandidateView(token, tokenIdx)
+
+            }
+
         }
+
+        private fun findCursorPos(token : List<String>, tokenIdxRange : ArrayList<ArrayList<Int>>) : Int{
+            var begin = 0
+            var tokenIdx = 0
+
+            //문장의 각 어절이 가진 문자열 길이로 index 범위 저장 --> 커서의 위치가 해당 범위내 존재 시 tokenIdx 저장
+            if (token.size > 0){
+                for (i in token.indices){
+                    tokenIdxRange.add(ArrayList())
+                    tokenIdxRange.get(i).add(begin)
+                    val st = begin
+                    begin += token.get(i).length
+                    tokenIdxRange.get(i).add(begin)
+                    val en = begin
+                    begin += 1
+
+                    if (st <= idx && idx <= en){
+                        tokenIdx = i
+                    }
+                }
+            }
+            return tokenIdx
+        }
+
+        private fun createCandidateView(token : List<String>, tokenIdx : Int){
+            var mText = ""
+            var space = ""
+
+            for (i in tokenIdx downTo 0){
+                if (i != tokenIdx)
+                    space = " "
+                mText = token.get(i) + space + mText
+                mCandidateView.createView(mText)
+            }
+
+            mText = ""
+            space = ""
+
+            for (i in tokenIdx until token.size){
+                if (i != tokenIdx)
+                    space = " "
+                mText += space + token.get(i)
+                mCandidateView.createView(mText)
+            }
+        }
+
     }
 
     override fun onCreate() {
@@ -114,6 +179,8 @@ class KeyBoardService : InputMethodService(){
             newSelStart, newSelEnd,
             candidatesStart, candidatesEnd
         )
+        //현재 커서 인덱스 저장
+        idx = newSelStart
         //text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다,
         //text 추가될 때마다 call back
         Log.d("IMEupdateindex olds", oldSelStart.toString())
