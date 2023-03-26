@@ -382,6 +382,8 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             playClick('ㅂ'.toInt())
             playVibrate()
             inputConnection?.commitText(" ",1)
+            //space바 눌렀을 때 잔존 candidateView 지우기 위함
+            keyboardInterationListener.sendText("")
         }
     }
 

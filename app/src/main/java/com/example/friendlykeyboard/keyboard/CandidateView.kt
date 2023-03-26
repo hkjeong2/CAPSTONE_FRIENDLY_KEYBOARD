@@ -54,9 +54,9 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
 
             }
         }
-        else{
-            mCandidateLL.removeAllViews()
-        }
+//        else{
+//            mCandidateLL.removeAllViews()
+//        }
 
     }
 
@@ -64,6 +64,13 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mSuggestion.put("ㅁㅊ", arrayListOf<String>("와", "대박", "헐"))
         mSuggestion.put("ㅅㄲ야", arrayListOf<String>("친구야", "자식아", "얘야"))
         mSuggestion.put("ㅈㄴ", arrayListOf<String>("매우", "정말", "완전"))
+        mSuggestion.put("콘텐츠", arrayListOf<String>("제작물"))
+        mSuggestion.put("오리지널 콘텐츠", arrayListOf<String>("자체 제작물"))
+        mSuggestion.put("멀티데믹", arrayListOf<String>("감염병 복합 유행"))
+        mSuggestion.put("노마드 워커", arrayListOf<String>("유목민형 노동자"))
+        mSuggestion.put("디지털 트윈", arrayListOf<String>("가상 모형"))
+        mSuggestion.put("커리어 하이", arrayListOf<String>("최고 기록"))
+        mSuggestion.put("주스 주스", arrayListOf<String>("쥬시쿨"))
     }
 
     // 추후 설정 관련
@@ -74,6 +81,9 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mCandidateHSV.setBackgroundColor(Color.parseColor(mColorBackground))
     }
 
+    fun eraseViews(){
+        mCandidateLL.removeAllViews()
+    }
 
     fun getCandidate() : HorizontalScrollView{
         return mCandidateHSV

@@ -366,6 +366,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             playClick('ㅂ'.toInt())
             playVibrate()
             hangulMaker.commitSpace()
+            //space바 눌렀을 때 잔존 candidateView 지우기 위함
+            keyboardInterationListener.sendText("")
         }
     }
 

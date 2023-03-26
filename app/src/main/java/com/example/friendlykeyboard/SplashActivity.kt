@@ -14,9 +14,12 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Handler().postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }, 2000)
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+
+//        Handler().postDelayed({
+//            startActivity(Intent(this, LoginActivity::class.java))
+//            finish()
+//        }, 2000)
     }
 }
