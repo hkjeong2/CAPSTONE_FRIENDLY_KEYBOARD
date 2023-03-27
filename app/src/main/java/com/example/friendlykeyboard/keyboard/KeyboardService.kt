@@ -94,14 +94,21 @@ class KeyBoardService : InputMethodService(){
         return keyboardView
     }
 
-
-    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
-        super.onStartInput(attribute, restarting)
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
         //focus onto text field --> keyboard 올라올 때
-
         //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
-        Log.d("IMEstart", "1")
+        idx = currentInputConnection.getTextBeforeCursor(1000, 0).toString().length
+        updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
+
+        Log.d("IMEstart", "2")
     }
+
+
+//    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
+//        super.onStartInput(attribute, restarting)
+//        Log.d("IMEstart", "1")
+//    }
 
 
     override fun onFinishInput() {
@@ -246,5 +253,6 @@ class KeyBoardService : InputMethodService(){
             mCandidateView.createView(mText)
         }
     }
-    //startInput 첫 클릭 후보뷰
+
+
 }
