@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
+import com.example.friendlykeyboard.keyboard.keyboardview.KeyboardKorean
 
 class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(context) {
 
@@ -41,7 +42,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
     }
 
     //대체어 UI 생성
-    fun createView(ic: InputConnection, text: String, stIdx: Int, edIdx: Int) : Boolean{
+    fun createView(ic: InputConnection, text: String, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean) : Boolean{
         // Hashmap에 typing된 text 존재 시 UI 생성
         if (mSuggestion.containsKey(text)){
             Log.d("시험", text)
@@ -55,7 +56,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
                 child.text = mSuggestion[text]!!.get(i)
                 child.setTextColor(Color.parseColor(mColorText))
                 child.setTextSize(2, mTextSize)
-                child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx))
+                child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx, keyboardKorean))
 
                 mCandidateLL.addView(child)
 
@@ -69,6 +70,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mSuggestion.put("ㅁㅊ", arrayListOf<String>("와", "대박", "헐"))
         mSuggestion.put("ㅅㄲ야", arrayListOf<String>("친구야", "자식아", "얘야"))
         mSuggestion.put("ㅈㄴ", arrayListOf<String>("매우", "정말", "완전"))
+        mSuggestion.put("ㅎㅇ", arrayListOf<String>("안녕", "안녕하세요", "만나서 반가워"))
         mSuggestion.put("콘텐츠", arrayListOf<String>("제작물"))
         mSuggestion.put("오리지널 콘텐츠", arrayListOf<String>("자체 제작물"))
         mSuggestion.put("멀티데믹", arrayListOf<String>("감염병 복합 유행"))
@@ -76,6 +78,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mSuggestion.put("디지털 트윈", arrayListOf<String>("가상 모형"))
         mSuggestion.put("커리어 하이", arrayListOf<String>("최고 기록"))
         mSuggestion.put("주스 주스", arrayListOf<String>("쥬시쿨"))
+        mSuggestion.put("language", arrayListOf<String>("korean", "english", "japanese", "chinese"))
     }
 
     // 추후 설정 관련
@@ -86,11 +89,15 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mCandidateHSV.setBackgroundColor(Color.parseColor(mColorBackground))
     }
 
-    fun getMyCandidateClickListener(ic: InputConnection, child: Button, stIdx: Int, edIdx: Int): OnClickListener{
+    fun getMyCandidateClickListener(ic: InputConnection, child: Button, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean): OnClickListener{
         return OnClickListener {
             ic.finishComposingText()
             ic.setSelection(stIdx, edIdx)
             ic.commitText(child.text, 1)
+
+            //대체어 변환 할 시 타이핑 중이던 한글 내용 초기화
+            keyboardKorean.hangulMaker.clear()
+            keyboardKorean.hangulMaker.set(0)
         }
     }
 
