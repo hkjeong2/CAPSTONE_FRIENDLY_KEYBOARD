@@ -1,6 +1,7 @@
 package com.example.friendlykeyboard.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -72,6 +73,7 @@ class SettingsFragment : Fragment() {
         }
 
         initClickListener()
+        initAttributes()
 
         return binding.root
     }
@@ -97,5 +99,17 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardBackground.item.setOnClickListener {
             resultLauncher.launch(Intent(activity, SettingsKeyboardBackgroundActivity::class.java))
         }
+    }
+
+    private fun initAttributes() {
+        // TODO: 키보드 속성들을 설정 화면에 표시해야 함.
+
+        val tempColor = Color.GREEN // 임시 변수
+        //binding.settingsItemKeyboardSize.attribute.text = "?"
+        //binding.settingsItemKeyboardFont.attribute.text = "?"
+        //binding.settingsItemKeyboardColor.imageView.drawable.setTint()
+        //binding.settingsItemKeyboardColor.attribute.setTextColor()
+        binding.settingsItemKeyboardBackground.imageView.drawable.setTint(tempColor)
+        binding.settingsItemKeyboardBackground.attribute.setTextColor(tempColor)
     }
 }

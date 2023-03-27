@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardBackgroundBinding
-import com.example.friendlykeyboard.keyboard.KeyBoardService
 
 class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardBackgroundBinding

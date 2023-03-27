@@ -1,15 +1,12 @@
 package com.example.friendlykeyboard.keyboard
 
-import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
-import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
@@ -89,7 +86,7 @@ class KeyBoardService : InputMethodService(){
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
 
-        setCandidatesViewShown(true);
+        setCandidatesViewShown(true)
         //EditText에 포커스가 갈 경우 호출되는 View
         return keyboardView
     }
@@ -184,10 +181,10 @@ class KeyBoardService : InputMethodService(){
             // 2) 오른쪽 방향으로
             // 토큰들을 조합하며 대체어 존재 유무 알기위해 사전 검색 (있으면 후보뷰 생성)
 
-            var token : List<String> = text.replace("\n", " ").split(" ")
-            var tokenIdxRange = ArrayList<ArrayList<Int>>()
+            val token : List<String> = text.replace("\n", " ").split(" ")
+            val tokenIdxRange = ArrayList<ArrayList<Int>>()
             //현재 커서가 위치한 토큰의 Idx 탐색
-            var tokenIdx = findCursorPos(token, tokenIdxRange)
+            val tokenIdx = findCursorPos(token, tokenIdxRange)
 
             //커서의 현재위치 기준에서 양방향으로 토큰 append하며 검색
             createCandidateView(token, tokenIdx)
