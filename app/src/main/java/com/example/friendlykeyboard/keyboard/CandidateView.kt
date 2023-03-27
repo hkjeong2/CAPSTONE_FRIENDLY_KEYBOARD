@@ -6,9 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
 
@@ -39,16 +41,21 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
     }
 
     //대체어 UI 생성
-    fun createView(text: String) : Boolean{
+    fun createView(ic: InputConnection, text: String, stIdx: Int, edIdx: Int) : Boolean{
         // Hashmap에 typing된 text 존재 시 UI 생성
         if (mSuggestion.containsKey(text)){
+            Log.d("시험", text)
+            Log.d("시험", stIdx.toString())
+            Log.d("시험", edIdx.toString())
             for(i in 0 until mSuggestion[text]!!.size){
 
+                //대체어 UI 생성
                 mCandidateItem = layoutInflater.inflate(R.layout.keyboard_candidate_item, null)
                 val child = mCandidateItem.findViewById<Button>(R.id.candidate_word)
                 child.text = mSuggestion[text]!!.get(i)
                 child.setTextColor(Color.parseColor(mColorText))
                 child.setTextSize(2, mTextSize)
+                child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx))
 
                 mCandidateLL.addView(child)
 
@@ -77,6 +84,14 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mColorText = colorText
         mTextSize = textSize
         mCandidateHSV.setBackgroundColor(Color.parseColor(mColorBackground))
+    }
+
+    fun getMyCandidateClickListener(ic: InputConnection, child: Button, stIdx: Int, edIdx: Int): OnClickListener{
+        return OnClickListener {
+            ic.finishComposingText()
+            ic.setSelection(stIdx, edIdx)
+            ic.commitText(child.text, 1)
+        }
     }
 
     fun eraseViews(){
