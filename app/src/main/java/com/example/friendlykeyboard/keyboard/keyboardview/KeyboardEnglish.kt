@@ -192,8 +192,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                         playClick(textView.text.toString().toCharArray().get(0).toInt())
                         inputConnection?.commitText(textView.text.toString(), 1)
 
-                        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-                        keyboardInterationListener.sendText(text?.text.toString())
+                        sendText()
                     }
                 }
                 return true
@@ -256,8 +255,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                     )
                     inputConnection?.commitText(actionButton.text,1)
 
-                    val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-                    keyboardInterationListener.sendText(text?.text.toString())
+                    sendText()
                 }
             }
 
@@ -383,7 +381,8 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             playVibrate()
             inputConnection?.commitText(" ",1)
             //space바 눌렀을 때 잔존 candidateView 지우기 위함
-            keyboardInterationListener.sendText("")
+            sendText()
+//            keyboardInterationListener.sendText("")
         }
     }
 
@@ -395,8 +394,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             }else{
                 inputConnection?.deleteSurroundingText(1,0)
             }
-            val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-            keyboardInterationListener.sendText(text?.text.toString())
+            sendText()
         }
     }
 
@@ -425,5 +423,9 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         }
     }
 
+    fun sendText(){
+        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+        keyboardInterationListener.sendText(text?.text.toString())
+    }
 
 }
