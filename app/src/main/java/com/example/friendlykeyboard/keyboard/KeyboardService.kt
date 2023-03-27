@@ -197,7 +197,7 @@ class KeyBoardService : InputMethodService(){
             val tokenIdx = findCursorPos(token, tokenIdxRange)
 
             //커서의 현재위치 기준에서 양방향으로 토큰 append하며 검색
-            createCandidateView(token, tokenIdx)
+            createCandidateView(token, tokenIdxRange, tokenIdx)
 
         }
     }
@@ -225,18 +225,20 @@ class KeyBoardService : InputMethodService(){
         return tokenIdx
     }
 
-    private fun createCandidateView(token : List<String>, tokenIdx : Int){
+    private fun createCandidateView(token : List<String>, tokenIdxRange: ArrayList<ArrayList<Int>>, tokenIdx: Int){
         var mText = ""
         var space = ""
         //현재 커서 기준 양방향으로 각각 for문 하나를 사용해 단어 조합을 검색하기 때문에
         //첫 문자가 겹치는 경우 발생 --> 해당 케이스 제거용 flag
         var isFirstWordAgain = false
+        val st = tokenIdxRange.get(tokenIdx).get(0)
+        val ed = tokenIdxRange.get(tokenIdx).get(1)
 
         for (i in tokenIdx downTo 0){
             if (i != tokenIdx)
                 space = " "
             mText = token.get(i) + space + mText
-            if (mCandidateView.createView(mText) && i == tokenIdx)
+            if (mCandidateView.createView(currentInputConnection, mText, tokenIdxRange.get(i).get(0), ed) && i == tokenIdx)
                 isFirstWordAgain = true
         }
 
@@ -250,7 +252,7 @@ class KeyBoardService : InputMethodService(){
             if (i != tokenIdx)
                 space = " "
             mText += space + token.get(i)
-            mCandidateView.createView(mText)
+            mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1))
         }
     }
 
