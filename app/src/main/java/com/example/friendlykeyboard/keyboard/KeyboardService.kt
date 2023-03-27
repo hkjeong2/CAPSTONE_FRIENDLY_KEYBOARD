@@ -12,6 +12,18 @@ import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 
 class KeyBoardService : InputMethodService(){
+    /*
+    // TODO: 동반 객체로 설정하면 memory leak 위험이 있음.
+    // 아래 코드는 동적으로 키보드 배경색을 변경하기 위함.
+    // 기존의 코드로는 keyboardKorean 에 접근할 수 없어서 속성을 변경할 수 없음.
+    // 클래스를 object로 수정하는 것도 마찬가지로 memory leak 위험 존재.
+    // 또한 동반 객체로 설정하였을 때 키보드 배경색 설정화면에 들어가기 전에 friendly keyboard 의 한글 qwerty
+    // 화면을 한 번 켰다 들어가야 함. 그렇지 않으면 keyboadrKorean 이 not initialized 되어 오류 발생.
+    companion object {
+        lateinit var keyboardKorean:KeyboardKorean
+    }
+    */
+
     lateinit var keyboardView:LinearLayout
     lateinit var keyboardFrame:FrameLayout
     lateinit var keyboardKorean:KeyboardKorean

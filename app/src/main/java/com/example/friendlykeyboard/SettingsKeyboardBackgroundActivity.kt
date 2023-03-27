@@ -1,10 +1,12 @@
 package com.example.friendlykeyboard
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardBackgroundBinding
+import com.example.friendlykeyboard.keyboard.KeyBoardService
 
 class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardBackgroundBinding
@@ -23,9 +25,9 @@ class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
         }
 
         binding.colorPickerView.addOnColorChangedListener {
-            // TODO
-            //keyboardLayout.linearLayout.setBackgroundColor(binding.colorPickerView.selectedColor)
             selectedColor = binding.colorPickerView.selectedColor
+            // TODO: 동반 객체로 설정하면 memory leak 위험이 있음.
+            //KeyBoardService.keyboardKorean.koreanLayout.setBackgroundColor(selectedColor!!)
         }
     }
 

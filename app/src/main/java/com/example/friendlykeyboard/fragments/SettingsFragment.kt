@@ -14,6 +14,7 @@ import com.example.friendlykeyboard.SettingsKeyboardColorActivity
 import com.example.friendlykeyboard.SettingsKeyboardFontActivity
 import com.example.friendlykeyboard.SettingsKeyboardSizeActivity
 import com.example.friendlykeyboard.databinding.FragmentSettingsBinding
+import com.example.friendlykeyboard.keyboard.KeyBoardService
 
 class SettingsFragment : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -104,12 +105,15 @@ class SettingsFragment : Fragment() {
     private fun initAttributes() {
         // TODO: 키보드 속성들을 설정 화면에 표시해야 함.
 
-        val tempColor = Color.GREEN // 임시 변수
+        // TODO: 동반 객체로 설정하면 memory leak 위험이 있음.
+        //KeyBoardService.keyboardKorean.koreanLayout.setBackgroundColor(Color.GREEN)
+
+        //val tempColor = Color.GREEN // 임시 변수
         //binding.settingsItemKeyboardSize.attribute.text = "?"
         //binding.settingsItemKeyboardFont.attribute.text = "?"
         //binding.settingsItemKeyboardColor.imageView.drawable.setTint()
         //binding.settingsItemKeyboardColor.attribute.setTextColor()
-        binding.settingsItemKeyboardBackground.imageView.drawable.setTint(tempColor)
-        binding.settingsItemKeyboardBackground.attribute.setTextColor(tempColor)
+        //binding.settingsItemKeyboardBackground.imageView.drawable.setTint(tempColor)
+        //binding.settingsItemKeyboardBackground.attribute.setTextColor(tempColor)
     }
 }
