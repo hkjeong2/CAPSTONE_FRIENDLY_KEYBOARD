@@ -63,71 +63,9 @@ class KeyBoardService : InputMethodService(){
         //text type될 때마다 call back
         //후보뷰 삭제 및 생성
         override fun sendText(text: String) {
-            if (::mCandidateView.isInitialized){
-                //새로운 문자가 들어왔으므로 이전 후보뷰 모두 삭제
-                mCandidateView.eraseViews()
 
-                // 문장을 띄어쓰기 기준으로 토큰화
-                // 현재 커서를 중심으로
-                // 1) 왼쪽 방향으로
-                // 2) 오른쪽 방향으로
-                // 토큰들을 조합하며 대체어 존재 유무 알기위해 사전 검색 (있으면 후보뷰 생성)
+            updateCandidates(text)
 
-                var token : List<String> = text.replace("\n", " ").split(" ")
-                var tokenIdxRange = ArrayList<ArrayList<Int>>()
-                //현재 커서가 위치한 토큰의 Idx 탐색
-                var tokenIdx = findCursorPos(token, tokenIdxRange)
-
-                //커서의 현재위치 기준에서 양방향으로 토큰 append하며 검색
-                createCandidateView(token, tokenIdx)
-
-            }
-
-        }
-
-        private fun findCursorPos(token : List<String>, tokenIdxRange : ArrayList<ArrayList<Int>>) : Int{
-            var begin = 0
-            var tokenIdx = 0
-
-            //문장의 각 어절이 가진 문자열 길이로 index 범위 저장 --> 커서의 위치가 해당 범위내 존재 시 tokenIdx 저장
-            if (token.size > 0){
-                for (i in token.indices){
-                    tokenIdxRange.add(ArrayList())
-                    tokenIdxRange.get(i).add(begin)
-                    val st = begin
-                    begin += token.get(i).length
-                    tokenIdxRange.get(i).add(begin)
-                    val en = begin
-                    begin += 1
-
-                    if (st <= idx && idx <= en){
-                        tokenIdx = i
-                    }
-                }
-            }
-            return tokenIdx
-        }
-
-        private fun createCandidateView(token : List<String>, tokenIdx : Int){
-            var mText = ""
-            var space = ""
-
-            for (i in tokenIdx downTo 0){
-                if (i != tokenIdx)
-                    space = " "
-                mText = token.get(i) + space + mText
-                mCandidateView.createView(mText)
-            }
-
-            mText = ""
-            space = ""
-
-            for (i in tokenIdx until token.size){
-                if (i != tokenIdx)
-                    space = " "
-                mText += space + token.get(i)
-                mCandidateView.createView(mText)
-            }
         }
 
     }
@@ -160,12 +98,19 @@ class KeyBoardService : InputMethodService(){
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
         //focus onto text field --> keyboard 올라올 때
+
+        //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
         Log.d("IMEstart", "1")
     }
+
 
     override fun onFinishInput() {
         super.onFinishInput()
         //focus out of text field --> keyboard 내려갈 때
+
+        //후보뷰 초기화
+        if (::mCandidateView.isInitialized)
+            mCandidateView.eraseViews()
        Log.d("IMEfinish", "0")
     }
 
@@ -181,12 +126,21 @@ class KeyBoardService : InputMethodService(){
         )
         //현재 커서 인덱스 저장
         idx = newSelStart
+
+        if ((newSelStart != candidatesEnd
+                    || newSelEnd != candidatesEnd)
+        ) {
+            updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
+            val ic = currentInputConnection
+            ic?.finishComposingText()
+        }
+
         //text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다,
         //text 추가될 때마다 call back
         Log.d("IMEupdateindex olds", oldSelStart.toString())
-        Log.d("IMEupdateindex olde", oldSelEnd.toString())
         Log.d("IMEupdateindex news", newSelStart.toString())
-        Log.d("IMEupdateindex newe", newSelEnd.toString())
+        Log.d("IMEupdateindex cs", candidatesStart.toString())
+        Log.d("IMEupdateindex ce", candidatesEnd.toString())
     }
 
 
@@ -223,6 +177,71 @@ class KeyBoardService : InputMethodService(){
 
     }
 
+    private fun updateCandidates(text : String){
+        if (::mCandidateView.isInitialized){
+            //새로운 문자가 들어왔으므로 이전 후보뷰 모두 삭제
+            mCandidateView.eraseViews()
 
+            // 문장을 띄어쓰기 기준으로 토큰화
+            // 현재 커서를 중심으로
+            // 1) 왼쪽 방향으로
+            // 2) 오른쪽 방향으로
+            // 토큰들을 조합하며 대체어 존재 유무 알기위해 사전 검색 (있으면 후보뷰 생성)
+
+            var token : List<String> = text.replace("\n", " ").split(" ")
+            var tokenIdxRange = ArrayList<ArrayList<Int>>()
+            //현재 커서가 위치한 토큰의 Idx 탐색
+            var tokenIdx = findCursorPos(token, tokenIdxRange)
+
+            //커서의 현재위치 기준에서 양방향으로 토큰 append하며 검색
+            createCandidateView(token, tokenIdx)
+
+        }
+    }
+
+    private fun findCursorPos(token : List<String>, tokenIdxRange : ArrayList<ArrayList<Int>>) : Int{
+        var begin = 0
+        var tokenIdx = 0
+
+        //문장의 각 어절이 가진 문자열 길이로 index 범위 저장 --> 커서의 위치가 해당 범위내 존재 시 tokenIdx 저장
+        if (token.size > 0){
+            for (i in token.indices){
+                tokenIdxRange.add(ArrayList())
+                tokenIdxRange.get(i).add(begin)
+                val st = begin
+                begin += token.get(i).length
+                tokenIdxRange.get(i).add(begin)
+                val en = begin
+                begin += 1
+
+                if (st <= idx && idx <= en){
+                    tokenIdx = i
+                }
+            }
+        }
+        return tokenIdx
+    }
+
+    private fun createCandidateView(token : List<String>, tokenIdx : Int){
+        var mText = ""
+        var space = ""
+
+        for (i in tokenIdx downTo 0){
+            if (i != tokenIdx)
+                space = " "
+            mText = token.get(i) + space + mText
+            mCandidateView.createView(mText)
+        }
+
+        mText = ""
+        space = ""
+
+        for (i in tokenIdx until token.size){
+            if (i != tokenIdx)
+                space = " "
+            mText += space + token.get(i)
+            mCandidateView.createView(mText)
+        }
+    }
 
 }
