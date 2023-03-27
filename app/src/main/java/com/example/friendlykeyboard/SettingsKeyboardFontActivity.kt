@@ -20,23 +20,22 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_action_arrow_back)
             title = "글자 크기와 폰트"
         }
-
-        binding.button.setOnClickListener {
-            val intent = Intent().apply {
-                putExtra("size", "크기 50%")
-                putExtra("font", "폰트 Bold")
-            }
-            setResult(200, intent)
-            finish()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            setResult(RESULT_CANCELED)
-            finish()
+            onBackPressed()
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent().apply {
+            putExtra("size", "크기 50%")
+            putExtra("font", "폰트 Bold")
+        }
+        setResult(200, intent)
+        finish()
     }
 }

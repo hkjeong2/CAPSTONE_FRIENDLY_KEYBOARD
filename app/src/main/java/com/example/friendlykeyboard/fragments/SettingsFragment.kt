@@ -1,6 +1,7 @@
 package com.example.friendlykeyboard.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.example.friendlykeyboard.SettingsKeyboardColorActivity
 import com.example.friendlykeyboard.SettingsKeyboardFontActivity
 import com.example.friendlykeyboard.SettingsKeyboardSizeActivity
 import com.example.friendlykeyboard.databinding.FragmentSettingsBinding
+import com.example.friendlykeyboard.keyboard.KeyBoardService
 
 class SettingsFragment : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -57,19 +59,22 @@ class SettingsFragment : Fragment() {
                 }
                 300 -> {
                     // 키보드 색상 설정
-                    val intent = it.data!!
-                    binding.settingsItemKeyboardColor.attribute.text = intent.getStringExtra("color")
+                    val selectedColor: Int = it.data!!.getStringExtra("color")!!.toInt()
+                    binding.settingsItemKeyboardColor.imageView.drawable.setTint(selectedColor)
+                    binding.settingsItemKeyboardColor.attribute.setTextColor(selectedColor)
                 }
                 400 -> {
                     // 키보드 배경색 설정
-                    val intent = it.data!!
-                    binding.settingsItemKeyboardBackground.attribute.text = intent.getStringExtra("background")
+                    val selectedColor: Int = it.data!!.getStringExtra("background")!!.toInt()
+                    binding.settingsItemKeyboardBackground.imageView.drawable.setTint(selectedColor)
+                    binding.settingsItemKeyboardBackground.attribute.setTextColor(selectedColor)
                 }
                 else -> {}
             }
         }
 
         initClickListener()
+        initAttributes()
 
         return binding.root
     }
@@ -95,5 +100,20 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardBackground.item.setOnClickListener {
             resultLauncher.launch(Intent(activity, SettingsKeyboardBackgroundActivity::class.java))
         }
+    }
+
+    private fun initAttributes() {
+        // TODO: 키보드 속성들을 설정 화면에 표시해야 함.
+
+        // TODO: 동반 객체로 설정하면 memory leak 위험이 있음.
+        //KeyBoardService.keyboardKorean.koreanLayout.setBackgroundColor(Color.GREEN)
+
+        //val tempColor = Color.GREEN // 임시 변수
+        //binding.settingsItemKeyboardSize.attribute.text = "?"
+        //binding.settingsItemKeyboardFont.attribute.text = "?"
+        //binding.settingsItemKeyboardColor.imageView.drawable.setTint()
+        //binding.settingsItemKeyboardColor.attribute.setTextColor()
+        //binding.settingsItemKeyboardBackground.imageView.drawable.setTint(tempColor)
+        //binding.settingsItemKeyboardBackground.attribute.setTextColor(tempColor)
     }
 }
