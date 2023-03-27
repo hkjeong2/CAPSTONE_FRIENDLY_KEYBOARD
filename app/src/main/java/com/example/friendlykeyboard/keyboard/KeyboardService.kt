@@ -127,13 +127,9 @@ class KeyBoardService : InputMethodService(){
         //현재 커서 인덱스 저장
         idx = newSelStart
 
-        if ((newSelStart != candidatesEnd
-                    || newSelEnd != candidatesEnd)
-        ) {
+        //유저가 text field 내 text 클릭 시 해당 블록과 주변 text 검사하여 candidate view 생성 및 삭제
+        if (newSelStart != candidatesEnd || newSelEnd != candidatesEnd )
             updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
-            val ic = currentInputConnection
-            ic?.finishComposingText()
-        }
 
         //text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다,
         //text 추가될 때마다 call back
@@ -225,23 +221,30 @@ class KeyBoardService : InputMethodService(){
     private fun createCandidateView(token : List<String>, tokenIdx : Int){
         var mText = ""
         var space = ""
+        //현재 커서 기준 양방향으로 각각 for문 하나를 사용해 단어 조합을 검색하기 때문에
+        //첫 문자가 겹치는 경우 발생 --> 해당 케이스 제거용 flag
+        var isFirstWordAgain = false
 
         for (i in tokenIdx downTo 0){
             if (i != tokenIdx)
                 space = " "
             mText = token.get(i) + space + mText
-            mCandidateView.createView(mText)
+            if (mCandidateView.createView(mText) && i == tokenIdx)
+                isFirstWordAgain = true
         }
 
         mText = ""
         space = ""
 
         for (i in tokenIdx until token.size){
+            //앞선 for문에서 첫 word로 대체어 생성했기 때문에 skip
+            if (i == tokenIdx && isFirstWordAgain)
+                continue
             if (i != tokenIdx)
                 space = " "
             mText += space + token.get(i)
             mCandidateView.createView(mText)
         }
     }
-
+    //startInput 첫 클릭 후보뷰
 }
