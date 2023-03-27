@@ -3,6 +3,7 @@ package com.example.friendlykeyboard.keyboard.keyboardview
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
 import android.inputmethodservice.Keyboard
 import android.media.AudioManager
 import android.os.*

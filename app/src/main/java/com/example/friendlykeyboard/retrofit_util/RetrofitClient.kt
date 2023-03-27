@@ -6,8 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     /**
-     * IP 주소 1: http://52.78.26.88:5000/
-     * IP 주소 2: http://175.112.34.253:5000/
+     * IP 주소: http://175.112.34.253:5000/
      */
     private const val BASE_URL = "http://175.112.34.253:5000/"
 

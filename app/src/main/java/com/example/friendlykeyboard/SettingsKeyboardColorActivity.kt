@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardColorBinding
+import com.flask.colorpicker.builder.ColorPickerClickListener
 
 class SettingsKeyboardColorActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardColorBinding
@@ -20,32 +21,12 @@ class SettingsKeyboardColorActivity : AppCompatActivity() {
             title = "키보드 색상"
         }
 
-
-        val colorPicker = binding.colorPicker
-        val saturationBar = binding.saturationBar
-        val opacityBar = binding.opacityBar
-
-        with(colorPicker) {
-            addSaturationBar(saturationBar)
-            addOpacityBar(opacityBar)
-            showOldCenterColor = false
+        binding.colorPickerView.addOnColorChangedListener {
+            // TODO: 키보드 색상 수정
+            //binding.tempTextView.text = binding.colorPickerView.selectedColor.toString(16)
+            //binding.tempTextView.setBackgroundColor(binding.colorPickerView.selectedColor)
         }
 
-        // To set the old selected color you can do it like this
-        // colorPicker.oldCenterColor = colorPicker.color
-
-        // adds listener to the colorpicker which is implemented in the activity
-        colorPicker.setOnColorChangedListener {
-            // TODO
-        }
-
-        // adding onChangeListeners to bars
-        saturationBar.setOnSaturationChangedListener {
-            // TODO
-        }
-        opacityBar.setOnOpacityChangedListener {
-            // TODO
-        }
 
         /*
         binding.button.setOnClickListener {
