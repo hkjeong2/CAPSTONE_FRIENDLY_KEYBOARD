@@ -127,14 +127,10 @@ class KeyBoardService : InputMethodService(){
         //현재 커서 인덱스 저장
         idx = newSelStart
 
-        if ((newSelStart != candidatesEnd
-                    || newSelEnd != candidatesEnd)
-        ) {
+        //유저가 text field 내 text 클릭 시 해당 블록과 주변 text 검사하여 candidate view 생성 및 삭제
+        if (newSelStart != candidatesEnd || newSelEnd != candidatesEnd )
             updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
-            val ic = currentInputConnection
-            ic?.finishComposingText()
-        }
-
+        
         //text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다,
         //text 추가될 때마다 call back
         Log.d("IMEupdateindex olds", oldSelStart.toString())
@@ -243,5 +239,6 @@ class KeyBoardService : InputMethodService(){
             mCandidateView.createView(mText)
         }
     }
-
+    //중복 현상
+    //startInput 첫 클릭 후보뷰
 }
