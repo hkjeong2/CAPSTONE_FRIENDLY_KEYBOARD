@@ -57,13 +57,15 @@ class SettingsFragment : Fragment() {
                 }
                 300 -> {
                     // 키보드 색상 설정
-                    val intent = it.data!!
-                    binding.settingsItemKeyboardColor.attribute.text = intent.getStringExtra("color")
+                    val selectedColor: Int = it.data!!.getStringExtra("color")!!.toInt()
+                    binding.settingsItemKeyboardColor.imageView.drawable.setTint(selectedColor)
+                    binding.settingsItemKeyboardColor.attribute.setTextColor(selectedColor)
                 }
                 400 -> {
                     // 키보드 배경색 설정
-                    val intent = it.data!!
-                    binding.settingsItemKeyboardBackground.attribute.text = intent.getStringExtra("background")
+                    val selectedColor: Int = it.data!!.getStringExtra("background")!!.toInt()
+                    binding.settingsItemKeyboardBackground.imageView.drawable.setTint(selectedColor)
+                    binding.settingsItemKeyboardBackground.attribute.setTextColor(selectedColor)
                 }
                 else -> {}
             }

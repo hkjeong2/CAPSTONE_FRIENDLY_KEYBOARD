@@ -1,5 +1,6 @@
 package com.example.friendlykeyboard
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +9,7 @@ import com.example.friendlykeyboard.keyboard.KeyBoardService
 
 class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardBackgroundBinding
+    private var selectedColor: Int? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,30 +23,30 @@ class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
             title = "키보드 배경색"
         }
 
-        KeyBoardService().keyboardKorean.koreanLayout.setBackgroundColor(binding.colorPickerView.selectedColor)
-
         binding.colorPickerView.addOnColorChangedListener {
             // TODO
             //keyboardLayout.linearLayout.setBackgroundColor(binding.colorPickerView.selectedColor)
+            selectedColor = binding.colorPickerView.selectedColor
         }
-
-        /*
-        binding.button.setOnClickListener {
-            val intent = Intent().apply {
-                putExtra("background", "배경색 #FFFFFF")
-            }
-            setResult(400, intent)
-            finish()
-        }
-        */
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            setResult(RESULT_CANCELED)
-            finish()
+            onBackPressed()
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (selectedColor != null) {
+            val intent = Intent().apply {
+                putExtra("background", "${binding.colorPickerView.selectedColor}")
+            }
+            setResult(400, intent)
+        } else {
+            setResult(RESULT_CANCELED)
+        }
+        finish()
     }
 }

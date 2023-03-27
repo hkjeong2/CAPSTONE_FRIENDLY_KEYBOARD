@@ -1,5 +1,6 @@
 package com.example.friendlykeyboard
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +9,7 @@ import com.flask.colorpicker.builder.ColorPickerClickListener
 
 class SettingsKeyboardColorActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardColorBinding
+    private var selectedColor: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,28 +25,27 @@ class SettingsKeyboardColorActivity : AppCompatActivity() {
 
         binding.colorPickerView.addOnColorChangedListener {
             // TODO: 키보드 색상 수정
-            //binding.tempTextView.text = binding.colorPickerView.selectedColor.toString(16)
-            //binding.tempTextView.setBackgroundColor(binding.colorPickerView.selectedColor)
+            selectedColor = binding.colorPickerView.selectedColor
         }
-
-
-        /*
-        binding.button.setOnClickListener {
-            val intent = Intent().apply {
-                putExtra("color", "색상 #FFFFFF")
-            }
-            setResult(300, intent)
-            finish()
-        }
-        */
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            setResult(RESULT_CANCELED)
-            finish()
+            onBackPressed()
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (selectedColor != null) {
+            val intent = Intent().apply {
+                putExtra("color", "${binding.colorPickerView.selectedColor}")
+            }
+            setResult(300, intent)
+        } else {
+            setResult(RESULT_CANCELED)
+        }
+        finish()
     }
 }
