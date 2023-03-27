@@ -39,7 +39,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
     }
 
     //대체어 UI 생성
-    fun createView(text: String){
+    fun createView(text: String) : Boolean{
         // Hashmap에 typing된 text 존재 시 UI 생성
         if (mSuggestion.containsKey(text)){
             for(i in 0 until mSuggestion[text]!!.size){
@@ -53,11 +53,9 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
                 mCandidateLL.addView(child)
 
             }
+            return true
         }
-//        else{
-//            mCandidateLL.removeAllViews()
-//        }
-
+        return false
     }
 
     fun loadDic(){
