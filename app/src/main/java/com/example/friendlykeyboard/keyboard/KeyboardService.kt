@@ -121,6 +121,9 @@ class KeyBoardService : InputMethodService(){
        Log.d("IMEfinish", "0")
     }
 
+    //1) text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다
+    //2) text 추가될 때마다
+    // call back
     override fun onUpdateSelection(
         oldSelStart: Int, oldSelEnd: Int,
         newSelStart: Int, newSelEnd: Int,
@@ -138,8 +141,6 @@ class KeyBoardService : InputMethodService(){
         if (newSelStart != candidatesEnd || newSelEnd != candidatesEnd )
             updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
 
-        //text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다,
-        //text 추가될 때마다 call back
         Log.d("IMEupdateindex olds", oldSelStart.toString())
         Log.d("IMEupdateindex news", newSelStart.toString())
         Log.d("IMEupdateindex cs", candidatesStart.toString())
@@ -187,14 +188,13 @@ class KeyBoardService : InputMethodService(){
 
             // 문장을 띄어쓰기 기준으로 토큰화
             // 현재 커서를 중심으로
-            // 1) 왼쪽 방향으로
-            // 2) 오른쪽 방향으로
+            // 1) 왼쪽 방향으로   2) 오른쪽 방향으로
             // 토큰들을 조합하며 대체어 존재 유무 알기위해 사전 검색 (있으면 후보뷰 생성)
 
-            var token : List<String> = text.replace("\n", " ").split(" ")
-            var tokenIdxRange = ArrayList<ArrayList<Int>>()
+            val token : List<String> = text.replace("\n", " ").split(" ")
+            val tokenIdxRange = ArrayList<ArrayList<Int>>()
             //현재 커서가 위치한 토큰의 Idx 탐색
-            var tokenIdx = findCursorPos(token, tokenIdxRange)
+            val tokenIdx = findCursorPos(token, tokenIdxRange)
 
             //커서의 현재위치 기준에서 양방향으로 토큰 append하며 검색
             createCandidateView(token, tokenIdx)
