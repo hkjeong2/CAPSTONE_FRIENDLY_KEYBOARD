@@ -231,8 +231,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                     if(isCaps){
                         modeChange()
                     }
-                    val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-                    keyboardInterationListener.sendText(text?.text.toString())
+
+                    sendText()
 
                 }
             }
@@ -361,7 +361,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             playVibrate()
             hangulMaker.commitSpace()
             //space바 눌렀을 때 잔존 candidateView 지우기 위함
-            keyboardInterationListener.sendText("")
+            sendText()
+//            keyboardInterationListener.sendText("")
         }
     }
 
@@ -384,8 +385,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             else{
                 hangulMaker.delete()
             }
-            val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-            keyboardInterationListener.sendText(text?.text.toString())
+            sendText()
         }
     }
 
@@ -410,5 +410,9 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         }
     }
 
+    fun sendText(){
+        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+        keyboardInterationListener.sendText(text?.text.toString())
+    }
 
 }

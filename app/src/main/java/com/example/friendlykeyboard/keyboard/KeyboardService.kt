@@ -72,9 +72,7 @@ class KeyBoardService : InputMethodService(){
         //text type될 때마다 call back
         //후보뷰 삭제 및 생성
         override fun sendText(text: String) {
-
             updateCandidates(text)
-
         }
 
     }
@@ -113,13 +111,6 @@ class KeyBoardService : InputMethodService(){
         Log.d("IMEstart", "2")
     }
 
-
-//    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
-//        super.onStartInput(attribute, restarting)
-//        Log.d("IMEstart", "1")
-//    }
-
-
     override fun onFinishInput() {
         super.onFinishInput()
         //focus out of text field --> keyboard 내려갈 때
@@ -127,12 +118,10 @@ class KeyBoardService : InputMethodService(){
         //후보뷰 초기화
         if (::mCandidateView.isInitialized)
             mCandidateView.eraseViews()
+
         Log.d("IMEfinish", "0")
     }
 
-    //1) text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다
-    //2) text 추가될 때마다
-    // call back
     override fun onUpdateSelection(
         oldSelStart: Int, oldSelEnd: Int,
         newSelStart: Int, newSelEnd: Int,
@@ -143,6 +132,10 @@ class KeyBoardService : InputMethodService(){
             newSelStart, newSelEnd,
             candidatesStart, candidatesEnd
         )
+        //1) text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다
+        //2) text 추가될 때마다
+        // call back
+        
         //현재 커서 인덱스 저장
         idx = newSelStart
 
@@ -155,8 +148,6 @@ class KeyBoardService : InputMethodService(){
         Log.d("IMEupdateindex cs", candidatesStart.toString())
         Log.d("IMEupdateindex ce", candidatesEnd.toString())
     }
-
-
 
     override fun updateInputViewShown() {
         //현재 필요한 키보드를 결정하고 수정
@@ -171,7 +162,6 @@ class KeyBoardService : InputMethodService(){
             keyboardInterationListener.modechange(1)
         }
     }
-
 
     //화면이 위로 스크롤 되면서 candidate view도 자리를 차지
     override fun onComputeInsets(outInsets: Insets?) {
