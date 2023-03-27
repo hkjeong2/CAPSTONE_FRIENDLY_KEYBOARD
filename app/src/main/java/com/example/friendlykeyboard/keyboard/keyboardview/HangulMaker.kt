@@ -335,4 +335,8 @@ open class HangulMaker {
         }
         return false
     }
+
+    fun set(st: Int){
+        state = st
+    }
 }

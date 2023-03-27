@@ -127,7 +127,7 @@ class KeyBoardService : InputMethodService(){
         //후보뷰 초기화
         if (::mCandidateView.isInitialized)
             mCandidateView.eraseViews()
-       Log.d("IMEfinish", "0")
+        Log.d("IMEfinish", "0")
     }
 
     //1) text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다
@@ -247,7 +247,7 @@ class KeyBoardService : InputMethodService(){
             if (i != tokenIdx)
                 space = " "
             mText = token.get(i) + space + mText
-            if (mCandidateView.createView(currentInputConnection, mText, tokenIdxRange.get(i).get(0), ed) && i == tokenIdx)
+            if (mCandidateView.createView(currentInputConnection, mText, tokenIdxRange.get(i).get(0), ed, keyboardKorean) && i == tokenIdx)
                 isFirstWordAgain = true
         }
 
@@ -261,7 +261,7 @@ class KeyBoardService : InputMethodService(){
             if (i != tokenIdx)
                 space = " "
             mText += space + token.get(i)
-            mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1))
+            mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1), keyboardKorean)
         }
     }
 
