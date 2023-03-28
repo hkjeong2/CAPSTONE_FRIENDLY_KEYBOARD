@@ -82,10 +82,12 @@ class KeyBoardService : InputMethodService(){
         //keyboard가 될 전체 레이아웃과 입력방식에 따라 다르게 채워질 framelayout 정의
         keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
         keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
+        Log.d("키보드 생성", "111")
     }
 
     override fun onCreateInputView(): View {
         //각 type의 keyboard 생성
+        Log.d("키보드 생성2", "222")
         keyboardKorean = KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardEnglish = KeyboardEnglish(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardSymbols = KeyboardSymbols(applicationContext, layoutInflater, keyboardInterationListener)
@@ -108,7 +110,7 @@ class KeyBoardService : InputMethodService(){
         idx = currentInputConnection.getTextBeforeCursor(1000, 0).toString().length
         updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
 
-        Log.d("IMEstart", "2")
+        Log.d("키보드 생성3", "333")
     }
 
     override fun onFinishInput() {
@@ -119,7 +121,7 @@ class KeyBoardService : InputMethodService(){
         if (::mCandidateView.isInitialized)
             mCandidateView.eraseViews()
 
-        Log.d("IMEfinish", "0")
+        Log.d("키보드 닫기", "111")
     }
 
     override fun onUpdateSelection(
@@ -149,7 +151,14 @@ class KeyBoardService : InputMethodService(){
         Log.d("IMEupdateindex ce", candidatesEnd.toString())
     }
 
+    private fun updateKeyboard(){
+        if(::keyboardKorean.isInitialized)
+            keyboardKorean.updateHeight(200)
+    }
+
     override fun updateInputViewShown() {
+        updateKeyboard()
+        Log.d("키보드 수정", "111")
         //현재 필요한 키보드를 결정하고 수정
         super.updateInputViewShown()
         currentInputConnection.finishComposingText()
