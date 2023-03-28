@@ -1,14 +1,17 @@
 package com.example.friendlykeyboard
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardColorBinding
 import com.flask.colorpicker.builder.ColorPickerClickListener
 
 class SettingsKeyboardColorActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardColorBinding
+    private lateinit var inputMethodManager: InputMethodManager
     private var selectedColor: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,9 +26,12 @@ class SettingsKeyboardColorActivity : AppCompatActivity() {
             title = "키보드 색상"
         }
 
+        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         binding.colorPickerView.addOnColorChangedListener {
-            // TODO: 키보드 색상 수정
             selectedColor = binding.colorPickerView.selectedColor
+            binding.textInputEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
