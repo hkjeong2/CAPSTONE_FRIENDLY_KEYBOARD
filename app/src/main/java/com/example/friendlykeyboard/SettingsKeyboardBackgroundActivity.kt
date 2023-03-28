@@ -1,15 +1,18 @@
 package com.example.friendlykeyboard
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.renderscript.ScriptGroup.Input
 import android.view.MenuItem
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardBackgroundBinding
-import com.example.friendlykeyboard.keyboard.KeyBoardService
 
 class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardBackgroundBinding
+    private lateinit var inputMethodManager: InputMethodManager
     private var selectedColor: Int? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +27,12 @@ class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
             title = "키보드 배경색"
         }
 
+        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         binding.colorPickerView.addOnColorChangedListener {
             selectedColor = binding.colorPickerView.selectedColor
-            // TODO: 동반 객체로 설정하면 memory leak 위험이 있음.
-            //KeyBoardService.keyboardKorean.koreanLayout.setBackgroundColor(selectedColor!!)
+            binding.textInputEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
