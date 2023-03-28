@@ -49,36 +49,23 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
             Log.d("시험", stIdx.toString())
             Log.d("시험", edIdx.toString())
             for(i in 0 until mSuggestion[text]!!.size){
-
                 //대체어 UI 생성
-                mCandidateItem = layoutInflater.inflate(R.layout.keyboard_candidate_item, null)
-                val child = mCandidateItem.findViewById<Button>(R.id.candidate_word)
-                child.text = mSuggestion[text]!!.get(i)
-                child.setTextColor(Color.parseColor(mColorText))
-                child.setTextSize(2, mTextSize)
-                child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx, keyboardKorean))
-
-                mCandidateLL.addView(child)
-
+                generateCandidates(i, text, ic, stIdx, edIdx, keyboardKorean)
             }
             return true
         }
         return false
     }
 
-    fun loadDic(){
-        mSuggestion.put("ㅁㅊ", arrayListOf<String>("와", "대박", "헐"))
-        mSuggestion.put("ㅅㄲ야", arrayListOf<String>("친구야", "자식아", "얘야"))
-        mSuggestion.put("ㅈㄴ", arrayListOf<String>("매우", "정말", "완전"))
-        mSuggestion.put("ㅎㅇ", arrayListOf<String>("안녕", "안녕하세요", "만나서 반가워"))
-        mSuggestion.put("콘텐츠", arrayListOf<String>("제작물"))
-        mSuggestion.put("오리지널 콘텐츠", arrayListOf<String>("자체 제작물"))
-        mSuggestion.put("멀티데믹", arrayListOf<String>("감염병 복합 유행"))
-        mSuggestion.put("노마드 워커", arrayListOf<String>("유목민형 노동자"))
-        mSuggestion.put("디지털 트윈", arrayListOf<String>("가상 모형"))
-        mSuggestion.put("커리어 하이", arrayListOf<String>("최고 기록"))
-        mSuggestion.put("주스 주스", arrayListOf<String>("쥬시쿨"))
-        mSuggestion.put("language", arrayListOf<String>("korean", "english", "japanese", "chinese"))
+    fun generateCandidates(i: Int, text: String, ic: InputConnection, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean){
+        mCandidateItem = layoutInflater.inflate(R.layout.keyboard_candidate_item, null)
+        val child = mCandidateItem.findViewById<Button>(R.id.candidate_word)
+        child.text = mSuggestion[text]!!.get(i)
+        child.setTextColor(Color.parseColor(mColorText))
+        child.setTextSize(2, mTextSize)
+        child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx, keyboardKorean))
+
+        mCandidateLL.addView(child)
     }
 
     // 추후 설정 관련
@@ -107,6 +94,21 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
 
     fun getCandidate() : HorizontalScrollView{
         return mCandidateHSV
+    }
+
+    fun loadDic(){
+        mSuggestion.put("ㅁㅊ", arrayListOf<String>("와", "대박", "헐"))
+        mSuggestion.put("ㅅㄲ야", arrayListOf<String>("친구야", "자식아", "얘야"))
+        mSuggestion.put("ㅈㄴ", arrayListOf<String>("매우", "정말", "완전"))
+        mSuggestion.put("ㅎㅇ", arrayListOf<String>("안녕", "안녕하세요", "만나서 반가워"))
+        mSuggestion.put("콘텐츠", arrayListOf<String>("제작물"))
+        mSuggestion.put("오리지널 콘텐츠", arrayListOf<String>("자체 제작물"))
+        mSuggestion.put("멀티데믹", arrayListOf<String>("감염병 복합 유행"))
+        mSuggestion.put("노마드 워커", arrayListOf<String>("유목민형 노동자"))
+        mSuggestion.put("디지털 트윈", arrayListOf<String>("가상 모형"))
+        mSuggestion.put("커리어 하이", arrayListOf<String>("최고 기록"))
+        mSuggestion.put("주스 주스", arrayListOf<String>("쥬시쿨"))
+        mSuggestion.put("language", arrayListOf<String>("korean", "english", "japanese", "chinese"))
     }
 
 }
