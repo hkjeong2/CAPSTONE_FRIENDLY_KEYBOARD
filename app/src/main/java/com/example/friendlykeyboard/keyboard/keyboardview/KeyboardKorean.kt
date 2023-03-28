@@ -47,6 +47,18 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     var downView:View? = null
     var capsView:ImageView? = null
 
+    lateinit var numpadLine : LinearLayout
+    lateinit var firstLine: LinearLayout
+    lateinit var secondLine: LinearLayout
+    lateinit var thirdLine: LinearLayout
+    lateinit var fourthLine: LinearLayout
+
+    fun updateHeight(height : Int){
+        firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*1).toInt())
+        secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*1).toInt())
+        thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*1).toInt())
+    }
+
     fun init(){
         koreanLayout = layoutInflater.inflate(R.layout.keyboard_action, null) as LinearLayout
         hangulMaker = HangulMaker(inputConnection!!)
@@ -59,19 +71,19 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
-        val numpadLine = koreanLayout.findViewById<LinearLayout>(
+        numpadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.numpad_line
         )
-        val firstLine = koreanLayout.findViewById<LinearLayout>(
+        firstLine = koreanLayout.findViewById<LinearLayout>(
             R.id.first_line
         )
-        val secondLine = koreanLayout.findViewById<LinearLayout>(
+        secondLine = koreanLayout.findViewById<LinearLayout>(
             R.id.second_line
         )
-        val thirdLine = koreanLayout.findViewById<LinearLayout>(
+        thirdLine = koreanLayout.findViewById<LinearLayout>(
             R.id.third_line
         )
-        val fourthLine = koreanLayout.findViewById<LinearLayout>(
+        fourthLine = koreanLayout.findViewById<LinearLayout>(
             R.id.fourth_line
         )
 
