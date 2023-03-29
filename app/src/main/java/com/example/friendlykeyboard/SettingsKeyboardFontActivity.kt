@@ -1,6 +1,8 @@
 package com.example.friendlykeyboard
 
+import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +10,8 @@ import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardFontBind
 
 class SettingsKeyboardFontActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsKeyboardFontBinding
+    private lateinit var pref: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,22 +24,23 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_action_arrow_back)
             title = "글자 크기와 폰트"
         }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        android.R.id.home -> {
-            onBackPressed()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
+        pref = getSharedPreferences("setting", Activity.MODE_PRIVATE)
+        editor = pref.edit()
 
-    override fun onBackPressed() {
+        /*
         val intent = Intent().apply {
             putExtra("size", "크기 50%")
             putExtra("font", "폰트 Bold")
         }
-        setResult(200, intent)
-        finish()
+        */
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

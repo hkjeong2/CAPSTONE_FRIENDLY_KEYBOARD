@@ -1,5 +1,7 @@
 package com.example.friendlykeyboard.keyboard
 
+import android.app.Activity
+import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
 import android.util.Log
 import android.view.View
@@ -11,7 +13,8 @@ import android.widget.LinearLayout
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 
-class KeyBoardService : InputMethodService(){
+class KeyBoardService : InputMethodService() {
+    private lateinit var pref: SharedPreferences
     lateinit var keyboardView:LinearLayout
     lateinit var keyboardFrame:FrameLayout
     lateinit var keyboardKorean:KeyboardKorean
@@ -70,6 +73,7 @@ class KeyBoardService : InputMethodService(){
         //keyboard가 될 전체 레이아웃과 입력방식에 따라 다르게 채워질 framelayout 정의
         keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
         keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
+        pref = getSharedPreferences("setting", Activity.MODE_PRIVATE)
         Log.d("키보드 생성", "111")
     }
 
@@ -85,6 +89,8 @@ class KeyBoardService : InputMethodService(){
         keyboardEnglish.init()
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
+
+        updateKeyboard()
 
         setCandidatesViewShown(true)
         //EditText에 포커스가 갈 경우 호출되는 View
@@ -139,9 +145,15 @@ class KeyBoardService : InputMethodService(){
         Log.d("IMEupdateindex ce", candidatesEnd.toString())
     }
 
+    // 키보드 속성 값을 설정하는 메소드
     private fun updateKeyboard(){
-        if(::keyboardKorean.isInitialized)
-            keyboardKorean.updateHeight(200)
+        if (::keyboardKorean.isInitialized) {
+            //keyboardKorean.updateHeight(200)
+            // 키보드 배경색 업데이트
+            val background_color = pref.getInt("keyboardBackground", 0)
+            keyboardKorean.koreanLayout.setBackgroundColor(background_color)
+            keyboardEnglish.englishLayout.setBackgroundColor(background_color)
+        }
     }
 
     override fun updateInputViewShown() {
