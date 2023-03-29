@@ -149,6 +149,11 @@ class KeyBoardService : InputMethodService() {
     private fun updateKeyboard(){
         if (::keyboardKorean.isInitialized) {
             //keyboardKorean.updateHeight(200)
+
+            // TODO: 키보드 색상 업데이트
+            val color = pref.getInt("keyboardColor", 0)
+
+
             // 키보드 배경색 업데이트
             val background_color = pref.getInt("keyboardBackground", 0)
             keyboardKorean.koreanLayout.setBackgroundColor(background_color)
