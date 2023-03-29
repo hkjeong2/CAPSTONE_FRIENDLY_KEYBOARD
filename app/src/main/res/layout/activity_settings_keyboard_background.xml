@@ -20,81 +20,87 @@
         app:title="키보드 배경색"
         app:titleTextColor="@color/white" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="4dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
 
-            <com.flask.colorpicker.ColorPickerView
-                android:id="@+id/color_picker_view"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                app:alphaSlider="true"
-                app:alphaSliderView="@+id/v_alpha_slider"
-                app:density="12"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lightnessSlider="true"
-                app:lightnessSliderView="@+id/v_lightness_slider"
-                app:wheelType="FLOWER" />
+                android:layout_height="match_parent">
 
-            <com.flask.colorpicker.slider.LightnessSlider
-                android:id="@+id/v_lightness_slider"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintEnd_toEndOf="@+id/color_picker_view"
-                app:layout_constraintStart_toStartOf="@+id/color_picker_view"
-                app:layout_constraintTop_toBottomOf="@+id/lightnessTextView" />
+                <com.flask.colorpicker.ColorPickerView
+                    android:id="@+id/color_picker_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    app:alphaSlider="true"
+                    app:alphaSliderView="@+id/v_alpha_slider"
+                    app:density="12"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lightnessSlider="true"
+                    app:lightnessSliderView="@+id/v_lightness_slider"
+                    app:wheelType="FLOWER" />
 
-            <com.flask.colorpicker.slider.AlphaSlider
-                android:id="@+id/v_alpha_slider"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/color_picker_view"
-                app:layout_constraintStart_toStartOf="@+id/color_picker_view"
-                app:layout_constraintTop_toBottomOf="@+id/opacityTextView" />
+                <com.flask.colorpicker.slider.LightnessSlider
+                    android:id="@+id/v_lightness_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintEnd_toEndOf="@+id/color_picker_view"
+                    app:layout_constraintStart_toStartOf="@+id/color_picker_view"
+                    app:layout_constraintTop_toBottomOf="@+id/lightnessTextView" />
 
-            <TextView
-                android:id="@+id/lightnessTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="밝기"
-                app:layout_constraintStart_toStartOf="@+id/color_picker_view"
-                app:layout_constraintTop_toBottomOf="@+id/color_picker_view" />
+                <com.flask.colorpicker.slider.AlphaSlider
+                    android:id="@+id/v_alpha_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/color_picker_view"
+                    app:layout_constraintStart_toStartOf="@+id/color_picker_view"
+                    app:layout_constraintTop_toBottomOf="@+id/opacityTextView" />
 
-            <TextView
-                android:id="@+id/opacityTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="투명도"
-                app:layout_constraintStart_toStartOf="@+id/v_lightness_slider"
-                app:layout_constraintTop_toBottomOf="@+id/v_lightness_slider" />
+                <TextView
+                    android:id="@+id/lightnessTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="밝기"
+                    app:layout_constraintStart_toStartOf="@+id/color_picker_view"
+                    app:layout_constraintTop_toBottomOf="@+id/color_picker_view" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/opacityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="투명도"
+                    app:layout_constraintStart_toStartOf="@+id/v_lightness_slider"
+                    app:layout_constraintTop_toBottomOf="@+id/v_lightness_slider" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
