@@ -32,12 +32,11 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
         pref = getSharedPreferences("setting", Activity.MODE_PRIVATE)
         editor = pref.edit()
 
-        /*
-        val intent = Intent().apply {
-            putExtra("size", "크기 50%")
-            putExtra("font", "폰트 Bold")
+        binding.colorPickerView.addOnColorChangedListener {
+            editor.putInt("keyboardFontColor", binding.colorPickerView.selectedColor).apply()
+            binding.textInputEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
-        */
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

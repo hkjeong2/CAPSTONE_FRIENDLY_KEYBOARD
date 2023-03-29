@@ -149,6 +149,7 @@ class KeyBoardService : InputMethodService() {
     private fun updateKeyboard(){
         if (::keyboardKorean.isInitialized) {
             // 키보드 크기 업데이트
+            // 폰트 색깔 업데이트
             keyboardKorean.updateKeyboard()
             keyboardEnglish.updateKeyboard()
 
