@@ -1,6 +1,8 @@
 package com.example.friendlykeyboard.keyboard
 
 import android.content.Intent
+import android.app.Activity
+import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
 import android.net.Uri
 import android.os.Build
@@ -17,20 +19,8 @@ import com.example.friendlykeyboard.MyOverlayUIService
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 
-
-class KeyBoardService : InputMethodService(){
-    /*
-    // TODO: 동반 객체로 설정하면 memory leak 위험이 있음.
-    // 아래 코드는 동적으로 키보드 배경색을 변경하기 위함.
-    // 기존의 코드로는 keyboardKorean 에 접근할 수 없어서 속성을 변경할 수 없음.
-    // 클래스를 object로 수정하는 것도 마찬가지로 memory leak 위험 존재.
-    // 또한 동반 객체로 설정하였을 때 키보드 배경색 설정화면에 들어가기 전에 friendly keyboard 의 한글 qwerty
-    // 화면을 한 번 켰다 들어가야 함. 그렇지 않으면 keyboadrKorean 이 not initialized 되어 오류 발생.
-    companion object {
-        lateinit var keyboardKorean:KeyboardKorean
-    }
-    */
-
+class KeyBoardService : InputMethodService() {
+    private lateinit var pref: SharedPreferences
     lateinit var keyboardView:LinearLayout
     lateinit var keyboardFrame:FrameLayout
     lateinit var keyboardKorean:KeyboardKorean
@@ -92,10 +82,13 @@ class KeyBoardService : InputMethodService(){
         //keyboard가 될 전체 레이아웃과 입력방식에 따라 다르게 채워질 framelayout 정의
         keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
         keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
+        pref = getSharedPreferences("setting", Activity.MODE_PRIVATE)
+        Log.d("키보드 생성", "111")
     }
 
     override fun onCreateInputView(): View {
         //각 type의 keyboard 생성
+        Log.d("키보드 생성2", "222")
         keyboardKorean = KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardEnglish = KeyboardEnglish(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardSymbols = KeyboardSymbols(applicationContext, layoutInflater, keyboardInterationListener)
@@ -105,6 +98,8 @@ class KeyBoardService : InputMethodService(){
         keyboardEnglish.init()
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
+
+        updateKeyboard()
 
         setCandidatesViewShown(true)
         //EditText에 포커스가 갈 경우 호출되는 View
@@ -122,7 +117,7 @@ class KeyBoardService : InputMethodService(){
         idx = currentInputConnection.getTextBeforeCursor(1000, 0).toString().length
         updateCandidates(currentInputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString())
 
-        Log.d("IMEstart", "2")
+        Log.d("키보드 생성3", "333")
     }
 
     override fun onFinishInput() {
@@ -133,7 +128,7 @@ class KeyBoardService : InputMethodService(){
         if (::mCandidateView.isInitialized)
             mCandidateView.eraseViews()
 
-        Log.d("IMEfinish", "0")
+        Log.d("키보드 닫기", "111")
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
@@ -172,7 +167,27 @@ class KeyBoardService : InputMethodService(){
         Log.d("IMEupdateindex ce", candidatesEnd.toString())
     }
 
+    // 키보드 속성 값을 설정하는 메소드
+    private fun updateKeyboard(){
+        if (::keyboardKorean.isInitialized) {
+            // 키보드 크기 업데이트
+            // 폰트 색깔 업데이트
+            keyboardKorean.updateKeyboard()
+            keyboardEnglish.updateKeyboard()
+
+            // TODO: 키보드 색상 업데이트
+            val color = pref.getInt("keyboardColor", 0)
+
+            // 키보드 배경색 업데이트
+            val background_color = pref.getInt("keyboardBackground", 0)
+            keyboardKorean.koreanLayout.setBackgroundColor(background_color)
+            keyboardEnglish.englishLayout.setBackgroundColor(background_color)
+        }
+    }
+
     override fun updateInputViewShown() {
+        updateKeyboard()
+        Log.d("키보드 수정", "111")
         //현재 필요한 키보드를 결정하고 수정
         super.updateInputViewShown()
         currentInputConnection.finishComposingText()

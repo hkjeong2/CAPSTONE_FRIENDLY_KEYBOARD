@@ -20,27 +20,116 @@
         app:title="키보드 크기"
         app:titleTextColor="@color/white" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="4dp"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/heightTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="높이"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/heightSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:max="70"
+                    android:progress="35"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/heightTextView" />
+
+                <TextView
+                    android:id="@+id/leftPaddingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="좌측 여백"
+                    app:layout_constraintStart_toStartOf="@+id/heightSeekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/heightSeekBar" />
+
+                <SeekBar
+                    android:id="@+id/leftPaddingSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0"
+                    app:layout_constraintEnd_toEndOf="@+id/heightSeekBar"
+                    app:layout_constraintStart_toStartOf="@+id/heightSeekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/leftPaddingTextView" />
+
+                <TextView
+                    android:id="@+id/rightPaddingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="우측 여백"
+                    app:layout_constraintStart_toStartOf="@+id/leftPaddingSeekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/leftPaddingSeekBar" />
+
+                <SeekBar
+                    android:id="@+id/rightPaddingSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0"
+                    app:layout_constraintEnd_toEndOf="@+id/leftPaddingSeekBar"
+                    app:layout_constraintStart_toStartOf="@+id/leftPaddingSeekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/rightPaddingTextView" />
+
+                <TextView
+                    android:id="@+id/bottomPaddingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="하단 여백"
+                    app:layout_constraintStart_toStartOf="@+id/rightPaddingSeekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/rightPaddingSeekBar" />
+
+                <SeekBar
+                    android:id="@+id/bottomPaddingSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:max="100"
+                    android:progress="0"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/rightPaddingSeekBar"
+                    app:layout_constraintStart_toStartOf="@+id/rightPaddingSeekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomPaddingTextView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -62,6 +151,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black" />
