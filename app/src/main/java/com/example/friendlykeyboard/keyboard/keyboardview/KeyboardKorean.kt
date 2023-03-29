@@ -53,10 +53,27 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     lateinit var thirdLine: LinearLayout
     lateinit var fourthLine: LinearLayout
 
-    fun updateHeight(height : Int){
-        firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*1).toInt())
-        secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*1).toInt())
-        thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*1).toInt())
+    fun updateKeyboard(){
+        val height = sharedPreferences.getInt("keyboardHeight", 150)
+        val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
+        val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
+        val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
+
+        koreanLayout.setPadding(paddingLeft, 0, paddingRight, paddingBottom)
+
+        if(context.getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
+            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
+        }else{
+            numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+        }
     }
 
     fun init(){
@@ -65,9 +82,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
-
-        val height = sharedPreferences.getInt("keyboardHeight", 150)
-        val config = context.getResources().configuration
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
@@ -87,15 +101,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             R.id.fourth_line
         )
 
-        if(config.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-        }else{
-            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-        }
+        updateKeyboard()
 
         myKeysText.clear()
         myKeysText.add(numpadText)

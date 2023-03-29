@@ -35,7 +35,14 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        //val tempColor = Color.GREEN // 임시 변수
+
+        val height = pref.getInt("keyboardHeight", 150) - 50
+        val paddingLeft = pref.getInt("keyboardPaddingLeft", 0)
+        val paddingRight = pref.getInt("keyboardPaddingRight", 0)
+        val paddingBottom = pref.getInt("keyboardPaddingBottom", 0)
+        binding.settingsItemKeyboardSize.attribute.text =
+            "높이: ${height}%, 좌측: ${paddingLeft}dp, 우측: ${paddingRight}dp, 하단: ${paddingBottom}dp"
+
         //binding.settingsItemKeyboardSize.attribute.text = "?"
         //binding.settingsItemKeyboardFont.attribute.text = "?"
         //binding.settingsItemKeyboardColor.imageView.drawable.setTint()
