@@ -77,7 +77,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
 
         val height = sharedPreferences.getInt("keyboardHeight", 150)
-        val config = context.getResources().configuration
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
