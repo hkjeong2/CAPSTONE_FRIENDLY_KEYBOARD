@@ -59,6 +59,8 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
+                    android:max="70"
+                    android:progress="35"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/heightTextView" />
@@ -77,6 +79,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0"
                     app:layout_constraintEnd_toEndOf="@+id/heightSeekBar"
                     app:layout_constraintStart_toStartOf="@+id/heightSeekBar"
                     app:layout_constraintTop_toBottomOf="@+id/leftPaddingTextView" />
@@ -95,6 +99,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0"
                     app:layout_constraintEnd_toEndOf="@+id/leftPaddingSeekBar"
                     app:layout_constraintStart_toStartOf="@+id/leftPaddingSeekBar"
                     app:layout_constraintTop_toBottomOf="@+id/rightPaddingTextView" />
@@ -114,6 +120,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="24dp"
+                    android:max="100"
+                    android:progress="0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/rightPaddingSeekBar"
                     app:layout_constraintStart_toStartOf="@+id/rightPaddingSeekBar"

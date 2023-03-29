@@ -49,44 +49,61 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     var vibrate = 0
     var capsView: ImageView? = null
 
+    lateinit var numpadLine : LinearLayout
+    lateinit var firstLine: LinearLayout
+    lateinit var secondLine: LinearLayout
+    lateinit var thirdLine: LinearLayout
+    lateinit var fourthLine: LinearLayout
+
+    fun updateKeyboard(){
+        val height = sharedPreferences.getInt("keyboardHeight", 150)
+        val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
+        val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
+        val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
+
+        englishLayout.setPadding(paddingLeft, 0, paddingRight, paddingBottom)
+
+        if(context.getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
+            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
+        }else{
+            numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+        }
+    }
+
     //키보드 (view) 및 (클릭 시 기능) 초기화
     fun init() {
         englishLayout = layoutInflater.inflate(R.layout.keyboard_action, null) as LinearLayout
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-
-        val config = context.getResources().configuration
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
-        val height = sharedPreferences.getInt("keyboardHeight", 150)
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
-        val numpadLine = englishLayout.findViewById<LinearLayout>(
+        numpadLine = englishLayout.findViewById<LinearLayout>(
             R.id.numpad_line
         )
-        val firstLine = englishLayout.findViewById<LinearLayout>(
+        firstLine = englishLayout.findViewById<LinearLayout>(
             R.id.first_line
         )
-        val secondLine = englishLayout.findViewById<LinearLayout>(
+        secondLine = englishLayout.findViewById<LinearLayout>(
             R.id.second_line
         )
-        val thirdLine = englishLayout.findViewById<LinearLayout>(
+        thirdLine = englishLayout.findViewById<LinearLayout>(
             R.id.third_line
         )
-        val fourthLine = englishLayout.findViewById<LinearLayout>(
+        fourthLine = englishLayout.findViewById<LinearLayout>(
             R.id.fourth_line
         )
 
-        //키보드 높이 설정 (각 layout 별 설정 가능)
-        if(config.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-        }else{
-            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-        }
+        updateKeyboard()
 
         //keyboard 위치별 각 문자
         myKeysText.clear()

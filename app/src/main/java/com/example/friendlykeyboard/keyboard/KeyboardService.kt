@@ -149,8 +149,8 @@ class KeyBoardService : InputMethodService() {
     private fun updateKeyboard(){
         if (::keyboardKorean.isInitialized) {
             // 키보드 크기 업데이트
-            val height = pref.getInt("keyboardHeight", 150)
-            keyboardKorean.updateHeight(height)
+            keyboardKorean.updateKeyboard()
+            keyboardEnglish.updateKeyboard()
 
             // TODO: 키보드 색상 업데이트
             val color = pref.getInt("keyboardColor", 0)

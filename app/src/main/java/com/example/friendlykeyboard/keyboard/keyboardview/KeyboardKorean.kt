@@ -53,7 +53,14 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     lateinit var thirdLine: LinearLayout
     lateinit var fourthLine: LinearLayout
 
-    fun updateHeight(height : Int){
+    fun updateKeyboard(){
+        val height = sharedPreferences.getInt("keyboardHeight", 150)
+        val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
+        val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
+        val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
+
+        koreanLayout.setPadding(paddingLeft, 0, paddingRight, paddingBottom)
+
         if(context.getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
             numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
             firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
@@ -75,8 +82,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
-
-        val height = sharedPreferences.getInt("keyboardHeight", 150)
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
@@ -96,7 +101,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             R.id.fourth_line
         )
 
-        updateHeight(height)
+        updateKeyboard()
 
         myKeysText.clear()
         myKeysText.add(numpadText)
