@@ -3,6 +3,7 @@ package com.example.friendlykeyboard.keyboard.keyboardview
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
 import android.inputmethodservice.Keyboard
 import android.media.AudioManager
 import android.os.*
@@ -58,6 +59,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
         val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
         val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
+        val fontColor = sharedPreferences.getInt("keyboardFontColor", 0)
 
         koreanLayout.setPadding(paddingLeft, 0, paddingRight, paddingBottom)
 
@@ -73,6 +75,10 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
             thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
             fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+        }
+
+        for (button in buttons) {
+            button.setTextColor(fontColor)
         }
     }
 
@@ -122,7 +128,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         layoutLines.add(thirdLine)
         layoutLines.add(fourthLine)
         setLayoutComponents()
-
     }
 
     fun getLayout():LinearLayout{
