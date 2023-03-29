@@ -1,6 +1,10 @@
 package com.example.friendlykeyboard.keyboard
 
+import android.content.Intent
 import android.inputmethodservice.InputMethodService
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -8,8 +12,11 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
+import com.example.friendlykeyboard.MyOverlayUIService
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
+
 
 class KeyBoardService : InputMethodService(){
     /*
@@ -30,6 +37,7 @@ class KeyBoardService : InputMethodService(){
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
+    lateinit var mOverlay: MyOverlayUIService
     var idx = 0
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
 
@@ -79,6 +87,8 @@ class KeyBoardService : InputMethodService(){
 
     override fun onCreate() {
         super.onCreate()
+        //채팅 앱 전송버튼 위치에 가깝게 적용시킬 임의의 send button을 가진 overlay UI 생성
+        mOverlay = MyOverlayUIService()
         //keyboard가 될 전체 레이아웃과 입력방식에 따라 다르게 채워질 framelayout 정의
         keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
         keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
@@ -103,6 +113,10 @@ class KeyBoardService : InputMethodService(){
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
+        //키보드 올라올 시 나의 전송버튼 UI 또한 드러나게하여 유저가 채팅 앱의 전송버튼 누르면 같이 눌려 인식할 수 있게끔
+        //앱 권한 설정 필요함
+        checkPermission()
+
         //focus onto text field --> keyboard 올라올 때
         //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
         idx = currentInputConnection.getTextBeforeCursor(1000, 0).toString().length
@@ -120,6 +134,15 @@ class KeyBoardService : InputMethodService(){
             mCandidateView.eraseViews()
 
         Log.d("IMEfinish", "0")
+    }
+
+    override fun onFinishInputView(finishingInput: Boolean) {
+        super.onFinishInputView(finishingInput)
+
+        if(::mOverlay.isInitialized)
+            stopService(Intent(applicationContext, mOverlay::class.java))
+
+        Log.d("IMEfinish", "1")
     }
 
     override fun onUpdateSelection(
@@ -252,6 +275,24 @@ class KeyBoardService : InputMethodService(){
                 space = " "
             mText += space + token.get(i)
             mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1), keyboardKorean)
+        }
+    }
+
+    fun checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
+            if (!Settings.canDrawOverlays(this)) {              // 체크
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
+                Toast.makeText(applicationContext, "원활한 기능을 위해 설정을 허용해주세요", Toast.LENGTH_SHORT).show()
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            } else {
+                startService(Intent(applicationContext, mOverlay::class.java))
+            }
+        } else {
+            startService(Intent(applicationContext, mOverlay::class.java))
         }
     }
 
