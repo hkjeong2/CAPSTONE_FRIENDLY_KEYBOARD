@@ -3,6 +3,7 @@ package com.example.friendlykeyboard.keyboard.keyboardview
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.drawable.GradientDrawable
 import android.media.AudioManager
 import android.os.*
 import android.util.Log
@@ -16,6 +17,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.KeyboardInteractionListener
@@ -55,14 +57,20 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     lateinit var thirdLine: LinearLayout
     lateinit var fourthLine: LinearLayout
 
+    // 키보드 속성 업데이트
     fun updateKeyboard(){
         val height = sharedPreferences.getInt("keyboardHeight", 150)
         val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
         val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
         val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
+        val fontColor = sharedPreferences.getInt("keyboardFontColor", 0)
+        val keyboardColor = sharedPreferences.getInt("keyboardColor", 0)
+        val keyboardBackgroundColor = sharedPreferences.getInt("keyboardBackground", 0)
 
+        // 키보드 padding 업데이트
         englishLayout.setPadding(paddingLeft, 0, paddingRight, paddingBottom)
 
+        // 키보드 높이 업데이트
         if(context.getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
             numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
             firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
@@ -76,6 +84,15 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
             fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
         }
+
+        // 키보드 자판 색, 폰트 색 업데이트
+        for (button in buttons) {
+            button.setTextColor(fontColor)
+            button.background.setTint(keyboardColor)
+        }
+
+        // 키보드 배경색 업데이트
+        englishLayout.setBackgroundColor(keyboardBackgroundColor)
     }
 
     //키보드 (view) 및 (클릭 시 기능) 초기화

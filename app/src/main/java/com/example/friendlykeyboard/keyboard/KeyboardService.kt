@@ -150,16 +150,10 @@ class KeyBoardService : InputMethodService() {
         if (::keyboardKorean.isInitialized) {
             // 키보드 크기 업데이트
             // 폰트 색깔 업데이트
+            // 키보드 색상 업데이트
+            // 키보드 배경색 업데이트
             keyboardKorean.updateKeyboard()
             keyboardEnglish.updateKeyboard()
-
-            // TODO: 키보드 색상 업데이트
-            val color = pref.getInt("keyboardColor", 0)
-
-            // 키보드 배경색 업데이트
-            val background_color = pref.getInt("keyboardBackground", 0)
-            keyboardKorean.koreanLayout.setBackgroundColor(background_color)
-            keyboardEnglish.englishLayout.setBackgroundColor(background_color)
         }
     }
 
