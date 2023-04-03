@@ -108,9 +108,10 @@ class KeyBoardService : InputMethodService() {
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
+
         //키보드 올라올 시 나의 전송버튼 UI 또한 드러나게하여 유저가 채팅 앱의 전송버튼 누르면 같이 눌려 인식할 수 있게끔
-        //앱 권한 설정 필요함
-        checkPermission()
+        //overlay UI 사용 시 앱 권한 설정 필요함
+//        checkPermission()
 
         //focus onto text field --> keyboard 올라올 때
         //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
@@ -134,6 +135,7 @@ class KeyBoardService : InputMethodService() {
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
 
+        //키보드 닫히면 overlay UI 서비스 종료
         if(::mOverlay.isInitialized)
             stopService(Intent(applicationContext, mOverlay::class.java))
 

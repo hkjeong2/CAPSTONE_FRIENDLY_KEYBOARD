@@ -47,6 +47,8 @@ class MyOverlayUIService : Service() {
         })
         bt.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
+                //Action Down에서 curentInputConnection의 text가 존재 시 (텍스트 type 된 상태)
+                //전송 버튼 클릭으로 인식하고 관련 작업 해주면 될 것 같습니다
                 MotionEvent.ACTION_DOWN -> Log.d("test2", "touch DOWN ")
                 MotionEvent.ACTION_UP -> Log.d("test2", "touch UP")
                 MotionEvent.ACTION_MOVE -> Log.d("test2", "touch move ")
