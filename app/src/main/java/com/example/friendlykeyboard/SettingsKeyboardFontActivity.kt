@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardFontBinding
 
 class SettingsKeyboardFontActivity : AppCompatActivity() {
@@ -25,7 +27,7 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
         with (supportActionBar!!) {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_action_arrow_back)
-            title = "글자 크기와 폰트"
+            title = "글자 색깔과 폰트"
         }
 
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -37,6 +39,17 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
             binding.textInputEditText.requestFocus()
             inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
+        
+        binding.fontSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            editor.putBoolean("keyboardFontStyle", isChecked).apply()
+            binding.textInputEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.fontSwitch.isChecked = pref.getBoolean("keyboardFontStyle", false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

@@ -3,6 +3,7 @@ package com.example.friendlykeyboard.keyboard.keyboardview
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.media.AudioManager
 import android.os.*
@@ -64,6 +65,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
         val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
         val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
         val fontColor = sharedPreferences.getInt("keyboardFontColor", 0)
+        val fontStyle = sharedPreferences.getBoolean("keyboardFontStyle", false)
         val keyboardColor = sharedPreferences.getInt("keyboardColor", 0)
         val keyboardBackgroundColor = sharedPreferences.getInt("keyboardBackground", 0)
 
@@ -85,8 +87,14 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
         }
 
-        // 키보드 자판 색, 폰트 색 업데이트
+        // 키보드 폰트, 자판 색, 폰트 색 업데이트
         for (button in buttons) {
+            if (fontStyle) {
+                button.setTypeface(null, Typeface.BOLD)
+            } else {
+                button.setTypeface(null, Typeface.NORMAL)
+            }
+
             button.setTextColor(fontColor)
             button.background.setTint(keyboardColor)
         }

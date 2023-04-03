@@ -43,10 +43,11 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardSize.attribute.text =
             "높이: ${height}%, 좌측: ${paddingLeft}dp, 우측: ${paddingRight}dp, 하단: ${paddingBottom}dp"
 
-        //binding.settingsItemKeyboardSize.attribute.text = "?"
-        //binding.settingsItemKeyboardFont.attribute.text = "?"
-        //binding.settingsItemKeyboardColor.imageView.drawable.setTint()
-        //binding.settingsItemKeyboardColor.attribute.setTextColor()
+        val fontColor = pref.getInt("keyboardFontColor", 0)
+        with (binding.settingsItemKeyboardFont) {
+            imageView.drawable.setTint(fontColor)
+            attribute.setTextColor(fontColor)
+        }
 
         val color = pref.getInt("keyboardColor", 0)
         with (binding.settingsItemKeyboardColor) {

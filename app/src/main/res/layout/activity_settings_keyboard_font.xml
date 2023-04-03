@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_action_arrow_back"
-        app:title="글자 크기와 폰트"
+        app:title="글자 색깔과 폰트"
         app:titleTextColor="@color/white" />
 
     <ScrollView
@@ -75,8 +75,6 @@
                     android:layout_height="36dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/opacityTextView" />
@@ -98,6 +96,32 @@
                     android:text="투명도"
                     app:layout_constraintStart_toStartOf="@+id/v_lightness_slider"
                     app:layout_constraintTop_toBottomOf="@+id/v_lightness_slider" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="385dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/v_alpha_slider" />
+
+                <Switch
+                    android:id="@+id/fontSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:background="@drawable/custom_ripple_border"
+                    android:ellipsize="end"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="글자 굵게"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
