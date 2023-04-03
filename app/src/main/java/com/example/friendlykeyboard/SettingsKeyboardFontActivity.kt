@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardFontBinding
 
 class SettingsKeyboardFontActivity : AppCompatActivity() {
@@ -34,6 +35,12 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
 
         binding.colorPickerView.addOnColorChangedListener {
             editor.putInt("keyboardFontColor", binding.colorPickerView.selectedColor).apply()
+            binding.textInputEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
+        }
+        
+        binding.fontSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            editor.putBoolean("keyboardFontStyle", isChecked)
             binding.textInputEditText.requestFocus()
             inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
