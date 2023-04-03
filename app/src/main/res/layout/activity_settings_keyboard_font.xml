@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_action_arrow_back"
-        app:title="글자 크기와 폰트"
+        app:title="글자 색깔과 폰트"
         app:titleTextColor="@color/white" />
 
     <ScrollView

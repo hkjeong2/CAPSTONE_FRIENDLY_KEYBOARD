@@ -25,7 +25,7 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
         with (supportActionBar!!) {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_action_arrow_back)
-            title = "글자 크기와 폰트"
+            title = "글자 색깔과 폰트"
         }
 
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
