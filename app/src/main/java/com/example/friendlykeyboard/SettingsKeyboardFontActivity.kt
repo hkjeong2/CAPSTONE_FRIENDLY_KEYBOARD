@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -40,10 +41,15 @@ class SettingsKeyboardFontActivity : AppCompatActivity() {
         }
         
         binding.fontSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
-            editor.putBoolean("keyboardFontStyle", isChecked)
+            editor.putBoolean("keyboardFontStyle", isChecked).apply()
             binding.textInputEditText.requestFocus()
             inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.fontSwitch.isChecked = pref.getBoolean("keyboardFontStyle", false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

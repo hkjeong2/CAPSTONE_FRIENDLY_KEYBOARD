@@ -87,7 +87,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
         }
 
-        // 키보드 자판 색, 폰트 색 업데이트
+        // 키보드 폰트, 자판 색, 폰트 색 업데이트
         for (button in buttons) {
             if (fontStyle) {
                 button.setTypeface(null, Typeface.BOLD)
