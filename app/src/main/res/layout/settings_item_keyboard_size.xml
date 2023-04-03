@@ -59,7 +59,7 @@
                     android:gravity="center_vertical"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="높이 100%, 좌우 여백 0%, 하단 여백 0%"
+                    android:text="높이: 100%, 좌측: 0dp, 우측: 0dp, 하단: 0dp"
                     android:textColor="@color/teal_200"
                     android:textSize="14sp" />
 
