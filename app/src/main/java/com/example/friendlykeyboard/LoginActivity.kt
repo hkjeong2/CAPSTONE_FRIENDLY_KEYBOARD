@@ -2,6 +2,7 @@ package com.example.friendlykeyboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -35,8 +36,19 @@ class LoginActivity : AppCompatActivity() {
         //자동로그인 체크돼 있을 시 바로 메인 화면으로 전환
         val spfAuto = getSharedPreferences("cbAuto", 0)
         if (spfAuto.getBoolean("check", false)){
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            val currentInputMethod = Settings.Secure.getString(
+                contentResolver,
+                Settings.Secure.DEFAULT_INPUT_METHOD
+            )
+
+            // 현재 키보드가 friendly keyboard 일 경우 바로 홈 화면으로 이동
+            if (currentInputMethod == "com.example.friendlykeyboard/.keyboard.KeyBoardService") {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                startActivity(Intent(this, InputMethodPickerActivity::class.java))
+                finish()
+            }
         }
         //화면 setup 후 ID저장 checkbox 값 확인
         val spfID = getSharedPreferences("cbID", 0)
@@ -52,8 +64,6 @@ class LoginActivity : AppCompatActivity() {
             binding.editId.setText(id)
             binding.editPwd.setText(pwd)
         }
-
-
     }
 
     private fun autoFillInfo(){
@@ -137,10 +147,22 @@ class LoginActivity : AppCompatActivity() {
                                 if (binding.checkboxAutoLogin.isChecked){
                                     editSPF("cbAuto", true, "", "")
                                 }
-                                //본격적으로 main 화면 시작
-                                Toast.makeText(this@LoginActivity, "로그인에 성공하였습니다", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                                finish()
+
+                                val currentInputMethod = Settings.Secure.getString(
+                                    contentResolver,
+                                    Settings.Secure.DEFAULT_INPUT_METHOD
+                                )
+
+                                // 현재 키보드가 friendly keyboard 일 경우 바로 홈 화면으로 이동
+                                if (currentInputMethod == "com.example.friendlykeyboard/.keyboard.KeyBoardService") {
+                                    //본격적으로 main 화면 시작
+                                    Toast.makeText(this@LoginActivity, "로그인에 성공하였습니다", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                    finish()
+                                } else {
+                                    startActivity(Intent(this@LoginActivity, InputMethodPickerActivity::class.java))
+                                    finish()
+                                }
                             }
                             else -> {
                                 Toast.makeText(
