@@ -9,6 +9,7 @@ import com.example.friendlykeyboard.databinding.ActivityInputMethodPickerBinding
 class InputMethodPickerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInputMethodPickerBinding
     private lateinit var inputMethodManager: InputMethodManager
+    private lateinit var currentInputMethod: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,27 +19,30 @@ class InputMethodPickerActivity : AppCompatActivity() {
         inputMethodManager =
             applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
-        val id = Settings.Secure.getString(
+        currentInputMethod = Settings.Secure.getString(
             contentResolver,
             Settings.Secure.DEFAULT_INPUT_METHOD
         )
 
+        binding.textView.text = buildString {
+            append(currentInputMethod)
+            append("\n")
 
-        runOnUiThread {
-            binding.textView.text = buildString {
-                append(id)
-                append("\n")
-
-                if (id == "com.example.friendlykeyboard/.keyboard.KeyBoardService") {
-                    append("true")
-                } else {
-                    append("false")
-                }
+            if (currentInputMethod == "com.example.friendlykeyboard/.keyboard.KeyBoardService") {
+                append("true")
+            } else {
+                append("false")
             }
-
-            inputMethodManager.showInputMethodPicker()
         }
 
         inputMethodManager.showInputMethodPicker()
+
+        initClickListener()
+    }
+
+    private fun initClickListener() {
+        binding.inputMethodPickerButton.setOnClickListener {
+            inputMethodManager.showInputMethodPicker()
+        }
     }
 }
