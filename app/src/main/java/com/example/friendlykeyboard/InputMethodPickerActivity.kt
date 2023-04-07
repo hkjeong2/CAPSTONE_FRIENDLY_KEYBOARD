@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.friendlykeyboard.databinding.ActivityInputMethodPickerBinding
@@ -19,6 +20,9 @@ class InputMethodPickerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityInputMethodPickerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val animation = AnimationUtils.loadAnimation(this, R.anim.animation)
+        binding.imageView1.startAnimation(animation)
 
         inputMethodManager =
             applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
