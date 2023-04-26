@@ -30,6 +30,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     lateinit var koreanLayout: LinearLayout
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
+    var tempButtons:MutableList<Button> = mutableListOf<Button>()
+    var keyboardCharPos:MutableList<MutableList<Int>> = mutableListOf()     //키보드 상 한글 자음 및 모음 위치
     lateinit var hangulMaker: HangulMaker
     lateinit var vibrator: Vibrator
     lateinit var sharedPreferences:SharedPreferences
@@ -58,6 +60,46 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     lateinit var secondLine: LinearLayout
     lateinit var thirdLine: LinearLayout
     lateinit var fourthLine: LinearLayout
+
+    fun shuffleKeyboard(){
+        Toast.makeText(context, "shuffle", Toast.LENGTH_SHORT).show()
+        //한글 자음과 모음이 속한 line
+        var shuffledFirstLineText = mutableListOf<String>()
+        var shuffledSecondLineText = mutableListOf<String>()
+        var shuffledThirdLineText = mutableListOf<String>()
+
+        //키보드 섞기
+        tempButtons.shuffle()
+
+        for (i in 0 .. 9){
+            shuffledFirstLineText.add(tempButtons[i].text.toString())
+        }
+        for (i in 10 .. 18){
+            shuffledSecondLineText.add(tempButtons[i].text.toString())
+        }
+        shuffledThirdLineText.add("CAPS")
+        for (i in 19 .. 25){
+            shuffledThirdLineText.add(tempButtons[i].text.toString())
+        }
+        shuffledThirdLineText.add("DEL")
+
+        myKeysText.clear()
+        myKeysText.add(numpadText)
+        myKeysText.add(shuffledFirstLineText)
+        myKeysText.add(shuffledSecondLineText)
+        myKeysText.add(shuffledThirdLineText)
+        myKeysText.add(fourthLineText)
+
+    }
+
+    fun restoreKeyboard(){
+        myKeysText.clear()
+        myKeysText.add(numpadText)
+        myKeysText.add(firstLineText)
+        myKeysText.add(secondLineText)
+        myKeysText.add(thirdLineText)
+        myKeysText.add(fourthLineText)
+    }
 
     // 키보드 속성 업데이트
     fun updateKeyboard(){
@@ -325,9 +367,11 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     }
 
     private fun setLayoutComponents(){
+        var tempArrayList : MutableList<MutableList<Int>> = mutableListOf()
         for(line in layoutLines.indices){
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
+            val tempList = mutableListOf<Int>()
             var longClickIndex = 0
             for(item in children.indices){
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
@@ -390,15 +434,21 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         actionButton.setOnClickListener(myOnClickListener)
                     }
                     else -> {
+                        tempList.add(item)
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
+                        if (line in 1..3){
+                            tempButtons.add(actionButton)   //shuffle할 button들 따로 보관
+                        }
                         myOnClickListener = getMyClickListener(actionButton)
                         actionButton.setOnTouchListener(getOnTouchListener(myOnClickListener))
                     }
                 }
                 children[item].setOnClickListener(myOnClickListener)
             }
+            tempArrayList.add(tempList)
         }
+        keyboardCharPos = tempArrayList //키보드 상 한글 자음 및 모음 위치 index 수집 --> 해당 위치에 랜덤한 버튼들 배치하기 위함
     }
     fun getSpaceAction():View.OnClickListener{
         return View.OnClickListener{
