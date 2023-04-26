@@ -12,6 +12,10 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class KeyBoardService : InputMethodService() {
     private lateinit var pref: SharedPreferences
@@ -23,6 +27,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var mCandidateView: CandidateView
     var idx = 0
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
+    var count = 0
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
         //inputconnection이 null일경우 재요청하는 부분 필요함
@@ -66,6 +71,37 @@ class KeyBoardService : InputMethodService() {
             updateCandidates(text)
         }
 
+        //Enter키로 전송된 text AI로 검사
+        override fun checkText(text: String) {
+            checkTexts(text)
+        }
+
+    }
+
+    private fun checkTexts(text : String){
+        blockKeyboard()
+//        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
+//            count += 1
+//            if (count % 3 == 0){
+//                count += 1
+//                blockKeyboard()
+//            }
+//        }
+    }
+
+    private fun blockKeyboard(){
+        // keyboard 섞기 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
+        keyboardKorean.shuffleKeyboard()
+        // coroutine delayed로 일정시간 뒤
+        GlobalScope.launch(Dispatchers.Main){
+            delay(5000)
+            // keyboard 원상 복구 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
+            keyboardKorean.restoreKeyboard()
+            keyboardFrame.removeAllViews()
+            keyboardKorean.inputConnection = currentInputConnection
+            keyboardFrame.addView(keyboardKorean.getLayout())
+        }
+
     }
 
     override fun onCreate() {
@@ -99,6 +135,11 @@ class KeyBoardService : InputMethodService() {
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
+
+        //키보드 올라올 시 나의 전송버튼 UI 또한 드러나게하여 유저가 채팅 앱의 전송버튼 누르면 같이 눌려 인식할 수 있게끔
+        //overlay UI 사용 시 앱 권한 설정 필요함
+//        checkPermission()
+
         //focus onto text field --> keyboard 올라올 때
         //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
         idx = currentInputConnection.getTextBeforeCursor(1000, 0).toString().length
@@ -116,6 +157,12 @@ class KeyBoardService : InputMethodService() {
             mCandidateView.eraseViews()
 
         Log.d("키보드 닫기", "111")
+    }
+
+    override fun onFinishInputView(finishingInput: Boolean) {
+        super.onFinishInputView(finishingInput)
+
+        Log.d("IMEfinish", "1")
     }
 
     override fun onUpdateSelection(
@@ -264,6 +311,8 @@ class KeyBoardService : InputMethodService() {
             mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1), keyboardKorean)
         }
     }
+
+
 
 
 }

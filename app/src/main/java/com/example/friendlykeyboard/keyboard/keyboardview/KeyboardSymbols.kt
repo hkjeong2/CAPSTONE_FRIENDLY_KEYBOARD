@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
+import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
@@ -179,7 +180,9 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
                         ).toInt()
                     )
                     inputConnection?.commitText(actionButton.text.toString(), 1)
+                    sendText()
                 }
+
             }
 
         })
@@ -287,6 +290,7 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
             playClick('ㅂ'.toInt())
             playVibrate()
             inputConnection?.commitText(" ",1)
+            sendText()
         }
     }
 
@@ -298,6 +302,7 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
             }else{
                 inputConnection?.deleteSurroundingText(1,0)
             }
+            sendText()
         }
     }
 
@@ -315,11 +320,21 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
             inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
+            enterText()
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
         }
     }
 
+    fun sendText(){
+        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+        keyboardInterationListener.sendText(text?.text.toString())
+    }
+
+    fun enterText(){
+        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+        keyboardInterationListener.checkText(text?.text.toString())
+    }
 
 }

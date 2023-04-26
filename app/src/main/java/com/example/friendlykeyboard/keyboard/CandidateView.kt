@@ -98,6 +98,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
 
     fun loadDic(){
         mSuggestion.put("ㅁㅊ", arrayListOf<String>("와", "대박", "헐"))
+        mSuggestion.put("ㅅㅂ", arrayListOf<String>("화나", "이런", "젠장"))
         mSuggestion.put("ㅅㄲ야", arrayListOf<String>("친구야", "자식아", "얘야"))
         mSuggestion.put("ㅈㄴ", arrayListOf<String>("매우", "정말", "완전"))
         mSuggestion.put("ㅎㅇ", arrayListOf<String>("안녕", "안녕하세요", "만나서 반가워"))
