@@ -46,7 +46,7 @@ class KeyBoardService : InputMethodService() {
                     if(isQwerty == 0){
                         keyboardFrame.removeAllViews()
                         keyboardKorean.inputConnection = currentInputConnection
-                        keyboardFrame.addView(keyboardKorean.getLayout())
+                        keyboardFrame.addView(keyboardKorean.getLayout(0))
                     }
                     else{
                         keyboardFrame.removeAllViews()
@@ -92,14 +92,19 @@ class KeyBoardService : InputMethodService() {
     private fun blockKeyboard(){
         // keyboard 섞기 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
         keyboardKorean.shuffleKeyboard()
-        // coroutine delayed로 일정시간 뒤
+        // coroutine delayed로 일정시간 뒤 키보드 화면 교체
         GlobalScope.launch(Dispatchers.Main){
-            delay(5000)
+            delay(8000)
             // keyboard 원상 복구 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
             keyboardKorean.restoreKeyboard()
+
             keyboardFrame.removeAllViews()
             keyboardKorean.inputConnection = currentInputConnection
-            keyboardFrame.addView(keyboardKorean.getLayout())
+            // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
+            // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
+            // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
+            // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
+            keyboardFrame.addView(keyboardKorean.getLayout(1))
         }
 
     }

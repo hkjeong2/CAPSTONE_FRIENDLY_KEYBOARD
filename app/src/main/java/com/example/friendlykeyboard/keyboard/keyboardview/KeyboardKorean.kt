@@ -30,8 +30,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     lateinit var koreanLayout: LinearLayout
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
-    var tempButtons:MutableList<Button> = mutableListOf<Button>()
-    var keyboardCharPos:MutableList<MutableList<Int>> = mutableListOf()     //키보드 상 한글 자음 및 모음 위치
     lateinit var hangulMaker: HangulMaker
     lateinit var vibrator: Vibrator
     lateinit var sharedPreferences:SharedPreferences
@@ -69,35 +67,35 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         var shuffledThirdLineText = mutableListOf<String>()
 
         //키보드 섞기
-        tempButtons.shuffle()
+        val hangulCharacters = mutableListOf<String>("ㅂ","ㅈ","ㄷ","ㄱ","ㅅ","ㅛ","ㅕ","ㅑ","ㅐ","ㅔ","ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ","ㅋ","ㅌ","ㅊ","ㅍ","ㅠ","ㅜ","ㅡ")
+        hangulCharacters.shuffle()
 
         for (i in 0 .. 9){
-            shuffledFirstLineText.add(tempButtons[i].text.toString())
+            shuffledFirstLineText.add(hangulCharacters[i])
         }
         for (i in 10 .. 18){
-            shuffledSecondLineText.add(tempButtons[i].text.toString())
+            shuffledSecondLineText.add(hangulCharacters[i])
         }
         shuffledThirdLineText.add("CAPS")
         for (i in 19 .. 25){
-            shuffledThirdLineText.add(tempButtons[i].text.toString())
+            shuffledThirdLineText.add(hangulCharacters[i])
         }
         shuffledThirdLineText.add("DEL")
 
-        myKeysText.clear()
-        myKeysText.add(numpadText)
-        myKeysText.add(shuffledFirstLineText)
-        myKeysText.add(shuffledSecondLineText)
-        myKeysText.add(shuffledThirdLineText)
-        myKeysText.add(fourthLineText)
+        clearMyKeysText(shuffledFirstLineText, shuffledSecondLineText, shuffledThirdLineText)
 
     }
 
     fun restoreKeyboard(){
+        clearMyKeysText(firstLineText,secondLineText,thirdLineText)
+    }
+
+    fun clearMyKeysText(first:List<String>, second:List<String>, third:List<String>){
         myKeysText.clear()
         myKeysText.add(numpadText)
-        myKeysText.add(firstLineText)
-        myKeysText.add(secondLineText)
-        myKeysText.add(thirdLineText)
+        myKeysText.add(first)
+        myKeysText.add(second)
+        myKeysText.add(third)
         myKeysText.add(fourthLineText)
     }
 
@@ -173,12 +171,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
 
         updateKeyboard()
 
-        myKeysText.clear()
-        myKeysText.add(numpadText)
-        myKeysText.add(firstLineText)
-        myKeysText.add(secondLineText)
-        myKeysText.add(thirdLineText)
-        myKeysText.add(fourthLineText)
+        clearMyKeysText(firstLineText,secondLineText,thirdLineText)
 
 //        myLongClickKeysText.clear()
 //        myLongClickKeysText.add(firstLongClickText)
@@ -194,8 +187,9 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         setLayoutComponents()
     }
 
-    fun getLayout():LinearLayout{
-        hangulMaker = HangulMaker(inputConnection!!)
+    fun getLayout(mode : Int):LinearLayout{
+        if (mode != 1)  //
+            hangulMaker = HangulMaker(inputConnection!!)
         setLayoutComponents()
         return koreanLayout
     }
@@ -367,7 +361,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     }
 
     private fun setLayoutComponents(){
-        var tempArrayList : MutableList<MutableList<Int>> = mutableListOf()
         for(line in layoutLines.indices){
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
@@ -437,18 +430,13 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         tempList.add(item)
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
-                        if (line in 1..3){
-                            tempButtons.add(actionButton)   //shuffle할 button들 따로 보관
-                        }
                         myOnClickListener = getMyClickListener(actionButton)
                         actionButton.setOnTouchListener(getOnTouchListener(myOnClickListener))
                     }
                 }
                 children[item].setOnClickListener(myOnClickListener)
             }
-            tempArrayList.add(tempList)
         }
-        keyboardCharPos = tempArrayList //키보드 상 한글 자음 및 모음 위치 index 수집 --> 해당 위치에 랜덤한 버튼들 배치하기 위함
     }
     fun getSpaceAction():View.OnClickListener{
         return View.OnClickListener{
