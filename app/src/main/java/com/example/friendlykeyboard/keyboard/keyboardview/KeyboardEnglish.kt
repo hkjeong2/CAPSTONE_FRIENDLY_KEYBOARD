@@ -14,10 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
@@ -455,6 +452,10 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                 KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD)
             )
+
+            Toast.makeText(context, inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString(), Toast.LENGTH_SHORT).show()
+            enterText()
+
             inputConnection?.sendKeyEvent(
                 KeyEvent(
                     SystemClock.uptimeMillis(), eventTime,
@@ -467,6 +468,11 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     fun sendText(){
         val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
         keyboardInterationListener.sendText(text?.text.toString())
+    }
+
+    fun enterText(){
+        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+        keyboardInterationListener.checkText(text?.text.toString())
     }
 
 }

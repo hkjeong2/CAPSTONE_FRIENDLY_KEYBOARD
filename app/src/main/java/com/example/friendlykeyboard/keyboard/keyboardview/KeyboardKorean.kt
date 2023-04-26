@@ -19,6 +19,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
@@ -439,14 +440,23 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         }
     }
 
+    //엔터 키 눌렸을 때
     fun getEnterAction():View.OnClickListener{
         return View.OnClickListener{
             playVibrate()
             hangulMaker.directlyCommit()
             val eventTime = SystemClock.uptimeMillis()
+
+            //key ActionDown --> 키 눌렸을 때
             inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
+
+            //키 눌린 직후 ~ 떼지기 직전 처리할 작업
+            Toast.makeText(context, inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString(), Toast.LENGTH_SHORT).show()
+            enterText()
+
+            //key ActionUp --> 눌린 키 떼지도록
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
@@ -456,6 +466,11 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     fun sendText(){
         val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
         keyboardInterationListener.sendText(text?.text.toString())
+    }
+
+    fun enterText(){
+        val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
+        keyboardInterationListener.checkText(text?.text.toString())
     }
 
 }

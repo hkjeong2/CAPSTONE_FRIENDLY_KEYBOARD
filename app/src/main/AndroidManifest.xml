@@ -51,13 +51,6 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".MyOverlayUIService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.SYSTEM_ALERT_WINDOW">
-        </service>
-
         <activity
             android:name=".SplashActivity"
             android:exported="true">
