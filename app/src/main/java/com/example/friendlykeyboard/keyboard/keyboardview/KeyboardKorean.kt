@@ -509,7 +509,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
 
             if (mode == 1){
                 //키보드 무작위 배치
-                Toast.makeText(context, "키보드 무작위 배치", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
                 keyboardInterationListener.modechange(1)
             }
 

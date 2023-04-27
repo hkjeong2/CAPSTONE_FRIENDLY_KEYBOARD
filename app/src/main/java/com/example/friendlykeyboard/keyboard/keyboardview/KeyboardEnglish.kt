@@ -30,6 +30,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     lateinit var sharedPreferences: SharedPreferences
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
+    var modeButtons:MutableList<Button> = mutableListOf<Button>()
 
     //keyboard layout의 네 줄의 각 문자 item을 바인딩 시키기 위한 item 준비
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
@@ -54,6 +55,24 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     lateinit var secondLine: LinearLayout
     lateinit var thirdLine: LinearLayout
     lateinit var fourthLine: LinearLayout
+
+    // 제재 기능 : 영어 입력만 가능
+    fun setChangingModeAvailability(possible : Boolean){
+        if (!possible){
+            Toast.makeText(context, "제재 : 영문 키보드만 활성화", Toast.LENGTH_SHORT).show()
+            for (i in modeButtons.indices){
+                modeButtons[i].text = ""
+                modeButtons[i].setOnClickListener {  }
+            }
+        }
+        else{
+            val list : List<String> = listOf("!#1", "한/영")
+            for (i in modeButtons.indices){
+                modeButtons[i].text = list[i]
+                getMyClickListener(modeButtons[i])
+            }
+        }
+    }
 
     // 키보드 속성 업데이트
     fun updateKeyboard(){
@@ -400,6 +419,11 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
                         myOnClickListener = getMyClickListener(actionButton)
+
+                        // mode 잠금 할 수 있도록 따로 저장
+                        if (actionButton.text == "한/영" || actionButton.text == "!#1")
+                            modeButtons.add(actionButton)
+
                         if(line > 0 && line < 4){//특수기호가 삽입될 수 있는 layout의 라인 (1~3번째 키보드 줄)
                             //길게 눌렸을 때
                             longClickTextView.setText(myLongClickKeysText[line - 1].get(longClickIndex++))

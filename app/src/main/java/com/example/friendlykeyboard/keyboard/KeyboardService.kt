@@ -84,16 +84,31 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun checkTexts(text : String) : Int{
-        shuffleKeyboard()
-        return 1
 
-//        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
-//            count += 1
-//            if (count % 3 == 0){
-//                count += 1
-//                blockKeyboard()
-//            }
-//        }
+        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
+            count += 1
+            if (count == 2){
+                shuffleKeyboard()
+                return 1
+            }
+            else if (count >= 4){
+                allowEngKeyboardOnly()
+                return 2
+            }
+        }
+        return 0
+    }
+
+    private fun allowEngKeyboardOnly(){
+        keyboardInterationListener.modechange(0)
+        //다른 키보드 모드로 바꾸지 못하도록
+        keyboardEnglish.setChangingModeAvailability(false)
+
+        //일정 시간 뒤 모드 변경 잠금 해제
+        GlobalScope.launch(Dispatchers.Main){
+            delay(8000)
+            keyboardEnglish.setChangingModeAvailability(true)
+        }
     }
 
     private fun shuffleKeyboard(){
