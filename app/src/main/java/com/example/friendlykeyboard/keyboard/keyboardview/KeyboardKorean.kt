@@ -500,15 +500,19 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
             //키 눌린 직후 ~ 떼지기 직전 처리할 작업
-            Toast.makeText(context, inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString(), Toast.LENGTH_SHORT).show()
-            enterText()
+            val mode = enterText()
 
             //key ActionUp --> 눌린 키 떼지도록
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
-            keyboardInterationListener.modechange(1)
+            if (mode == 1){
+                //키보드 무작위 배치
+                Toast.makeText(context, "키보드 무작위 배치", Toast.LENGTH_SHORT).show()
+                keyboardInterationListener.modechange(1)
+            }
+
         }
     }
 
@@ -517,9 +521,9 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         keyboardInterationListener.sendText(text?.text.toString())
     }
 
-    fun enterText(){
+    fun enterText() : Int{
         val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-        keyboardInterationListener.checkText(text?.text.toString())
+        return keyboardInterationListener.checkText(text?.text.toString())
     }
 
 }

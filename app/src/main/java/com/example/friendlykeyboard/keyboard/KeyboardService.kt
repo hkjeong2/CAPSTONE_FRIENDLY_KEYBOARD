@@ -77,14 +77,16 @@ class KeyBoardService : InputMethodService() {
         }
 
         //Enter키로 전송된 text AI로 검사
-        override fun checkText(text: String) {
-            checkTexts(text)
+        override fun checkText(text: String) : Int {
+            return checkTexts(text)
         }
 
     }
 
-    private fun checkTexts(text : String){
-        blockKeyboard()
+    private fun checkTexts(text : String) : Int{
+        shuffleKeyboard()
+        return 1
+
 //        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
 //            count += 1
 //            if (count % 3 == 0){
@@ -94,7 +96,7 @@ class KeyBoardService : InputMethodService() {
 //        }
     }
 
-    private fun blockKeyboard(){
+    private fun shuffleKeyboard(){
         // Enter key의 clickListener를 한 번만 연동시키기 위함
         // 무작위 배치 키보드로 즉시 변경하는 과정에서의 정확한 오류 원인이 무엇인진 모르겠으나
         // 위와 같이 하면 해결 되는 듯 함
