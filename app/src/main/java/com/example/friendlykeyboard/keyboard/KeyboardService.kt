@@ -25,6 +25,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
+    var keyboardMode = -1
     var idx = 0
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
     var count = 0
@@ -38,11 +39,13 @@ class KeyBoardService : InputMethodService() {
             //mode 별로 keyboard frame 변환
             when(mode){
                 0 ->{
+                    keyboardMode = 0
                     keyboardFrame.removeAllViews()
                     keyboardEnglish.inputConnection = currentInputConnection
                     keyboardFrame.addView(keyboardEnglish.getLayout())
                 }
                 1 -> {
+                    keyboardMode = 1
                     if(isQwerty == 0){
                         keyboardFrame.removeAllViews()
                         keyboardKorean.inputConnection = currentInputConnection
@@ -54,11 +57,13 @@ class KeyBoardService : InputMethodService() {
                     }
                 }
                 2 -> {
+                    keyboardMode = 2
                     keyboardFrame.removeAllViews()
                     keyboardSymbols.inputConnection = currentInputConnection
                     keyboardFrame.addView(keyboardSymbols.getLayout())
                 }
                 3 -> {
+                    keyboardMode = 3
                     keyboardFrame.removeAllViews()
                     keyboardFrame.addView(KeyboardEmoji.newInstance(applicationContext, layoutInflater, currentInputConnection, this))
                 }
@@ -103,14 +108,17 @@ class KeyBoardService : InputMethodService() {
             delay(8000)
             // keyboard 원상 복구
             keyboardKorean.restoreKeyboard()
-            // 아래 코드는 어떤 키보드를 사용 중이었든지 한글 키보드로 교체
-            keyboardFrame.removeAllViews()
-            keyboardKorean.inputConnection = currentInputConnection
-            // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
-            // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
-            // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
-            // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
-            keyboardFrame.addView(keyboardKorean.getLayout(1))
+
+            if (keyboardMode == 1){
+                // 한글 키보드로 교체
+                keyboardFrame.removeAllViews()
+                keyboardKorean.inputConnection = currentInputConnection
+                // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
+                // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
+                // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
+                // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
+                keyboardFrame.addView(keyboardKorean.getLayout(1))
+            }
         }
 
     }
