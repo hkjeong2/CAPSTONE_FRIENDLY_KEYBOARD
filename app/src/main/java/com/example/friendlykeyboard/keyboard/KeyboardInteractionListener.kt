@@ -8,6 +8,6 @@ interface KeyboardInteractionListener {
     //키보드 클릭 시 textfield의 text send
     fun sendText(text : String)
 
-    //키보드 엔터 시 입력된 text 검사
-    fun checkText(text : String)
+    //키보드 엔터 시 입력된 text 검사 , 제재 기능 정수로 구분
+    fun checkText(text : String) : Int
 }

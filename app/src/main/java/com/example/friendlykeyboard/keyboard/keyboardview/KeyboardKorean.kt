@@ -29,6 +29,7 @@ import java.lang.NumberFormatException
 class KeyboardKorean constructor(var context:Context, var layoutInflater: LayoutInflater, var keyboardInterationListener: KeyboardInteractionListener){
     lateinit var koreanLayout: LinearLayout
     var isCaps:Boolean = false
+    var isFirst = true
     var buttons:MutableList<Button> = mutableListOf<Button>()
     lateinit var hangulMaker: HangulMaker
     lateinit var vibrator: Vibrator
@@ -407,10 +408,12 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         specialKey.setImageResource(R.drawable.ic_enter)
                         specialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
-                        myOnClickListener = getEnterAction()
-                        specialKey.setOnClickListener(myOnClickListener)
-                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
-                        specialKey.setBackgroundResource(R.drawable.key_background)
+                        if (isFirst){
+                            myOnClickListener = getEnterAction()
+                            specialKey.setOnClickListener(myOnClickListener)
+                            specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                            specialKey.setBackgroundResource(R.drawable.key_background)
+                        }
                     }
                     "한/영" -> {
                         actionButton.text = myText[item]
@@ -497,13 +500,18 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
             //키 눌린 직후 ~ 떼지기 직전 처리할 작업
-            Toast.makeText(context, inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString(), Toast.LENGTH_SHORT).show()
-            enterText()
+            val mode = enterText()
 
             //key ActionUp --> 눌린 키 떼지도록
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
+
+            if (mode == 1){
+                //키보드 무작위 배치
+                Toast.makeText(context, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
+                keyboardInterationListener.modechange(1)
+            }
 
         }
     }
@@ -513,9 +521,9 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         keyboardInterationListener.sendText(text?.text.toString())
     }
 
-    fun enterText(){
+    fun enterText() : Int{
         val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-        keyboardInterationListener.checkText(text?.text.toString())
+        return keyboardInterationListener.checkText(text?.text.toString())
     }
 
 }

@@ -25,6 +25,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
+    var keyboardMode = -1
     var idx = 0
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
     var count = 0
@@ -38,11 +39,13 @@ class KeyBoardService : InputMethodService() {
             //mode 별로 keyboard frame 변환
             when(mode){
                 0 ->{
+                    keyboardMode = 0
                     keyboardFrame.removeAllViews()
                     keyboardEnglish.inputConnection = currentInputConnection
                     keyboardFrame.addView(keyboardEnglish.getLayout())
                 }
                 1 -> {
+                    keyboardMode = 1
                     if(isQwerty == 0){
                         keyboardFrame.removeAllViews()
                         keyboardKorean.inputConnection = currentInputConnection
@@ -54,11 +57,13 @@ class KeyBoardService : InputMethodService() {
                     }
                 }
                 2 -> {
+                    keyboardMode = 2
                     keyboardFrame.removeAllViews()
                     keyboardSymbols.inputConnection = currentInputConnection
                     keyboardFrame.addView(keyboardSymbols.getLayout())
                 }
                 3 -> {
+                    keyboardMode = 3
                     keyboardFrame.removeAllViews()
                     keyboardFrame.addView(KeyboardEmoji.newInstance(applicationContext, layoutInflater, currentInputConnection, this))
                 }
@@ -72,47 +77,65 @@ class KeyBoardService : InputMethodService() {
         }
 
         //Enter키로 전송된 text AI로 검사
-        override fun checkText(text: String) {
-            checkTexts(text)
+        override fun checkText(text: String) : Int {
+            return checkTexts(text)
         }
 
     }
 
-    private fun checkTexts(text : String){
-        blockKeyboard()
-//        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
-//            count += 1
-//            if (count % 3 == 0){
-//                count += 1
-//                blockKeyboard()
-//            }
-//        }
+    private fun checkTexts(text : String) : Int{
+
+        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
+            count += 1
+            if (count == 2){
+                shuffleKeyboard()
+                return 1
+            }
+            else if (count >= 4){
+                allowEngKeyboardOnly()
+                return 2
+            }
+        }
+        return 0
     }
 
-    private fun blockKeyboard(){
-        // keyboard 섞기 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
-        keyboardKorean.shuffleKeyboard()
+    private fun allowEngKeyboardOnly(){
+        keyboardInterationListener.modechange(0)
+        //다른 키보드 모드로 바꾸지 못하도록
+        keyboardEnglish.setChangingModeAvailability(false)
 
-        GlobalScope.launch(Dispatchers.Main){
-            delay(100)
-            keyboardFrame.removeAllViews()
-            keyboardKorean.inputConnection = currentInputConnection
-            keyboardFrame.addView(keyboardKorean.getLayout(1))
-        }
-
-        // coroutine delayed로 일정시간 뒤 키보드 화면 교체
+        //일정 시간 뒤 모드 변경 잠금 해제
         GlobalScope.launch(Dispatchers.Main){
             delay(8000)
-            // keyboard 원상 복구 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
+            keyboardEnglish.setChangingModeAvailability(true)
+        }
+    }
+
+    private fun shuffleKeyboard(){
+        // Enter key의 clickListener를 한 번만 연동시키기 위함
+        // 무작위 배치 키보드로 즉시 변경하는 과정에서의 정확한 오류 원인이 무엇인진 모르겠으나
+        // 위와 같이 하면 해결 되는 듯 함
+        keyboardKorean.isFirst= false
+
+        // keyboard 섞기
+        keyboardKorean.shuffleKeyboard()
+
+        // coroutine delayed로 일정 시간 뒤 키보드 화면 교체
+        GlobalScope.launch(Dispatchers.Main){
+            delay(8000)
+            // keyboard 원상 복구
             keyboardKorean.restoreKeyboard()
 
-            keyboardFrame.removeAllViews()
-            keyboardKorean.inputConnection = currentInputConnection
-            // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
-            // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
-            // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
-            // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
-            keyboardFrame.addView(keyboardKorean.getLayout(1))
+            if (keyboardMode == 1){
+                // 한글 키보드로 교체
+                keyboardFrame.removeAllViews()
+                keyboardKorean.inputConnection = currentInputConnection
+                // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
+                // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
+                // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
+                // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
+                keyboardFrame.addView(keyboardKorean.getLayout(1))
+            }
         }
 
     }
