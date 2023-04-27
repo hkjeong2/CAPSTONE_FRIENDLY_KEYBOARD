@@ -90,22 +90,20 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun blockKeyboard(){
-        // keyboard 섞기 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
+        // Enter key의 clickListener를 한 번만 연동시키기 위함
+        // 무작위 배치 키보드로 즉시 변경하는 과정에서의 정확한 오류 원인이 무엇인진 모르겠으나
+        // 위와 같이 하면 해결 되는 듯 함
+        keyboardKorean.isFirst= false
+
+        // keyboard 섞기
         keyboardKorean.shuffleKeyboard()
 
-        GlobalScope.launch(Dispatchers.Main){
-            delay(100)
-            keyboardFrame.removeAllViews()
-            keyboardKorean.inputConnection = currentInputConnection
-            keyboardFrame.addView(keyboardKorean.getLayout(1))
-        }
-
-        // coroutine delayed로 일정시간 뒤 키보드 화면 교체
+        // coroutine delayed로 일정 시간 뒤 키보드 화면 교체
         GlobalScope.launch(Dispatchers.Main){
             delay(8000)
-            // keyboard 원상 복구 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
+            // keyboard 원상 복구
             keyboardKorean.restoreKeyboard()
-
+            // 아래 코드는 어떤 키보드를 사용 중이었든지 한글 키보드로 교체
             keyboardFrame.removeAllViews()
             keyboardKorean.inputConnection = currentInputConnection
             // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
