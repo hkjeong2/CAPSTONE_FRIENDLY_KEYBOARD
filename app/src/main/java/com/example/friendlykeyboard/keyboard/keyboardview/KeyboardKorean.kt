@@ -90,8 +90,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         shuffledThirdLineText.add("DEL")
 
         clearMyKeysText(shuffledNumpadText, shuffledFirstLineText, shuffledSecondLineText, shuffledThirdLineText)
-
-//        keyboardInterationListener.modechange(1)
     }
 
     fun restoreKeyboard(){
@@ -385,7 +383,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         actionButton.visibility = View.GONE
                         myOnClickListener = getSpaceAction()
                         specialKey.setOnClickListener(myOnClickListener)
-                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+//                        specialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                         specialKey.setBackgroundResource(R.drawable.key_background)
                     }
                     "DEL" -> {
@@ -506,6 +504,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
+
         }
     }
 
