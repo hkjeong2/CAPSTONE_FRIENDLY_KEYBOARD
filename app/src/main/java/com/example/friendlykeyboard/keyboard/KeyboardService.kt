@@ -92,6 +92,7 @@ class KeyBoardService : InputMethodService() {
     private fun blockKeyboard(){
         // keyboard 섞기 (어떤 키보드를 사용 중이었든지 한글 키보드로 교체)
         keyboardKorean.shuffleKeyboard()
+
         // coroutine delayed로 일정시간 뒤 키보드 화면 교체
         GlobalScope.launch(Dispatchers.Main){
             delay(8000)

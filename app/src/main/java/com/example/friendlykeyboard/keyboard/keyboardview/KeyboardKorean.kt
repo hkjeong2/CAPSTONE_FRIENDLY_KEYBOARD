@@ -60,16 +60,23 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     lateinit var fourthLine: LinearLayout
 
     fun shuffleKeyboard(){
-        Toast.makeText(context, "shuffle", Toast.LENGTH_SHORT).show()
         //한글 자음과 모음이 속한 line
+        var shuffledNumpadText = mutableListOf<String>()
         var shuffledFirstLineText = mutableListOf<String>()
         var shuffledSecondLineText = mutableListOf<String>()
         var shuffledThirdLineText = mutableListOf<String>()
 
-        //키보드 섞기
+        //키보드 한글 섞기
         val hangulCharacters = mutableListOf<String>("ㅂ","ㅈ","ㄷ","ㄱ","ㅅ","ㅛ","ㅕ","ㅑ","ㅐ","ㅔ","ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ","ㅋ","ㅌ","ㅊ","ㅍ","ㅠ","ㅜ","ㅡ")
         hangulCharacters.shuffle()
 
+        //키보드 숫자 섞기
+        val numbers = mutableListOf<String>("0","1","2","3","4","5","6","7","8","9")
+        numbers.shuffle()
+
+        for (i in 0 .. 9){
+            shuffledNumpadText.add(numbers[i])
+        }
         for (i in 0 .. 9){
             shuffledFirstLineText.add(hangulCharacters[i])
         }
@@ -82,17 +89,18 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         }
         shuffledThirdLineText.add("DEL")
 
-        clearMyKeysText(shuffledFirstLineText, shuffledSecondLineText, shuffledThirdLineText)
+        clearMyKeysText(shuffledNumpadText, shuffledFirstLineText, shuffledSecondLineText, shuffledThirdLineText)
 
+//        keyboardInterationListener.modechange(1)
     }
 
     fun restoreKeyboard(){
-        clearMyKeysText(firstLineText,secondLineText,thirdLineText)
+        clearMyKeysText(numpadText, firstLineText,secondLineText,thirdLineText)
     }
 
-    fun clearMyKeysText(first:List<String>, second:List<String>, third:List<String>){
+    fun clearMyKeysText(num:List<String>, first:List<String>, second:List<String>, third:List<String>){
         myKeysText.clear()
-        myKeysText.add(numpadText)
+        myKeysText.add(num)
         myKeysText.add(first)
         myKeysText.add(second)
         myKeysText.add(third)
@@ -171,7 +179,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
 
         updateKeyboard()
 
-        clearMyKeysText(firstLineText,secondLineText,thirdLineText)
+        clearMyKeysText(numpadText, firstLineText,secondLineText,thirdLineText)
 
 //        myLongClickKeysText.clear()
 //        myLongClickKeysText.add(firstLongClickText)
@@ -188,7 +196,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     }
 
     fun getLayout(mode : Int):LinearLayout{
-        if (mode != 1)  //
+        if (mode != 1)  // 키보드 종류 변환 시에만 작성 중이던 한글 정보 초기화
             hangulMaker = HangulMaker(inputConnection!!)
         setLayoutComponents()
         return koreanLayout
