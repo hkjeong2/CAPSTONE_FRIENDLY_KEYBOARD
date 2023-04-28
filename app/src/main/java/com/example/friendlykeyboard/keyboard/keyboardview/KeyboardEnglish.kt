@@ -31,6 +31,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
     var modeButtons:MutableList<Button> = mutableListOf<Button>()
+    var blockMode:Boolean = false
 
     //keyboard layout의 네 줄의 각 문자 item을 바인딩 시키기 위한 item 준비
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
@@ -59,13 +60,15 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     // 제재 기능 : 영어 입력만 가능
     fun setChangingModeAvailability(possible : Boolean){
         if (!possible){
-            Toast.makeText(context, "제재 : 영문 키보드만 활성화", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "제재 : 강제 영문 키보드 활성화", Toast.LENGTH_SHORT).show()
+            blockMode = true
             for (i in modeButtons.indices){
                 modeButtons[i].text = ""
                 modeButtons[i].setOnClickListener {  }
             }
         }
         else{
+            blockMode = false
             val list : List<String> = listOf("!#1", "한/영")
             for (i in modeButtons.indices){
                 modeButtons[i].text = list[i]
