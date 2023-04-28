@@ -127,7 +127,7 @@ class KeyBoardService : InputMethodService() {
             keyboardKorean.restoreKeyboard()
 
             if (keyboardMode == 1){
-                // 한글 키보드로 교체
+                // 한글 키보드를 사용중이었다면 복구된 한글 키보드로 교체
                 keyboardFrame.removeAllViews()
                 keyboardKorean.inputConnection = currentInputConnection
                 // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
@@ -171,10 +171,6 @@ class KeyBoardService : InputMethodService() {
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
-
-        //키보드 올라올 시 나의 전송버튼 UI 또한 드러나게하여 유저가 채팅 앱의 전송버튼 누르면 같이 눌려 인식할 수 있게끔
-        //overlay UI 사용 시 앱 권한 설정 필요함
-//        checkPermission()
 
         //focus onto text field --> keyboard 올라올 때
         //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
@@ -252,7 +248,13 @@ class KeyBoardService : InputMethodService() {
             keyboardFrame.addView(KeyboardNumpad.newInstance(applicationContext, layoutInflater, currentInputConnection, keyboardInterationListener))
         }
         else{
-            keyboardInterationListener.modechange(1)
+            // 키보드 올릴 때 2단계 제재 여부 확인
+            if (keyboardEnglish.blockMode){
+                keyboardInterationListener.modechange(0)
+            }
+            else{
+                keyboardInterationListener.modechange(1)
+            }
         }
     }
 
