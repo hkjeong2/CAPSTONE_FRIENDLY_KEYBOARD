@@ -80,20 +80,22 @@ class KeyBoardService : InputMethodService() {
         override fun checkText(text: String) : Int {
             return checkTexts(text)
         }
-
     }
 
-    private fun checkTexts(text : String) : Int{
-
+    private fun checkTexts(text : String) : Int {
         if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
             count += 1
             if (count == 2){
                 shuffleKeyboard()
                 return 1
             }
-            else if (count >= 4){
+            else if (count in 4..5){
                 allowEngKeyboardOnly()
                 return 2
+            } else if (count >= 6) {
+                invisibleKeyboard()
+                count = 0
+                return 0
             }
         }
         return 0
@@ -108,6 +110,24 @@ class KeyBoardService : InputMethodService() {
         GlobalScope.launch(Dispatchers.Main){
             delay(8000)
             keyboardEnglish.setChangingModeAvailability(true)
+        }
+    }
+
+    // 키보드 폰트 글자가 보이지 않도록 하는 기능
+    private fun invisibleKeyboard() {
+        val fontColor = pref.getInt("keyboardFontColor", 0)
+        val keyboardColor = pref.getInt("keyboardColor", 0)
+
+        pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
+        keyboardKorean.updateKeyboard()
+        keyboardEnglish.updateKeyboard()
+
+        // 일정 시간 뒤 다시 폰트 글자가 보이도록 수정
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(8000)
+            pref.edit().putInt("keyboardFontColor", fontColor).apply()
+            keyboardKorean.updateKeyboard()
+            keyboardEnglish.updateKeyboard()
         }
     }
 
