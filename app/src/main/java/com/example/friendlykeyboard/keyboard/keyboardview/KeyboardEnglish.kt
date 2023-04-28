@@ -480,8 +480,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                 KeyEvent.FLAG_SOFT_KEYBOARD)
             )
 
-            Toast.makeText(context, inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString(), Toast.LENGTH_SHORT).show()
-            enterText()
+            val mode = enterText()
 
             inputConnection?.sendKeyEvent(
                 KeyEvent(

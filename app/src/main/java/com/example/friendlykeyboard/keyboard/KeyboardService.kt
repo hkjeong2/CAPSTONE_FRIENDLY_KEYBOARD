@@ -1,6 +1,7 @@
 package com.example.friendlykeyboard.keyboard
 
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import kotlinx.coroutines.Dispatchers
@@ -112,6 +114,7 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun shuffleKeyboard(){
+        Toast.makeText(applicationContext, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
         // Enter key의 clickListener를 한 번만 연동시키기 위함
         // 무작위 배치 키보드로 즉시 변경하는 과정에서의 정확한 오류 원인이 무엇인진 모르겠으나
         // 위와 같이 하면 해결 되는 듯 함
