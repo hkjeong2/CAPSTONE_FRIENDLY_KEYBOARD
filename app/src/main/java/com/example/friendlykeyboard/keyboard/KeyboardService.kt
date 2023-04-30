@@ -106,6 +106,9 @@ class KeyBoardService : InputMethodService() {
             }
             else if (count == 4){
                 shuffleKeyboard()
+                // KeyboardKorean의 getEnterAction에서 if (mode == return값(2)) 으로 같게 해줘야함
+                // 그래야 KeyboardKorean 쪽에서 실시간 키보드 무작위 배치를 즉각 화면에 반영 가능
+                // checkTexts를 int 반환형 함수로 만든 이유...
                 return 2
             }
             else if (count == 6){
