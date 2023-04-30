@@ -502,7 +502,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
-            if (mode == 1){
+            if (mode == 2){
                 //키보드 무작위 배치
                 keyboardInterationListener.modechange(1)
             }
