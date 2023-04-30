@@ -3,13 +3,10 @@ package com.example.friendlykeyboard.keyboard.keyboardview
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.inputmethodservice.Keyboard
 import android.media.AudioManager
 import android.os.*
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -19,8 +16,6 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.KeyboardInteractionListener
@@ -507,9 +502,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
-            if (mode == 1){
+            if (mode == 2){
                 //키보드 무작위 배치
-                Toast.makeText(context, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
                 keyboardInterationListener.modechange(1)
             }
 

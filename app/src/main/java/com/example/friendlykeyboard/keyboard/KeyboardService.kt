@@ -1,8 +1,15 @@
 package com.example.friendlykeyboard.keyboard
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -10,6 +17,10 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import com.example.friendlykeyboard.LoginActivity
+import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +36,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
+    val delayTime : Long = 8000
     var keyboardMode = -1
     var idx = 0
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
@@ -78,7 +90,8 @@ class KeyBoardService : InputMethodService() {
 
         //Enter키로 전송된 text AI로 검사
         override fun checkText(text: String) : Int {
-            return checkTexts(text)
+            val option : Int = checkTexts(text)
+            return option
         }
     }
 
@@ -86,19 +99,59 @@ class KeyBoardService : InputMethodService() {
         if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
             count += 1
             if (count == 2){
-                shuffleKeyboard()
+                // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
+                // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
+                pushAlarm(text)
                 return 1
             }
-            else if (count in 4..5){
-                allowEngKeyboardOnly()
+            else if (count == 4){
+                shuffleKeyboard()
                 return 2
-            } else if (count >= 6) {
+            }
+            else if (count == 6){
+                allowEngKeyboardOnly()
+                return 3
+            } else if (count >= 8) {
                 invisibleKeyboard()
                 count = 0
-                return 0
+                return 4
             }
         }
         return 0
+    }
+
+    // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
+    private fun pushAlarm(curse : String){
+
+        // 알림 눌렀을 때 이동할 intent 구분 필요
+        // 1) 로그인 된 상태면 MainActivit
+        // 2) 로그인되지 않은 상태면 LoginActivity
+        val intent = Intent(this, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
+
+        var builder = NotificationCompat.Builder(this, "MY_channel")
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle("FriendlyKeyboard")
+            .setContentText("비속어를 사용하셨습니다 !")   //매개변수 집어 넣을 곳
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
+            val channel_id = "MY_channel" // 알림을 받을 채널 id 설정
+            val channel_name = "채널이름" // 채널 이름 설정
+            val descriptionText = "설명글" // 채널 설명글 설정
+            val importance = NotificationManager.IMPORTANCE_DEFAULT // 알림 우선순위 설정
+            val channel = NotificationChannel(channel_id, channel_name, importance).apply {
+                description = descriptionText
+            }
+
+            // 만든 채널 정보를 시스템에 등록
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            // 알림 표시: 알림의 고유 ID(ex: 1002), 알림 결과
+            notificationManager.notify(1002, builder.build())
+        }
     }
 
     private fun allowEngKeyboardOnly(){
@@ -108,30 +161,13 @@ class KeyBoardService : InputMethodService() {
 
         //일정 시간 뒤 모드 변경 잠금 해제
         GlobalScope.launch(Dispatchers.Main){
-            delay(8000)
+            delay(delayTime)
             keyboardEnglish.setChangingModeAvailability(true)
         }
     }
 
-    // 키보드 폰트 글자가 보이지 않도록 하는 기능
-    private fun invisibleKeyboard() {
-        val fontColor = pref.getInt("keyboardFontColor", 0)
-        val keyboardColor = pref.getInt("keyboardColor", 0)
-
-        pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
-        keyboardKorean.updateKeyboard()
-        keyboardEnglish.updateKeyboard()
-
-        // 일정 시간 뒤 다시 폰트 글자가 보이도록 수정
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(8000)
-            pref.edit().putInt("keyboardFontColor", fontColor).apply()
-            keyboardKorean.updateKeyboard()
-            keyboardEnglish.updateKeyboard()
-        }
-    }
-
     private fun shuffleKeyboard(){
+        Toast.makeText(applicationContext, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
         // Enter key의 clickListener를 한 번만 연동시키기 위함
         // 무작위 배치 키보드로 즉시 변경하는 과정에서의 정확한 오류 원인이 무엇인진 모르겠으나
         // 위와 같이 하면 해결 되는 듯 함
@@ -142,7 +178,7 @@ class KeyBoardService : InputMethodService() {
 
         // coroutine delayed로 일정 시간 뒤 키보드 화면 교체
         GlobalScope.launch(Dispatchers.Main){
-            delay(8000)
+            delay(delayTime)
             // keyboard 원상 복구
             keyboardKorean.restoreKeyboard()
 
@@ -157,7 +193,24 @@ class KeyBoardService : InputMethodService() {
                 keyboardFrame.addView(keyboardKorean.getLayout(1))
             }
         }
+    }
 
+    // 키보드 폰트 글자가 보이지 않도록 하는 기능
+    private fun invisibleKeyboard() {
+        val fontColor = pref.getInt("keyboardFontColor", 0)
+        val keyboardColor = pref.getInt("keyboardColor", 0)
+
+        pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
+        keyboardKorean.updateKeyboard()
+        keyboardEnglish.updateKeyboard()
+
+        // 일정 시간 뒤 다시 폰트 글자가 보이도록 수정
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(delayTime)
+            pref.edit().putInt("keyboardFontColor", fontColor).apply()
+            keyboardKorean.updateKeyboard()
+            keyboardEnglish.updateKeyboard()
+        }
     }
 
     override fun onCreate() {
