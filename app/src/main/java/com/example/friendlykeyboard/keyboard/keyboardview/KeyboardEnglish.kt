@@ -64,7 +64,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             blockMode = true
             for (i in modeButtons.indices){
                 modeButtons[i].text = ""
-                modeButtons[i].setOnClickListener {  }
+//                modeButtons[i].setOnClickListener {  }
             }
         }
         else{
@@ -72,7 +72,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             val list : List<String> = listOf("!#1", "한/영")
             for (i in modeButtons.indices){
                 modeButtons[i].text = list[i]
-                getMyClickListener(modeButtons[i])
+//                getMyClickListener(modeButtons[i])
             }
         }
     }
@@ -309,14 +309,16 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
                     keyboardInterationListener.modechange(2)
                 }
                 else -> {
-                    playClick(
-                        actionButton.text.toString().toCharArray().get(
-                            0
-                        ).toInt()
-                    )
-                    inputConnection?.commitText(actionButton.text,1)
+                    if (actionButton.text.toString().length >= 1){
+                        playClick(
+                            actionButton.text.toString().toCharArray().get(
+                                0
+                            ).toInt()
+                        )
+                        inputConnection?.commitText(actionButton.text,1)
 
-                    sendText()
+                        sendText()
+                    }
                 }
             }
 
