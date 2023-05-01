@@ -96,6 +96,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         return mCandidateHSV
     }
 
+    //데이터셋 완료되면 수정필요
     fun loadDic(){
         mSuggestion.put("ㅁㅊ", arrayListOf<String>("와", "대박", "헐"))
         mSuggestion.put("ㅅㅂ", arrayListOf<String>("화나", "이런", "젠장"))

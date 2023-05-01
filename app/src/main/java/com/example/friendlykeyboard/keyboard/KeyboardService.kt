@@ -1,9 +1,6 @@
 package com.example.friendlykeyboard.keyboard
 
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
@@ -36,6 +33,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
+    lateinit var notificationManager : NotificationManager
     val delayTime : Long = 10000
     var keyboardMode = -1 //keyboard 종류
     var idx = 0 //candidateView에 필요
@@ -96,6 +94,7 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
+    // 모델 및 counter 연동되면 수정필요
     private fun checkTexts(text : String) : Int {
         if (stage == 2 && keyboardMode == 1){   //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
             keyboardKorean.shuffleKeyboard()
@@ -133,41 +132,48 @@ class KeyBoardService : InputMethodService() {
     }
 
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
-    private fun pushAlarm(curse : String){
+    private fun pushAlarm(curse : String) {
+        //받아온 비속어로 text 수정
+        val text = "비속어를 사용하셨습니다!"
 
+        //채널 ID
+        val notificationId = 1
         // 알림 눌렀을 때 이동할 intent 구분 필요
         // 1) 로그인 된 상태면 MainActivit
         // 2) 로그인되지 않은 상태면 LoginActivity
-        val intent = Intent(this, LoginActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
-        val text = "비속어를 사용하셨습니다!"
+        val intent = Intent(this, MainActivity::class.java).apply {
+            //현재 액티비티에서 새로운 액티비티를 실행한다면 현재 액티비티를 새로운 액티비티로 교체하는 플래그
+            //flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+            //이전에 실행된 액티비티들을 모두 없엔 후 새로운 액티비티 실행 플래그
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_IMMUTABLE)
 
-        val builder = NotificationCompat.Builder(this, "MY_channel")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+        //노티피케이션 생성
+        val notification: Notification = NotificationCompat.Builder(this, "channelID")
             .setContentTitle("FriendlyKeyboard")
             .setContentText(text)
+            .setSmallIcon(android.R.drawable.ic_dialog_info) //아이콘이미지
+            .setAutoCancel(true) // 사용자가 알림을 탭하면 자동으로 알림을 삭제합니다.
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            .setAutoCancel(true)
-            .setFullScreenIntent(pendingIntent, true)
+            .setContentIntent(pendingIntent) //노티클릭시 인텐트작업
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .build()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
-            val channel_id = "MY_channel" // 알림을 받을 채널 id 설정
-            val channel_name = "비속어 알림" // 채널 이름 설정
-            val descriptionText = "설명글" // 채널 설명글 설정
-            val importance = NotificationManager.IMPORTANCE_HIGH // 알림 우선순위 설정
-            val channel = NotificationChannel(channel_id, channel_name, importance).apply {
-                description = descriptionText
+        notificationManager.notify(notificationId, notification)
+    }
+
+    /* 2. 채널 만들기 및 중요도 설정*/
+    private fun createNotificationChannel(id: String, name: String, channelDescription: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //중요도
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            //채널 생성
+            val channel = NotificationChannel(id, name, importance).apply {
+                description = channelDescription
             }
-
-            // 만든 채널 정보를 시스템에 등록
-            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
-
-            // 알림 표시: 알림의 고유 ID, 알림 결과
-            notificationManager.notify(1, builder.build())
         }
     }
 
@@ -238,6 +244,10 @@ class KeyBoardService : InputMethodService() {
         keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
         keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
         pref = getSharedPreferences("setting", Activity.MODE_PRIVATE)
+
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel("channelID", "DemoChannel", "this is a demo")
+
         Log.d("키보드 생성", "111")
     }
 

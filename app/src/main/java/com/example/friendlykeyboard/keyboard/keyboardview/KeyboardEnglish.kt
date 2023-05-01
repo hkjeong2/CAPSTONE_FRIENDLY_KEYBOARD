@@ -64,7 +64,6 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             blockMode = true
             for (i in modeButtons.indices){
                 modeButtons[i].text = ""
-//                modeButtons[i].setOnClickListener {  }
             }
         }
         else{
@@ -72,7 +71,6 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
             val list : List<String> = listOf("!#1", "한/영")
             for (i in modeButtons.indices){
                 modeButtons[i].text = list[i]
-//                getMyClickListener(modeButtons[i])
             }
         }
     }
