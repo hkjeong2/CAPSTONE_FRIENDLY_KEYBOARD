@@ -36,11 +36,12 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
-    val delayTime : Long = 8000
-    var keyboardMode = -1
-    var idx = 0
+    val delayTime : Long = 10000
+    var keyboardMode = -1 //keyboard 종류
+    var idx = 0 //candidateView에 필요
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
     var count = 0
+    var stage = -1 //2단계 제재 중 특정 기능
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
         //inputconnection이 null일경우 재요청하는 부분 필요함
@@ -96,12 +97,17 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun checkTexts(text : String) : Int {
+        if (stage == 2 && keyboardMode == 1){   //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
+            keyboardKorean.shuffleKeyboard()
+            keyboardInterationListener.modechange(1)
+        }
         if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
             count += 1
-            if (count >= 2){
+            if (count == 2){
                 // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
                 // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
                 pushAlarm(text)
+                stage = 1
                 return 1
             }
             else if (count == 4){
@@ -109,14 +115,17 @@ class KeyBoardService : InputMethodService() {
                 // KeyboardKorean의 getEnterAction에서 if (mode == return값(2)) 으로 같게 해줘야함
                 // 그래야 KeyboardKorean 쪽에서 실시간 키보드 무작위 배치를 즉각 화면에 반영 가능
                 // checkTexts를 int 반환형 함수로 만든 이유...
+                stage = 2
                 return 2
             }
             else if (count == 6){
                 allowEngKeyboardOnly()
+                stage = 3
                 return 3
             } else if (count >= 8) {
                 invisibleKeyboard()
                 count = 0
+                stage = 4
                 return 4
             }
         }
@@ -162,18 +171,6 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
-    private fun allowEngKeyboardOnly(){
-        keyboardInterationListener.modechange(0)
-        //다른 키보드 모드로 바꾸지 못하도록
-        keyboardEnglish.setChangingModeAvailability(false)
-
-        //일정 시간 뒤 모드 변경 잠금 해제
-        GlobalScope.launch(Dispatchers.Main){
-            delay(delayTime)
-            keyboardEnglish.setChangingModeAvailability(true)
-        }
-    }
-
     private fun shuffleKeyboard(){
         Toast.makeText(applicationContext, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
         // Enter key의 clickListener를 한 번만 연동시키기 위함
@@ -200,6 +197,20 @@ class KeyBoardService : InputMethodService() {
                 // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
                 keyboardFrame.addView(keyboardKorean.getLayout(1))
             }
+
+            stage = -1
+        }
+    }
+
+    private fun allowEngKeyboardOnly(){
+        keyboardInterationListener.modechange(0)
+        //다른 키보드 모드로 바꾸지 못하도록
+        keyboardEnglish.setChangingModeAvailability(false)
+
+        //일정 시간 뒤 모드 변경 잠금 해제
+        GlobalScope.launch(Dispatchers.Main){
+            delay(delayTime)
+            keyboardEnglish.setChangingModeAvailability(true)
         }
     }
 
