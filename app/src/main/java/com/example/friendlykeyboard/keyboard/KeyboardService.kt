@@ -98,7 +98,7 @@ class KeyBoardService : InputMethodService() {
     private fun checkTexts(text : String) : Int {
         if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
             count += 1
-            if (count == 2){
+            if (count >= 2){
                 // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
                 // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
                 pushAlarm(text)
@@ -131,19 +131,24 @@ class KeyBoardService : InputMethodService() {
         // 2) 로그인되지 않은 상태면 LoginActivity
         val intent = Intent(this, LoginActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
+        val text = "비속어를 사용하셨습니다!"
 
-        var builder = NotificationCompat.Builder(this, "MY_channel")
+        val builder = NotificationCompat.Builder(this, "MY_channel")
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("FriendlyKeyboard")
-            .setContentText("비속어를 사용하셨습니다 !")   //매개변수 집어 넣을 곳
+            .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
+            .setFullScreenIntent(pendingIntent, true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 버전 이후에는 알림을 받을 때 채널이 필요
             val channel_id = "MY_channel" // 알림을 받을 채널 id 설정
-            val channel_name = "채널이름" // 채널 이름 설정
+            val channel_name = "비속어 알림" // 채널 이름 설정
             val descriptionText = "설명글" // 채널 설명글 설정
-            val importance = NotificationManager.IMPORTANCE_DEFAULT // 알림 우선순위 설정
+            val importance = NotificationManager.IMPORTANCE_HIGH // 알림 우선순위 설정
             val channel = NotificationChannel(channel_id, channel_name, importance).apply {
                 description = descriptionText
             }
@@ -152,8 +157,8 @@ class KeyBoardService : InputMethodService() {
             val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
 
-            // 알림 표시: 알림의 고유 ID(ex: 1002), 알림 결과
-            notificationManager.notify(1002, builder.build())
+            // 알림 표시: 알림의 고유 ID, 알림 결과
+            notificationManager.notify(1, builder.build())
         }
     }
 
