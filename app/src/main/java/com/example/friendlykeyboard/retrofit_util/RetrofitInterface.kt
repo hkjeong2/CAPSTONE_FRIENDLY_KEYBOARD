@@ -5,11 +5,14 @@ import retrofit2.http.*
 
 interface RetrofitInterface {
     @POST("get_account")
-    fun getAccount(@Body account: Account): Call<DataModel>
+    fun getAccount(@Body account: Account): Call<AccountDataModel>
 
     @POST("sign-up")
-    fun signUp(@Body account: Account): Call<DataModel>
+    fun signUp(@Body account: Account): Call<AccountDataModel>
 
     @POST("sign-in")
-    fun signIn(@Body account: Account): Call<DataModel>
+    fun signIn(@Body account: Account): Call<AccountDataModel>
+
+    @POST("inference_hate_speech")
+    fun inferenceHateSpeech(@Body hateSpeech: HateSpeech): Call<HateSpeechDataModel>
 }

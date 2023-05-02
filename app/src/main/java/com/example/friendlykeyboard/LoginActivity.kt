@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.friendlykeyboard.databinding.ActivityLoginBinding
 import com.example.friendlykeyboard.retrofit_util.Account
-import com.example.friendlykeyboard.retrofit_util.DataModel
+import com.example.friendlykeyboard.retrofit_util.AccountDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -132,8 +132,8 @@ class LoginActivity : AppCompatActivity() {
         } else {
             val account = Account(id, pwd)
 
-            service.signIn(account).enqueue(object : Callback<DataModel> {
-                override fun onResponse(call: Call<DataModel>, response: Response<DataModel>) {
+            service.signIn(account).enqueue(object : Callback<AccountDataModel> {
+                override fun onResponse(call: Call<AccountDataModel>, response: Response<AccountDataModel>) {
                     if (response.isSuccessful) {
                         val result = response.body()
 
@@ -185,8 +185,8 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<DataModel>, t: Throwable) {
-                    // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유
+                override fun onFailure(call: Call<AccountDataModel>, t: Throwable) {
+                    // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
                     t.printStackTrace()
                     Toast.makeText(
                         applicationContext,
