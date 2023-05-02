@@ -106,8 +106,8 @@ class KeyBoardService : InputMethodService() {
             keyboardInterationListener.modechange(1)
         }
 
+        // 서버에서 혐오 표현 존재 여부를 판별함.
         val hateSpeech = HateSpeech(text)
-
         service.inferenceHateSpeech(hateSpeech).enqueue(object : Callback<HateSpeechDataModel> {
             override fun onResponse(
                 call: Call<HateSpeechDataModel>,
@@ -117,12 +117,20 @@ class KeyBoardService : InputMethodService() {
                     val result = response.body()
                     when (result?.inference_hate_speech_result) {
                         "notClean" -> {
+                            Toast.makeText(
+                                applicationContext,
+                                "notClean",
+                                Toast.LENGTH_SHORT).show()
                             count++
                             checkCount(text)
+                            // TODO: count 횟수 증가는 아래 제재 기능 적용 후에 이루어지는데 이를 수정해야 함.
                         }
                         else -> {
-                            // inference_hate_speech_result == notClean
-                            // Do nothing.
+                            // inference_hate_speech_result == clean
+                            Toast.makeText(
+                                applicationContext,
+                                "clean",
+                                Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
@@ -145,6 +153,7 @@ class KeyBoardService : InputMethodService() {
             }
         })
 
+        // TODO: 아래 코드는 서버와 통신 완료 전에 실행되므로 동기 처리 또는 비동기 처리를 다루어야 함.
         if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
             count += 1
             if (count == 2){
@@ -174,9 +183,9 @@ class KeyBoardService : InputMethodService() {
             }
         }
         return 0
-
     }
 
+    // TODO: 임시로 분리한 count 횟수 판별 기능
     private fun checkCount(text: String): Int {
         if (count == 2){
             // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
