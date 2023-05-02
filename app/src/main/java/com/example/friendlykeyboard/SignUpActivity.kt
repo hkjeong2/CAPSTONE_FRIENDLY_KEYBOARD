@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.example.friendlykeyboard.databinding.ActivitySignUpBinding
 import com.example.friendlykeyboard.retrofit_util.Account
-import com.example.friendlykeyboard.retrofit_util.DataModel
+import com.example.friendlykeyboard.retrofit_util.AccountDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,10 +45,10 @@ class SignUpActivity : AppCompatActivity() {
 
                     val account = Account(id, password)
 
-                    service.signUp(account).enqueue(object : Callback<DataModel> {
+                    service.signUp(account).enqueue(object : Callback<AccountDataModel> {
                         override fun onResponse(
-                            call: Call<DataModel>,
-                            response: Response<DataModel>
+                            call: Call<AccountDataModel>,
+                            response: Response<AccountDataModel>
                         ) {
                             if (response.isSuccessful) {
                                 val result = response.body()
@@ -86,8 +86,8 @@ class SignUpActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<DataModel>, t: Throwable) {
-                            // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유
+                        override fun onFailure(call: Call<AccountDataModel>, t: Throwable) {
+                            // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
                             t.printStackTrace()
                             Toast.makeText(
                                 applicationContext,
@@ -121,8 +121,8 @@ class SignUpActivity : AppCompatActivity() {
 
         val account = Account(id, "?")
 
-        service.getAccount(account).enqueue(object : Callback<DataModel> {
-            override fun onResponse(call: Call<DataModel>, response: Response<DataModel>) {
+        service.getAccount(account).enqueue(object : Callback<AccountDataModel> {
+            override fun onResponse(call: Call<AccountDataModel>, response: Response<AccountDataModel>) {
                 if (response.isSuccessful) {
                     val result = response.body()
 
@@ -159,7 +159,7 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<DataModel>, t: Throwable) {
+            override fun onFailure(call: Call<AccountDataModel>, t: Throwable) {
                 // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유
                 t.printStackTrace()
                 Toast.makeText(

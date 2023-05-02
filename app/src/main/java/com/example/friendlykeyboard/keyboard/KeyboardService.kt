@@ -20,10 +20,14 @@ import com.example.friendlykeyboard.LoginActivity
 import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.friendlykeyboard.retrofit_util.HateSpeech
+import com.example.friendlykeyboard.retrofit_util.HateSpeechDataModel
+import com.example.friendlykeyboard.retrofit_util.RetrofitClient
+import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 class KeyBoardService : InputMethodService() {
     private lateinit var pref: SharedPreferences
@@ -40,6 +44,7 @@ class KeyBoardService : InputMethodService() {
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
     var count = 0
     var stage = -1 //2단계 제재 중 특정 기능
+    private val service = RetrofitClient.getApiService()
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
         //inputconnection이 null일경우 재요청하는 부분 필요함
@@ -94,12 +99,61 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
-    // 모델 및 counter 연동되면 수정필요
+    // TODO: 모델 및 counter 연동되면 수정필요
     private fun checkTexts(text : String) : Int {
         if (stage == 2 && keyboardMode == 1){   //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
             keyboardKorean.shuffleKeyboard()
             keyboardInterationListener.modechange(1)
         }
+
+        // 서버에서 혐오 표현 존재 여부를 판별함.
+        val hateSpeech = HateSpeech(text)
+        service.inferenceHateSpeech(hateSpeech).enqueue(object : Callback<HateSpeechDataModel> {
+            override fun onResponse(
+                call: Call<HateSpeechDataModel>,
+                response: Response<HateSpeechDataModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result = response.body()
+                    when (result?.inference_hate_speech_result) {
+                        "notClean" -> {
+                            Toast.makeText(
+                                applicationContext,
+                                "notClean",
+                                Toast.LENGTH_SHORT).show()
+                            count++
+                            checkCount(text)
+                            // TODO: count 횟수 증가는 아래 제재 기능 적용 후에 이루어지는데 이를 수정해야 함.
+                        }
+                        else -> {
+                            // inference_hate_speech_result == clean
+                            Toast.makeText(
+                                applicationContext,
+                                "clean",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    // 통신이 실패한 경우
+                    Log.d("KeyboardService", response.message())
+                    Toast.makeText(
+                        applicationContext,
+                        "오류가 발생하였습니다.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<HateSpeechDataModel>, t: Throwable) {
+                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
+                t.printStackTrace()
+                Toast.makeText(
+                    applicationContext,
+                    "서버와의 통신이 실패하였습니다.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // TODO: 아래 코드는 서버와 통신 완료 전에 실행되므로 동기 처리 또는 비동기 처리를 다루어야 함.
         if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
             count += 1
             if (count == 2){
@@ -127,6 +181,36 @@ class KeyBoardService : InputMethodService() {
                 stage = 4
                 return 4
             }
+        }
+        return 0
+    }
+
+    // TODO: 임시로 분리한 count 횟수 판별 기능
+    private fun checkCount(text: String): Int {
+        if (count == 2){
+            // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
+            // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
+            pushAlarm(text)
+            stage = 1
+            return 1
+        }
+        else if (count == 4){
+            shuffleKeyboard()
+            // KeyboardKorean의 getEnterAction에서 if (mode == return값(2)) 으로 같게 해줘야함
+            // 그래야 KeyboardKorean 쪽에서 실시간 키보드 무작위 배치를 즉각 화면에 반영 가능
+            // checkTexts를 int 반환형 함수로 만든 이유...
+            stage = 2
+            return 2
+        }
+        else if (count == 6){
+            allowEngKeyboardOnly()
+            stage = 3
+            return 3
+        } else if (count >= 8) {
+            invisibleKeyboard()
+            count = 0
+            stage = 4
+            return 4
         }
         return 0
     }
