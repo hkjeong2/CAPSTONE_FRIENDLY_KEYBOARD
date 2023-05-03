@@ -1,6 +1,9 @@
 package com.example.friendlykeyboard
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.friendlykeyboard.databinding.ActivityMainBinding
@@ -63,5 +66,25 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.appbar_action, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_logout -> {
+            val editor = getSharedPreferences("cbAuto", 0).edit()
+            editor.putBoolean("check", false)
+            editor.putString("id", "")
+            editor.putString("pwd", "")
+            editor.apply()
+
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }
