@@ -157,8 +157,8 @@ class KeyBoardService : InputMethodService() {
                     Toast.LENGTH_SHORT).show()
             }
         })
-
     }
+
     // count 횟수에 따른 3단계 기능 적용
     private fun checkCount(text: String) {
         if (count == 2){
