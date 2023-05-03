@@ -16,6 +16,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import com.example.friendlykeyboard.ChattingActivity
 import com.example.friendlykeyboard.LoginActivity
 import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
@@ -101,6 +102,14 @@ class KeyBoardService : InputMethodService() {
 
     // TODO: 모델 및 counter 연동되면 수정필요
     private fun checkTexts(text : String) : Int {
+
+//        //chatting 화면 pop up
+//        val intent = Intent(this, ChattingActivity::class.java)
+//        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
+//        try{
+//            pendingIntent.send()
+//        }catch (e : Exception){}
+
         if (stage == 2 && keyboardMode == 1){   //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
             keyboardKorean.shuffleKeyboard()
             keyboardInterationListener.modechange(1)
