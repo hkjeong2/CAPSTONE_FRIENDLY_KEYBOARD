@@ -17,7 +17,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.example.friendlykeyboard.ChattingActivity
-import com.example.friendlykeyboard.LoginActivity
 import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
@@ -28,7 +27,6 @@ import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
 class KeyBoardService : InputMethodService() {
     private lateinit var pref: SharedPreferences
@@ -94,14 +92,13 @@ class KeyBoardService : InputMethodService() {
         }
 
         //Enter키로 전송된 text AI로 검사
-        override fun checkText(text: String) : Int {
-            val option : Int = checkTexts(text)
-            return option
+        override fun checkText(text: String): Int {
+            checkTexts(text)
+            return 0
         }
     }
 
-    // TODO: 모델 및 counter 연동되면 수정필요
-    private fun checkTexts(text : String) : Int {
+    private fun checkTexts(text : String) {
 
 //        //chatting 화면 pop up
 //        val intent = Intent(this, ChattingActivity::class.java)
@@ -132,7 +129,6 @@ class KeyBoardService : InputMethodService() {
                                 Toast.LENGTH_SHORT).show()
                             count++
                             checkCount(text)
-                            // TODO: count 횟수 증가는 아래 제재 기능 적용 후에 이루어지는데 이를 수정해야 함.
                         }
                         else -> {
                             // inference_hate_speech_result == clean
@@ -161,47 +157,16 @@ class KeyBoardService : InputMethodService() {
                     Toast.LENGTH_SHORT).show()
             }
         })
-
-        // TODO: 아래 코드는 서버와 통신 완료 전에 실행되므로 동기 처리 또는 비동기 처리를 다루어야 함.
-        if (text.contains("ㅈㄴ") || text.contains("ㅅㅂ") || text.contains("ㅁㅊ") || text.contains("ㅅㄲ야")){
-            count += 1
-            if (count == 2){
-                // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
-                // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
-                pushAlarm(text)
-                stage = 1
-                return 1
-            }
-            else if (count == 4){
-                shuffleKeyboard()
-                // KeyboardKorean의 getEnterAction에서 if (mode == return값(2)) 으로 같게 해줘야함
-                // 그래야 KeyboardKorean 쪽에서 실시간 키보드 무작위 배치를 즉각 화면에 반영 가능
-                // checkTexts를 int 반환형 함수로 만든 이유...
-                stage = 2
-                return 2
-            }
-            else if (count == 6){
-                allowEngKeyboardOnly()
-                stage = 3
-                return 3
-            } else if (count >= 8) {
-                invisibleKeyboard()
-                count = 0
-                stage = 4
-                return 4
-            }
-        }
-        return 0
     }
 
-    // TODO: 임시로 분리한 count 횟수 판별 기능
-    private fun checkCount(text: String): Int {
+    // count 횟수에 따른 3단계 기능 적용
+    private fun checkCount(text: String) {
         if (count == 2){
             // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
             // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
             pushAlarm(text)
             stage = 1
-            return 1
+            keyboardKorean.mode = 1
         }
         else if (count == 4){
             shuffleKeyboard()
@@ -209,19 +174,20 @@ class KeyBoardService : InputMethodService() {
             // 그래야 KeyboardKorean 쪽에서 실시간 키보드 무작위 배치를 즉각 화면에 반영 가능
             // checkTexts를 int 반환형 함수로 만든 이유...
             stage = 2
-            return 2
+            keyboardKorean.mode = 2
         }
         else if (count == 6){
             allowEngKeyboardOnly()
             stage = 3
-            return 3
+            keyboardKorean.mode = 3
         } else if (count >= 8) {
             invisibleKeyboard()
             count = 0
             stage = 4
-            return 4
+            keyboardKorean.mode = 4
         }
-        return 0
+
+        keyboardKorean.mode = 0
     }
 
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
