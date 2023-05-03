@@ -48,6 +48,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     val layoutLines = ArrayList<LinearLayout>()
     var downView:View? = null
     var capsView:ImageView? = null
+    var mode: Int = 0
 
     lateinit var numpadLine : LinearLayout
     lateinit var firstLine: LinearLayout
@@ -495,7 +496,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
             //키 눌린 직후 ~ 떼지기 직전 처리할 작업
-            val mode = enterText()
+            enterText()
 
             //key ActionUp --> 눌린 키 떼지도록
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
@@ -515,9 +516,8 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         keyboardInterationListener.sendText(text?.text.toString())
     }
 
-    fun enterText() : Int{
+    fun enterText() {
         val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
-        return keyboardInterationListener.checkText(text?.text.toString())
+        keyboardInterationListener.checkText(text?.text.toString())
     }
-
 }
