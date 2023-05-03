@@ -113,7 +113,9 @@ class KeyBoardService : InputMethodService() {
         }
 
         // 서버에서 혐오 표현 존재 여부를 판별함.
-        val hateSpeech = HateSpeech(text)
+        val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
+        val hateSpeech = HateSpeech(id, text)
+
         service.inferenceHateSpeech(hateSpeech).enqueue(object : Callback<HateSpeechDataModel> {
             override fun onResponse(
                 call: Call<HateSpeechDataModel>,
@@ -127,7 +129,7 @@ class KeyBoardService : InputMethodService() {
                                 applicationContext,
                                 "notClean",
                                 Toast.LENGTH_SHORT).show()
-                            count++
+                            count = result.hate_speech_count
                             checkCount(text)
                         }
                         else -> {
