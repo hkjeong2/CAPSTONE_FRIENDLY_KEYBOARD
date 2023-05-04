@@ -83,5 +83,6 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardBackground.item.setOnClickListener {
             startActivity(Intent(activity, SettingsKeyboardBackgroundActivity::class.java))
         }
+
     }
 }
