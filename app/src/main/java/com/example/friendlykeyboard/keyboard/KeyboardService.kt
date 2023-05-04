@@ -123,21 +123,22 @@ class KeyBoardService : InputMethodService() {
             ) {
                 if (response.isSuccessful) {
                     val result = response.body()
+                    Toast.makeText(
+                        applicationContext,
+                        result?.inference_hate_speech_result,
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // 10개의 Labels
+                    // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
+                    // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
                     when (result?.inference_hate_speech_result) {
-                        "notClean" -> {
-                            Toast.makeText(
-                                applicationContext,
-                                "notClean",
-                                Toast.LENGTH_SHORT).show()
-                            count = result.hate_speech_count
-                            checkCount(text)
+                        "clean" -> {
+                            // Do nothing
                         }
                         else -> {
-                            // inference_hate_speech_result == clean
-                            Toast.makeText(
-                                applicationContext,
-                                "clean",
-                                Toast.LENGTH_SHORT).show()
+                            count++
+                            checkCount(text)
                         }
                     }
                 } else {
@@ -512,8 +513,4 @@ class KeyBoardService : InputMethodService() {
             mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1), keyboardKorean)
         }
     }
-
-
-
-
 }

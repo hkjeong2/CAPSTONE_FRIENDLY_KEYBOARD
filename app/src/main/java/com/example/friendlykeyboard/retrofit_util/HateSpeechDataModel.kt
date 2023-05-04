@@ -8,8 +8,4 @@ data class HateSpeechDataModel(
     @SerializedName("inference_hate_speech_result")
     @Expose
     val inference_hate_speech_result: String,
-
-    @SerializedName("hate_speech_count")
-    @Expose
-    val hate_speech_count: Int
 )
