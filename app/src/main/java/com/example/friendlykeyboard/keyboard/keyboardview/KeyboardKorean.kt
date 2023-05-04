@@ -19,6 +19,8 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.KeyboardInteractionListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import java.lang.NumberFormatException
 
 class KeyboardKorean constructor(var context:Context, var layoutInflater: LayoutInflater, var keyboardInterationListener: KeyboardInteractionListener){
@@ -496,7 +498,9 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
             //키 눌린 직후 ~ 떼지기 직전 처리할 작업
-            enterText()
+            runBlocking {
+                enterText()
+            }
 
             //key ActionUp --> 눌린 키 떼지도록
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,

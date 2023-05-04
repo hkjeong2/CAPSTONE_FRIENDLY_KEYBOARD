@@ -512,8 +512,4 @@ class KeyBoardService : InputMethodService() {
             mCandidateView.createView(currentInputConnection, mText, st, tokenIdxRange.get(i).get(1), keyboardKorean)
         }
     }
-
-
-
-
 }
