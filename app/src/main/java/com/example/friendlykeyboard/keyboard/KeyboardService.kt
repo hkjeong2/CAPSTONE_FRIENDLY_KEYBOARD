@@ -164,6 +164,9 @@ class KeyBoardService : InputMethodService() {
 
     // count 횟수에 따른 3단계 기능 적용
     private fun checkCount(text: String) {
+
+        keyboardKorean.mode = 0
+
         if (count == 2){
             // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
             // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
@@ -183,14 +186,23 @@ class KeyBoardService : InputMethodService() {
             allowEngKeyboardOnly()
             stage = 3
             keyboardKorean.mode = 3
-        } else if (count >= 8) {
+        }
+        else if (count == 8) {
             invisibleKeyboard()
-            count = 0
             stage = 4
             keyboardKorean.mode = 4
         }
+        else if (count >= 9) {
+            textMasking()
+            stage = 5
+            keyboardKorean.mode = 5
+            count = 0
+        }
 
-        keyboardKorean.mode = 0
+    }
+
+    private fun textMasking(){
+
     }
 
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성

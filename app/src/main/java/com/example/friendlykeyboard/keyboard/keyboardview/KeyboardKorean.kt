@@ -19,9 +19,9 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.KeyboardInteractionListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.lang.NumberFormatException
+import java.lang.Runnable
 
 class KeyboardKorean constructor(var context:Context, var layoutInflater: LayoutInflater, var keyboardInterationListener: KeyboardInteractionListener){
     lateinit var koreanLayout: LinearLayout
@@ -492,24 +492,24 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             hangulMaker.directlyCommit()
             val eventTime = SystemClock.uptimeMillis()
 
-            //key ActionDown --> 키 눌렸을 때
-            inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
-                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD))
+            enterText()
 
-            //키 눌린 직후 ~ 떼지기 직전 처리할 작업
-            runBlocking {
-                enterText()
-            }
+            GlobalScope.launch(Dispatchers.Main){
+                delay(1000)
+                //key ActionDown --> 키 눌렸을 때
+                inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
+                    KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                    KeyEvent.FLAG_SOFT_KEYBOARD))
 
-            //key ActionUp --> 눌린 키 떼지도록
-            inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
-                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD))
+                //key ActionUp --> 눌린 키 떼지도록
+                inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
+                    KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                    KeyEvent.FLAG_SOFT_KEYBOARD))
 
-            if (mode == 2){
-                //키보드 무작위 배치
-                keyboardInterationListener.modechange(1)
+                if (mode == 2){
+                    //키보드 무작위 배치
+                    keyboardInterationListener.modechange(1)
+                }
             }
 
         }
