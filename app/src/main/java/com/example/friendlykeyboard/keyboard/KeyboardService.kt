@@ -183,14 +183,24 @@ class KeyBoardService : InputMethodService() {
             allowEngKeyboardOnly()
             stage = 3
             keyboardKorean.mode = 3
-        } else if (count >= 8) {
+        }
+        else if (count == 8) {
             invisibleKeyboard()
-            count = 0
             stage = 4
             keyboardKorean.mode = 4
         }
+        else if (count >= 9) {
+            textMasking()
+            stage = 5
+            keyboardKorean.mode = 5
+            count = 0
+        }
 
         keyboardKorean.mode = 0
+    }
+
+    private fun textMasking(){
+
     }
 
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성

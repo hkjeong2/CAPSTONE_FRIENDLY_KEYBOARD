@@ -498,9 +498,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                 KeyEvent.FLAG_SOFT_KEYBOARD))
 
             //키 눌린 직후 ~ 떼지기 직전 처리할 작업
-            runBlocking {
-                enterText()
-            }
+            enterText()
 
             //key ActionUp --> 눌린 키 떼지도록
             inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
