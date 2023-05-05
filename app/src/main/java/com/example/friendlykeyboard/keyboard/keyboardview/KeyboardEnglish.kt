@@ -64,7 +64,6 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     // 제재 기능 : 영어 입력만 가능
     fun setChangingModeAvailability(possible : Boolean){
         if (!possible){
-            Toast.makeText(context, "제재 : 강제 영문 키보드 활성화", Toast.LENGTH_SHORT).show()
             blockMode = true
             for (i in modeButtons.indices){
                 modeButtons[i].text = ""
