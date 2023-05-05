@@ -42,6 +42,9 @@ class ChattingActivity : AppCompatActivity() {
         spf.edit().putInt("settingEnglishColor", Color.parseColor("#000000")).apply()
         spf.edit().putInt("settingRandomColor", Color.parseColor("#000000")).apply()
         spf.edit().putInt("settingCorrectColor", Color.parseColor("#000000")).apply()
+
+        // 키보드 폰트색 복구
+        spf.edit().putInt("keyboardFontColor", spf.getInt("tempKeyboardFontColor", 0)).apply()
     }
 
 
