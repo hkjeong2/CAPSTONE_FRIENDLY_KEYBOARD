@@ -7,7 +7,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
 import android.os.Build
+import android.os.SystemClock
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
@@ -92,9 +94,8 @@ class KeyBoardService : InputMethodService() {
         }
 
         //Enter키로 전송된 text AI로 검사
-        override fun checkText(text: String): Int {
+        override fun checkText(text: String) {
             checkTexts(text)
-            return 0
         }
     }
 
@@ -134,7 +135,7 @@ class KeyBoardService : InputMethodService() {
                     // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
                     when (result?.inference_hate_speech_result) {
                         "clean" -> {
-                            // Do nothing
+                            sendEnterKey()
                         }
                         else -> {
                             count++
@@ -165,44 +166,53 @@ class KeyBoardService : InputMethodService() {
     // count 횟수에 따른 3단계 기능 적용
     private fun checkCount(text: String) {
 
-        keyboardKorean.mode = 0
-
         if (count == 2){
             // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
             // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
             pushAlarm(text)
             stage = 1
-            keyboardKorean.mode = 1
         }
         else if (count == 4){
             shuffleKeyboard()
-            // KeyboardKorean의 getEnterAction에서 if (mode == return값(2)) 으로 같게 해줘야함
-            // 그래야 KeyboardKorean 쪽에서 실시간 키보드 무작위 배치를 즉각 화면에 반영 가능
-            // checkTexts를 int 반환형 함수로 만든 이유...
             stage = 2
-            keyboardKorean.mode = 2
-            keyboardKorean.shuffleKeyboard2()
+            keyboardInterationListener.modechange(1)
         }
         else if (count == 6){
             allowEngKeyboardOnly()
             stage = 3
-            keyboardKorean.mode = 3
         }
         else if (count == 8) {
             invisibleKeyboard()
             stage = 4
-            keyboardKorean.mode = 4
         }
         else if (count in 9..11) {
             textMasking()
             stage = 5
-            keyboardKorean.mode = 5
-            count = 0
         }
         else if (count >= 12){
             count = 0
         }
 
+        sendEnterKey()
+
+    }
+
+    private fun sendEnterKey(){
+        val eventTime = SystemClock.uptimeMillis()
+        //key ActionDown --> 키 눌렸을 때
+        currentInputConnection.sendKeyEvent(
+            KeyEvent(eventTime, eventTime,
+                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD)
+        )
+
+        //key ActionUp --> 눌린 키 떼지도록
+        currentInputConnection.sendKeyEvent(
+            KeyEvent(
+                SystemClock.uptimeMillis(), eventTime,
+                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD)
+        )
     }
 
     private fun textMasking(){

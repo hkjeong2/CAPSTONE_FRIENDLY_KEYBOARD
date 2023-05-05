@@ -9,5 +9,5 @@ interface KeyboardInteractionListener {
     fun sendText(text : String)
 
     //키보드 엔터 시 입력된 text 검사 , 제재 기능 정수로 구분
-    fun checkText(text : String) : Int
+    fun checkText(text : String)
 }
