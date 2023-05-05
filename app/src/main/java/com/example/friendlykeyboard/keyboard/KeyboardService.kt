@@ -5,6 +5,7 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.SystemClock
@@ -39,12 +40,11 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardSymbols:KeyboardSymbols
     lateinit var mCandidateView: CandidateView
     lateinit var notificationManager : NotificationManager
-    val delayTime : Long = 10000
     var keyboardMode = -1 //keyboard 종류
     var idx = 0 //candidateView에 필요
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
     var count = 0
-    var stage = -1 //2단계 제재 중 특정 기능
+    var stage = 0 //2단계 제재 중 특정 기능
     private val service = RetrofitClient.getApiService()
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
@@ -101,18 +101,6 @@ class KeyBoardService : InputMethodService() {
 
     private fun checkTexts(text : String) {
 
-//        //chatting 화면 pop up
-//        val intent = Intent(this, ChattingActivity::class.java)
-//        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
-//        try{
-//            pendingIntent.send()
-//        }catch (e : Exception){}
-
-        if (stage == 2 && keyboardMode == 1){   //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
-            keyboardKorean.shuffleKeyboard()
-            keyboardInterationListener.modechange(1)
-        }
-
         // 서버에서 혐오 표현 존재 여부를 판별함.
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
         val hateSpeech = HateSpeech(id, text)
@@ -130,16 +118,23 @@ class KeyBoardService : InputMethodService() {
                         Toast.LENGTH_SHORT
                     ).show()
 
+                    //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
+                    if (stage == 4 && keyboardMode == 1){
+                        keyboardKorean.shuffleKeyboard()
+                        keyboardInterationListener.modechange(1)
+                    }
+
                     // 10개의 Labels
                     // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
                     // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
                     when (result?.inference_hate_speech_result) {
                         "clean" -> {
+                            // 텍스트 전송
                             sendEnterKey()
                         }
                         else -> {
                             count++
-                            checkCount(text)
+                            checkCount(result?.inference_hate_speech_result!!)
                         }
                     }
                 } else {
@@ -165,35 +160,111 @@ class KeyBoardService : InputMethodService() {
 
     // count 횟수에 따른 3단계 기능 적용
     private fun checkCount(text: String) {
-
-        if (count == 2){
-            // 탐지된 비속어 string을 매개변수로 알림 줄 때 사용하면 될 듯
-            // ex) 비속어 "ㅈㄴ"를 사용하였습니다 !
-            pushAlarm(text)
-            stage = 1
-        }
-        else if (count == 4){
-            shuffleKeyboard()
-            stage = 2
-            keyboardInterationListener.modechange(1)
-        }
-        else if (count == 6){
-            allowEngKeyboardOnly()
-            stage = 3
-        }
-        else if (count == 8) {
-            invisibleKeyboard()
-            stage = 4
-        }
-        else if (count in 9..11) {
-            textMasking()
-            stage = 5
-        }
-        else if (count >= 12){
+        if (count >= 2){
+            stage++
+            pref.edit().putInt("stageNumber", stage).apply()
+            changeUI()
+            releasePreviousMode()
+            implementStage(text)
+//            notifyChance()
             count = 0
         }
 
+        //아래 두 기능은 나머지와 달리 계속 실행해주는 기능
+        when (stage){
+            1 -> {
+                pushAlarm(text)
+            }
+            5 -> {
+                textMasking()
+            }
+        }
+
+        // 엔터 키 누르기 --> ex) kakaotalk 텍스트 전송
         sendEnterKey()
+    }
+
+    private fun changeUI(){
+        val spf : SharedPreferences = getSharedPreferences("setting", 0)
+        when (stage){
+            2 -> {
+                spf.edit().putInt("settingAlarmColor", Color.parseColor("#80000000")).apply()
+            }
+            3 -> {
+                spf.edit().putInt("settingInvisibleColor", Color.parseColor("#80000000")).apply()
+            }
+            4 -> {
+                spf.edit().putInt("settingEnglishColor", Color.parseColor("#80000000")).apply()
+            }
+            5 -> {
+                spf.edit().putInt("settingRandomColor", Color.parseColor("#80000000")).apply()
+                spf.edit().putInt("settingCorrectColor", Color.parseColor("#80000000")).apply()
+            }
+        }
+    }
+
+    private fun releasePreviousMode(){
+        when (stage){
+            3 -> {
+                //2단계 모드 해제
+                pref.edit().putInt("keyboardFontColor", pref.getInt("tempKeyboardFontColor", 0)).apply()
+                keyboardKorean.updateKeyboard()
+                keyboardEnglish.updateKeyboard()
+            }
+            4 -> {
+                //3단계 모드 해제
+                keyboardEnglish.setChangingModeAvailability(true)
+            }
+            5 -> {
+                //4단계 모드 해제
+                keyboardKorean.restoreKeyboard()
+                if (keyboardMode == 1){
+                    // 한글 키보드를 사용중이었다면 복구된 한글 키보드로 교체
+                    keyboardFrame.removeAllViews()
+                    keyboardKorean.inputConnection = currentInputConnection
+                    // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
+                    // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
+                    // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
+                    // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
+                    keyboardFrame.addView(keyboardKorean.getLayout(1))
+                }
+            }
+        }
+    }
+
+    private fun implementStage(text: String){
+        when (stage){
+            1 -> {
+                pushAlarm(text)
+            }
+            2 -> {
+                invisibleKeyboard()
+            }
+            3 -> {
+                allowEngKeyboardOnly()
+            }
+            4 -> {
+                shuffleKeyboard()
+                keyboardInterationListener.modechange(1)
+            }
+            5 -> {
+                textMasking()
+            }
+            6 -> {
+                stage--
+                pref.edit().putInt("stageNumber", stage).apply()
+            }
+        }
+    }
+
+    private fun notifyChance(){
+
+        //chatting 화면 pop up
+        val intent = Intent(this, ChattingActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
+        try{
+            pendingIntent.send()
+        }catch (e : Exception){}
 
     }
 
@@ -215,25 +286,10 @@ class KeyBoardService : InputMethodService() {
         )
     }
 
-    private fun textMasking(){
-        var tempText = ""
-        val text = currentInputConnection.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES).text
-        for (i in text.indices){
-            if (text[i] == ' '){
-                tempText += ' '
-            }
-            else{
-                tempText += '*'
-            }
-        }
-        currentInputConnection.deleteSurroundingText(1000, 1000)
-        currentInputConnection.commitText(tempText, 0)
-    }
-
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
     private fun pushAlarm(curse : String) {
         //받아온 비속어로 text 수정
-        val text = "비속어를 사용하셨습니다!"
+        val text = curse + " 혐오적인 말은 하지 마세요!"
 
         //채널 ID
         val notificationId = 1
@@ -276,8 +332,41 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
+    // 키보드 폰트 글자가 보이지 않도록 하는 기능
+    private fun invisibleKeyboard() {
+        Toast.makeText(applicationContext, "교정 : 투명 모드", Toast.LENGTH_SHORT).show()
+        val fontColor = pref.getInt("keyboardFontColor", 0)
+        pref.edit().putInt("tempKeyboardFontColor", fontColor).apply()
+        val keyboardColor = pref.getInt("keyboardColor", 0)
+
+        pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
+        keyboardKorean.updateKeyboard()
+        keyboardEnglish.updateKeyboard()
+
+//        // 일정 시간 뒤 다시 폰트 글자가 보이도록 수정
+//        GlobalScope.launch(Dispatchers.Main) {
+//            delay(delayTime)
+//            pref.edit().putInt("keyboardFontColor", fontColor).apply()
+//            keyboardKorean.updateKeyboard()
+//            keyboardEnglish.updateKeyboard()
+//        }
+    }
+
+    private fun allowEngKeyboardOnly(){
+        Toast.makeText(applicationContext, "교정 : 영문 키보드", Toast.LENGTH_SHORT).show()
+        keyboardInterationListener.modechange(0)
+        //다른 키보드 모드로 바꾸지 못하도록
+        keyboardEnglish.setChangingModeAvailability(false)
+
+//        //일정 시간 뒤 모드 변경 잠금 해제
+//        GlobalScope.launch(Dispatchers.Main){
+//            delay(delayTime)
+//            keyboardEnglish.setChangingModeAvailability(true)
+//        }
+    }
+
     private fun shuffleKeyboard(){
-        Toast.makeText(applicationContext, "제재 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "교정 : 키보드 무작위 배치", Toast.LENGTH_SHORT).show()
         // Enter key의 clickListener를 한 번만 연동시키기 위함
         // 무작위 배치 키보드로 즉시 변경하는 과정에서의 정확한 오류 원인이 무엇인진 모르겠으나
         // 위와 같이 하면 해결 되는 듯 함
@@ -286,54 +375,53 @@ class KeyBoardService : InputMethodService() {
         // keyboard 섞기
         keyboardKorean.shuffleKeyboard()
 
-        // coroutine delayed로 일정 시간 뒤 키보드 화면 교체
-        GlobalScope.launch(Dispatchers.Main){
-            delay(delayTime)
-            // keyboard 원상 복구
-            keyboardKorean.restoreKeyboard()
+//        // coroutine delayed로 일정 시간 뒤 키보드 화면 교체
+//        GlobalScope.launch(Dispatchers.Main){
+//            delay(delayTime)
+//            // keyboard 원상 복구
+//            keyboardKorean.restoreKeyboard()
+//
+//            if (keyboardMode == 1){
+//                // 한글 키보드를 사용중이었다면 복구된 한글 키보드로 교체
+//                keyboardFrame.removeAllViews()
+//                keyboardKorean.inputConnection = currentInputConnection
+//                // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
+//                // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
+//                // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
+//                // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
+//                keyboardFrame.addView(keyboardKorean.getLayout(1))
+//            }
+//
+//            stage = -1
+//        }
+    }
 
-            if (keyboardMode == 1){
-                // 한글 키보드를 사용중이었다면 복구된 한글 키보드로 교체
-                keyboardFrame.removeAllViews()
-                keyboardKorean.inputConnection = currentInputConnection
-                // 기존에는 키보드 타입 전환 시 call 되던 getLayout이 HangulMaker를 무조건 새 객체로 초기화
-                // --> 작성 중이던 한글을 저장할 필요가 없었기 때문
-                // 하지만 일정 시간 지난 뒤 기본 한글 키보드로 교체하는 여기 part에서는 위 경우를 구분해줘야함
-                // --> 이전에 한글을 작성중이었을 수 있기 때문 --> getLayout(1 or 0)으로 구분
-                keyboardFrame.addView(keyboardKorean.getLayout(1))
+    private fun textMasking(){
+        var tempText = ""
+        val text = currentInputConnection.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES).text
+        for (i in text.indices){
+            if (text[i] == ' '){
+                tempText += ' '
             }
-
-            stage = -1
+            else{
+                tempText += '*'
+            }
         }
+        currentInputConnection.deleteSurroundingText(1000, 1000)
+        currentInputConnection.commitText(tempText, 0)
     }
 
-    private fun allowEngKeyboardOnly(){
-        keyboardInterationListener.modechange(0)
-        //다른 키보드 모드로 바꾸지 못하도록
-        keyboardEnglish.setChangingModeAvailability(false)
+    private fun initStage(){
+        stage = pref.getInt("stageNumber", 0)
 
-        //일정 시간 뒤 모드 변경 잠금 해제
-        GlobalScope.launch(Dispatchers.Main){
-            delay(delayTime)
-            keyboardEnglish.setChangingModeAvailability(true)
-        }
-    }
-
-    // 키보드 폰트 글자가 보이지 않도록 하는 기능
-    private fun invisibleKeyboard() {
-        val fontColor = pref.getInt("keyboardFontColor", 0)
-        val keyboardColor = pref.getInt("keyboardColor", 0)
-
-        pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
-        keyboardKorean.updateKeyboard()
-        keyboardEnglish.updateKeyboard()
-
-        // 일정 시간 뒤 다시 폰트 글자가 보이도록 수정
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(delayTime)
-            pref.edit().putInt("keyboardFontColor", fontColor).apply()
-            keyboardKorean.updateKeyboard()
-            keyboardEnglish.updateKeyboard()
+        when (stage){
+            3 -> {
+                allowEngKeyboardOnly()
+            }
+            4 -> {
+                shuffleKeyboard()
+                keyboardInterationListener.modechange(1)
+            }
         }
     }
 
@@ -362,6 +450,8 @@ class KeyBoardService : InputMethodService() {
         keyboardEnglish.init()
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
+
+        initStage()
 
         updateKeyboard()
 
