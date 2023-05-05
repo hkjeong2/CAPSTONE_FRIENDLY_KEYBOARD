@@ -166,7 +166,7 @@ class KeyBoardService : InputMethodService() {
             changeUI()
             releasePreviousMode()
             implementStage(text)
-//            notifyChance()
+            notifyChance()
             count = 0
         }
 
@@ -259,13 +259,24 @@ class KeyBoardService : InputMethodService() {
 
     private fun notifyChance(){
 
-        //chatting 화면 pop up
+        val notificationId = 1
         val intent = Intent(this, ChattingActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
-        try{
-            pendingIntent.send()
-        }catch (e : Exception){}
+        val text = "키보드를 복구하기 위해 미션을 수행해 주세요!"
 
+        //노티피케이션 생성
+        val notification: Notification = NotificationCompat.Builder(this, "channelID")
+            .setContentTitle("FriendlyKeyboard")
+            .setContentText(text)
+            .setSmallIcon(android.R.drawable.ic_dialog_info) //아이콘이미지
+            .setAutoCancel(true) // 사용자가 알림을 탭하면 자동으로 알림을 삭제합니다.
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent) //노티클릭시 인텐트작업
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .build()
+
+        notificationManager.notify(notificationId, notification)
     }
 
     private fun sendEnterKey(){
@@ -289,7 +300,7 @@ class KeyBoardService : InputMethodService() {
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
     private fun pushAlarm(curse : String) {
         //받아온 비속어로 text 수정
-        val text = curse + " 혐오적인 말은 하지 마세요!"
+        val text = curse + " 혐오적인 말을 자제 해주세요!"
 
         //채널 ID
         val notificationId = 1
@@ -463,6 +474,9 @@ class KeyBoardService : InputMethodService() {
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
 
+        // 사용자 미션 수행으로 인해 stage가 바뀐 점이 있는지 확인
+        checkStageHasChanged()
+
         //focus onto text field --> keyboard 올라올 때
         //선택된 커서 블록에 대체어 존재 시 바로 후보뷰 생성 해줘야 함
         idx = currentInputConnection.getTextBeforeCursor(1000, 0).toString().length
@@ -564,6 +578,16 @@ class KeyBoardService : InputMethodService() {
         mCandidateView.setting(12.0f, "#dddddd", "#ffffff")
         return mCandidateView.getCandidate()
 
+    }
+
+    private fun checkStageHasChanged(){
+        val stageValue = pref.getInt("stageNumber", 0)
+        if (stage != stageValue && stageValue == 0){
+            stage++
+            releasePreviousMode()
+            stage = 0
+            count = 0
+        }
     }
 
     private fun updateCandidates(text : String){
