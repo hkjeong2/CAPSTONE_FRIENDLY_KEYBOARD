@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.Icon
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.SystemClock
@@ -169,8 +170,10 @@ class KeyBoardService : InputMethodService() {
             releasePreviousMode()
             // 변경된 단계 실행
             implementStage(text)
-            // 키보드 복구를 위한 수행 과제 알림
-            notifyChance()
+            if (stage>=2){
+                // 키보드 복구를 위한 수행 과제 알림
+                notifyChance()
+            }
             count = 0
         }
 
@@ -262,25 +265,10 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun notifyChance(){
-
-        val notificationId = 1
         val intent = Intent(this, ChattingActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
         val text = "키보드를 복구하기 위해 미션을 수행해 주세요!"
 
-        //노티피케이션 생성
-        val notification: Notification = NotificationCompat.Builder(this, "channelID")
-            .setContentTitle("FriendlyKeyboard")
-            .setContentText(text)
-            .setSmallIcon(android.R.drawable.ic_dialog_info) //아이콘이미지
-            .setAutoCancel(true) // 사용자가 알림을 탭하면 자동으로 알림을 삭제합니다.
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent) //노티클릭시 인텐트작업
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
-            .build()
-
-        notificationManager.notify(notificationId, notification)
+        createNotification(text, R.drawable.tasks, 2, intent)
     }
 
     private fun sendEnterKey(){
@@ -304,10 +292,8 @@ class KeyBoardService : InputMethodService() {
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
     private fun pushAlarm(curse : String) {
         //받아온 비속어로 text 수정
-        val text = curse + " 혐오적인 말을 자제 해주세요!"
+        val text = curse + " 혐오적인 말을 자제해 주세요!"
 
-        //채널 ID
-        val notificationId = 1
         // 알림 눌렀을 때 이동할 intent 구분 필요
         // 1) 로그인 된 상태면 MainActivit
         // 2) 로그인되지 않은 상태면 LoginActivity
@@ -317,13 +303,18 @@ class KeyBoardService : InputMethodService() {
             //이전에 실행된 액티비티들을 모두 없엔 후 새로운 액티비티 실행 플래그
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
+
+        createNotification(text, R.drawable.swearing, 1, intent)
+    }
+
+    private fun createNotification(text : String, image : Int, notificationID : Int, intent : Intent){
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_IMMUTABLE)
 
         //노티피케이션 생성
         val notification: Notification = NotificationCompat.Builder(this, "channelID")
             .setContentTitle("FriendlyKeyboard")
             .setContentText(text)
-            .setSmallIcon(android.R.drawable.ic_dialog_info) //아이콘이미지
+            .setSmallIcon(image) //아이콘이미지
             .setAutoCancel(true) // 사용자가 알림을 탭하면 자동으로 알림을 삭제합니다.
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent) //노티클릭시 인텐트작업
@@ -331,7 +322,7 @@ class KeyBoardService : InputMethodService() {
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .build()
 
-        notificationManager.notify(notificationId, notification)
+        notificationManager.notify(notificationID, notification)
     }
 
     /* 2. 채널 만들기 및 중요도 설정*/
@@ -448,7 +439,7 @@ class KeyBoardService : InputMethodService() {
         pref = getSharedPreferences("setting", Activity.MODE_PRIVATE)
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createNotificationChannel("channelID", "DemoChannel", "this is a demo")
+        createNotificationChannel("channelID", "FriendlyKeyboardChannel", "FriendlyKeyboard")
 
         Log.d("키보드 생성", "111")
     }

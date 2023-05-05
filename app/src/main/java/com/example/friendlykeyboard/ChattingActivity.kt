@@ -34,7 +34,6 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     private fun initStage(){
-        val stage = spf.getInt("stageNumber", 0)
         spf.edit().putInt("stageNumber", 0).apply()
 
         spf.edit().putInt("settingAlarmColor", Color.parseColor("#000000")).apply()
