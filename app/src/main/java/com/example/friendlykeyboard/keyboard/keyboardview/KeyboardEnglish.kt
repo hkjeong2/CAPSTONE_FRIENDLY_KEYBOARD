@@ -476,22 +476,11 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
 
     fun getEnterAction(): View.OnClickListener{
         return View.OnClickListener{
-            playVibrate()
-            val eventTime = SystemClock.uptimeMillis()
+            if (inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString().length >= 1){
+                playVibrate()
 
-            enterText()
+                enterText()
 
-            GlobalScope.launch(Dispatchers.Main){
-                delay(1000)
-                //key ActionDown --> 키 눌렸을 때
-                inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
-                    KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                    KeyEvent.FLAG_SOFT_KEYBOARD))
-
-                //key ActionUp --> 눌린 키 떼지도록
-                inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
-                    KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                    KeyEvent.FLAG_SOFT_KEYBOARD))
             }
         }
     }

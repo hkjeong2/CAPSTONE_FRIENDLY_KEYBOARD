@@ -50,7 +50,6 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     val layoutLines = ArrayList<LinearLayout>()
     var downView:View? = null
     var capsView:ImageView? = null
-    var mode: Int = 0
 
     lateinit var numpadLine : LinearLayout
     lateinit var firstLine: LinearLayout
@@ -488,21 +487,13 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     //엔터 키 눌렸을 때
     fun getEnterAction():View.OnClickListener{
         return View.OnClickListener{
-            playVibrate()
-            hangulMaker.directlyCommit()
-            val eventTime = SystemClock.uptimeMillis()
+            if (inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString().length >= 1){
+                playVibrate()
+                hangulMaker.directlyCommit()
 
-            enterText()
+                enterText()
 
-            //key ActionDown --> 키 눌렸을 때
-            inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
-                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD))
-
-            //key ActionUp --> 눌린 키 떼지도록
-            inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
-                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD))
+            }
         }
     }
 
@@ -516,10 +507,4 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
         keyboardInterationListener.checkText(text?.text.toString())
     }
 
-    fun shuffleKeyboard2() {
-        if (mode == 2) {
-            //키보드 무작위 배치
-            keyboardInterationListener.modechange(1)
-        }
-    }
 }
