@@ -3,6 +3,7 @@ package com.example.friendlykeyboard.fragments
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -60,6 +61,29 @@ class SettingsFragment : Fragment() {
             imageView.drawable.setTint(background_color)
             attribute.setTextColor(background_color)
         }
+
+        val settingAlarmColor = pref.getInt("settingAlarmColor", Color.parseColor("#000000"))
+        binding.stage1Text.setTextColor(settingAlarmColor)
+        binding.stage1.setTextColor(settingAlarmColor)
+        binding.stage1Img.drawable.setTint(settingAlarmColor)
+
+        val settingCorrectColor = pref.getInt("settingCorrectColor", Color.parseColor("#000000"))
+        binding.stage2Text.setTextColor(settingCorrectColor)
+        binding.stage2.setTextColor(settingCorrectColor)
+        binding.stage2Img.drawable.setTint(settingCorrectColor)
+
+        val settingInvisibleColor = pref.getInt("settingInvisibleColor", Color.parseColor("#000000"))
+        binding.stage21Text.setTextColor(settingInvisibleColor)
+        binding.stage21.setTextColor(settingInvisibleColor)
+
+        val settingEnglishColor = pref.getInt("settingEnglishColor", Color.parseColor("#000000"))
+        binding.stage22Text.setTextColor(settingEnglishColor)
+        binding.stage22.setTextColor(settingEnglishColor)
+
+        val settingRandomColor = pref.getInt("settingRandomColor", Color.parseColor("#000000"))
+        binding.stage23Text.setTextColor(settingRandomColor)
+        binding.stage23.setTextColor(settingRandomColor)
+
     }
 
     override fun onDestroyView() {

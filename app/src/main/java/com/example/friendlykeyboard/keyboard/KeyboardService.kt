@@ -5,6 +5,7 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.SystemClock
@@ -44,7 +45,6 @@ class KeyBoardService : InputMethodService() {
     var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
     var count = 0
     var stage = 0 //2단계 제재 중 특정 기능
-    var fontColor = 0
     private val service = RetrofitClient.getApiService()
 
     val keyboardInterationListener = object:KeyboardInteractionListener{
@@ -162,8 +162,10 @@ class KeyBoardService : InputMethodService() {
     private fun checkCount(text: String) {
         if (count >= 2){
             stage++
+            pref.edit().putInt("stageNumber", stage).apply()
+            changeUI()
             releasePreviousMode()
-            changeToNextStage(text)
+            implementStage(text)
 //            notifyChance()
             count = 0
         }
@@ -182,11 +184,30 @@ class KeyBoardService : InputMethodService() {
         sendEnterKey()
     }
 
+    private fun changeUI(){
+        val spf : SharedPreferences = getSharedPreferences("setting", 0)
+        when (stage){
+            2 -> {
+                spf.edit().putInt("settingAlarmColor", Color.parseColor("#80000000")).apply()
+            }
+            3 -> {
+                spf.edit().putInt("settingInvisibleColor", Color.parseColor("#80000000")).apply()
+            }
+            4 -> {
+                spf.edit().putInt("settingEnglishColor", Color.parseColor("#80000000")).apply()
+            }
+            5 -> {
+                spf.edit().putInt("settingRandomColor", Color.parseColor("#80000000")).apply()
+                spf.edit().putInt("settingCorrectColor", Color.parseColor("#80000000")).apply()
+            }
+        }
+    }
+
     private fun releasePreviousMode(){
         when (stage){
             3 -> {
                 //2단계 모드 해제
-                pref.edit().putInt("keyboardFontColor", fontColor).apply()
+                pref.edit().putInt("keyboardFontColor", pref.getInt("tempKeyboardFontColor", 0)).apply()
                 keyboardKorean.updateKeyboard()
                 keyboardEnglish.updateKeyboard()
             }
@@ -211,7 +232,7 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
-    private fun changeToNextStage(text: String){
+    private fun implementStage(text: String){
         when (stage){
             1 -> {
                 pushAlarm(text)
@@ -231,6 +252,7 @@ class KeyBoardService : InputMethodService() {
             }
             6 -> {
                 stage--
+                pref.edit().putInt("stageNumber", stage).apply()
             }
         }
     }
@@ -313,7 +335,8 @@ class KeyBoardService : InputMethodService() {
     // 키보드 폰트 글자가 보이지 않도록 하는 기능
     private fun invisibleKeyboard() {
         Toast.makeText(applicationContext, "교정 : 투명 모드", Toast.LENGTH_SHORT).show()
-        fontColor = pref.getInt("keyboardFontColor", 0)
+        val fontColor = pref.getInt("keyboardFontColor", 0)
+        pref.edit().putInt("tempKeyboardFontColor", fontColor).apply()
         val keyboardColor = pref.getInt("keyboardColor", 0)
 
         pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
@@ -388,6 +411,20 @@ class KeyBoardService : InputMethodService() {
         currentInputConnection.commitText(tempText, 0)
     }
 
+    private fun initStage(){
+        stage = pref.getInt("stageNumber", 0)
+
+        when (stage){
+            3 -> {
+                allowEngKeyboardOnly()
+            }
+            4 -> {
+                shuffleKeyboard()
+                keyboardInterationListener.modechange(1)
+            }
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         //keyboard가 될 전체 레이아웃과 입력방식에 따라 다르게 채워질 framelayout 정의
@@ -413,6 +450,8 @@ class KeyBoardService : InputMethodService() {
         keyboardEnglish.init()
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
+
+        initStage()
 
         updateKeyboard()
 
