@@ -192,17 +192,31 @@ class KeyBoardService : InputMethodService() {
             stage = 4
             keyboardKorean.mode = 4
         }
-        else if (count >= 9) {
+        else if (count in 9..11) {
             textMasking()
             stage = 5
             keyboardKorean.mode = 5
+            count = 0
+        }
+        else if (count >= 12){
             count = 0
         }
 
     }
 
     private fun textMasking(){
-
+        var tempText = ""
+        val text = currentInputConnection.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES).text
+        for (i in text.indices){
+            if (text[i] == ' '){
+                tempText += ' '
+            }
+            else{
+                tempText += '*'
+            }
+        }
+        currentInputConnection.deleteSurroundingText(1000, 1000)
+        currentInputConnection.commitText(tempText, 0)
     }
 
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
