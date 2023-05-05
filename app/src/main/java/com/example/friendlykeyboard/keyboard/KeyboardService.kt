@@ -163,9 +163,13 @@ class KeyBoardService : InputMethodService() {
         if (count >= 2){
             stage++
             pref.edit().putInt("stageNumber", stage).apply()
+            // 단계 변경에 따른 UI 변경
             changeUI()
+            // 단계 변경에 따른 이전 단계 교정 기능 해제
             releasePreviousMode()
+            // 변경된 단계 실행
             implementStage(text)
+            // 키보드 복구를 위한 수행 과제 알림
             notifyChance()
             count = 0
         }
