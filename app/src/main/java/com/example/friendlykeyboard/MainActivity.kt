@@ -8,13 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.friendlykeyboard.databinding.ActivityMainBinding
 import com.example.friendlykeyboard.fragments.HomeFragment
-import com.example.friendlykeyboard.fragments.NotificationFragment
+import com.example.friendlykeyboard.fragments.ChartFragment
 import com.example.friendlykeyboard.fragments.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private lateinit var homeFragment: HomeFragment
-    private lateinit var notificationFragment: NotificationFragment
+    private lateinit var chartFragment: ChartFragment
     private lateinit var settingsFragment: SettingsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFragments() {
         homeFragment = HomeFragment()
-        notificationFragment = NotificationFragment()
+        chartFragment = ChartFragment()
         settingsFragment = SettingsFragment()
         changeFragment(homeFragment)
     }
@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
                         supportActionBar?.title = "홈"
                     }
                 }
-                R.id.tab_notification -> {
-                    changeFragment(notificationFragment)
+                R.id.tab_chart -> {
+                    changeFragment(chartFragment)
                     runOnUiThread {
                         supportActionBar?.title = "알림"
                     }
