@@ -181,6 +181,7 @@ class KeyBoardService : InputMethodService() {
             // checkTexts를 int 반환형 함수로 만든 이유...
             stage = 2
             keyboardKorean.mode = 2
+            keyboardKorean.shuffleKeyboard2()
         }
         else if (count == 6){
             allowEngKeyboardOnly()

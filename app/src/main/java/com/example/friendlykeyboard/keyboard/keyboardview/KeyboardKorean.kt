@@ -494,24 +494,15 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
 
             enterText()
 
-            GlobalScope.launch(Dispatchers.Main){
-                delay(1000)
-                //key ActionDown --> 키 눌렸을 때
-                inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
-                    KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                    KeyEvent.FLAG_SOFT_KEYBOARD))
+            //key ActionDown --> 키 눌렸을 때
+            inputConnection?.sendKeyEvent(KeyEvent(eventTime, eventTime,
+                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD))
 
-                //key ActionUp --> 눌린 키 떼지도록
-                inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
-                    KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                    KeyEvent.FLAG_SOFT_KEYBOARD))
-
-                if (mode == 2){
-                    //키보드 무작위 배치
-                    keyboardInterationListener.modechange(1)
-                }
-            }
-
+            //key ActionUp --> 눌린 키 떼지도록
+            inputConnection?.sendKeyEvent(KeyEvent(SystemClock.uptimeMillis(), eventTime,
+                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD))
         }
     }
 
@@ -523,5 +514,12 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
     fun enterText() {
         val text = inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)
         keyboardInterationListener.checkText(text?.text.toString())
+    }
+
+    fun shuffleKeyboard2() {
+        if (mode == 2) {
+            //키보드 무작위 배치
+            keyboardInterationListener.modechange(1)
+        }
     }
 }
