@@ -96,8 +96,8 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         return mCandidateHSV
     }
 
-    //데이터셋 완료되면 수정필요
-    fun loadDic(){
+    //데이터셋
+    private fun loadDic(){
         mSuggestion.put("18넘", arrayListOf<String>("와", "대박", "헐"))
         mSuggestion.put("10새끼", arrayListOf<String>("나쁜","그인간"))
         mSuggestion.put("10알", arrayListOf<String>("이런","망할"))
@@ -131,6 +131,8 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mSuggestion.put("ㅁㅊ", arrayListOf<String>("망할","헐","이런"))
         mSuggestion.put("ㅂㅅ", arrayListOf<String>("바보","정신이상자","멍청이"))
         mSuggestion.put("ㅄ", arrayListOf<String>("바보","정신이상자","멍청이"))
+        mSuggestion.put("ㅅㄲ야", arrayListOf<String>("친구야", "자식아", "얘야"))
+        mSuggestion.put("ㅈㄴ", arrayListOf<String>("매우", "정말", "완전"))
         mSuggestion.put("ㅅㅂ", arrayListOf<String>("이런","망할"))
         mSuggestion.put("ㅅㅂㄹㅁ", arrayListOf<String>("야","안 좋은 놈","멍청아"))
         mSuggestion.put("ㅅㅍ", arrayListOf<String>("이런","망할","짜증"))
@@ -223,6 +225,13 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mSuggestion.put("호구", arrayListOf<String>("속은 사람","바보","멍청이"))
         mSuggestion.put("후래자식", arrayListOf<String>("싸가지 없는","말이 거친"))
         mSuggestion.put("후레자식", arrayListOf<String>("싸가지 없는","말이 거친"))
+
+        mSuggestion.put("콘텐츠", arrayListOf<String>("제작물"))
+        mSuggestion.put("오리지널 콘텐츠", arrayListOf<String>("자체 제작물"))
+        mSuggestion.put("멀티데믹", arrayListOf<String>("감염병 복합 유행"))
+        mSuggestion.put("노마드 워커", arrayListOf<String>("유목민형 노동자"))
+        mSuggestion.put("디지털 트윈", arrayListOf<String>("가상 모형"))
+        mSuggestion.put("커리어 하이", arrayListOf<String>("최고 기록"))
     }
 
 }
