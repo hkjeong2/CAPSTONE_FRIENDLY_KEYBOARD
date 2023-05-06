@@ -5,13 +5,10 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.view.children
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.KeyboardKorean
 
@@ -193,6 +190,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mSuggestion.put("십8", arrayListOf<String>("뭐야","이런","망할","짜증"),)
         mSuggestion.put("십새끼", arrayListOf<String>("바보","정신이상자","멍청이"))
         mSuggestion.put("씨발", arrayListOf<String>("뭐야","이런","망할","짜증"))
+        mSuggestion.put("시발", arrayListOf<String>("뭐야","이런","망할","짜증"))
         mSuggestion.put("씹새끼", arrayListOf<String>("바보","정신이상자","멍청이"))
         mSuggestion.put("아가리", arrayListOf<String>("입"))
         mSuggestion.put("아구창", arrayListOf<String>("입"))
