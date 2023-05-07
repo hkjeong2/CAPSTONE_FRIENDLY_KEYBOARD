@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/button_background.xml" value="0.2325" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/chat_bubble.xml" value="0.241" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/checkbox.xml" value="0.2325" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_caps_lock.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_caps_unlock.xml" value="0.1" />
@@ -28,6 +29,8 @@
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/fragment_home.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/fragment_notification.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/fragment_settings.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/item_left_chat.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/item_right_chat.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_action.xml" value="0.3609375" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_candidate.xml" value="0.3609375" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/layout/keyboard_candidate_item.xml" value="0.21726618705035972" />
