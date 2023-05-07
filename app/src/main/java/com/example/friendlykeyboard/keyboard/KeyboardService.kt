@@ -139,6 +139,7 @@ class KeyBoardService : InputMethodService() {
                         }
                     }
                 } else {
+                    sendEnterKey()
                     // 통신이 실패한 경우
                     Log.d("KeyboardService", response.message())
                     Toast.makeText(
