@@ -9,10 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.friendlykeyboard.SettingsKeyboardBackgroundActivity
-import com.example.friendlykeyboard.SettingsKeyboardColorActivity
-import com.example.friendlykeyboard.SettingsKeyboardFontActivity
-import com.example.friendlykeyboard.SettingsKeyboardSizeActivity
+import com.example.friendlykeyboard.*
 import com.example.friendlykeyboard.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -37,6 +34,7 @@ class SettingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        //키보드 설정
         val height = pref.getInt("keyboardHeight", 150) - 50
         val paddingLeft = pref.getInt("keyboardPaddingLeft", 0)
         val paddingRight = pref.getInt("keyboardPaddingRight", 0)
@@ -62,6 +60,7 @@ class SettingsFragment : Fragment() {
             attribute.setTextColor(background_color)
         }
 
+        //기능 설정
         val settingAlarmColor = pref.getInt("settingAlarmColor", Color.parseColor("#000000"))
         binding.stage1Text.setTextColor(settingAlarmColor)
         binding.stage1.setTextColor(settingAlarmColor)
@@ -83,6 +82,25 @@ class SettingsFragment : Fragment() {
         val settingRandomColor = pref.getInt("settingRandomColor", Color.parseColor("#000000"))
         binding.stage23Text.setTextColor(settingRandomColor)
         binding.stage23.setTextColor(settingRandomColor)
+
+        //대체어 설정
+        val candidateFontColor = pref.getInt("candidateFontColor", 0)
+        with (binding.settingsCandidateFont) {
+            imageView.drawable.setTint(candidateFontColor)
+            attribute.setTextColor(candidateFontColor)
+        }
+
+        val candidateButtonColor = pref.getInt("candidateButtonColor", 0)
+        with (binding.settingsCandidateButtonColor) {
+            imageView.drawable.setTint(candidateButtonColor)
+            attribute.setTextColor(candidateButtonColor)
+        }
+
+        val candidateLayoutColor = pref.getInt("candidateLayoutColor", 0)
+        with (binding.settingsCandidateLayoutColor) {
+            imageView.drawable.setTint(candidateLayoutColor)
+            attribute.setTextColor(candidateLayoutColor)
+        }
 
     }
 
@@ -108,5 +126,17 @@ class SettingsFragment : Fragment() {
             startActivity(Intent(activity, SettingsKeyboardBackgroundActivity::class.java))
         }
 
+        binding.settingsCandidateFont.item.setOnClickListener{
+            startActivity(Intent(activity, SettingsCandidateFontActivity::class.java))
+        }
+
+        binding.settingsCandidateButtonColor.item.setOnClickListener{
+            startActivity(Intent(activity, SettingsCandidateButtonColorActivity::class.java))
+        }
+
+        binding.settingsCandidateLayoutColor.item.setOnClickListener{
+            startActivity(Intent(activity, SettingsCandidateLayoutColorActivity::class.java))
+        }
     }
+
 }

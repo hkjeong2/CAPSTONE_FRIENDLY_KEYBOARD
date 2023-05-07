@@ -476,6 +476,51 @@
             android:background="#1e000000"
             android:layout_marginLeft="60dp"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="대체어 설정"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/settings_candidate_font"
+            layout="@layout/settings_candidate_font"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#1e000000"
+            android:layout_marginLeft="70dp"/>
+
+        <include
+            android:id="@+id/settings_candidate_button_color"
+            layout="@layout/settings_candidate_button_color"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#1e000000"
+            android:layout_marginLeft="70dp"/>
+
+        <include
+            android:id="@+id/settings_candidate_layout_color"
+            layout="@layout/settings_candidate_layout_color"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
