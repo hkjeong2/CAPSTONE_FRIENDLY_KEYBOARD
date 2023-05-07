@@ -27,16 +27,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvChatting"
-        android:text="Chatting"
-        android:textSize="20sp">
-    </Button>
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -46,10 +36,6 @@
         android:textColorHint="@color/gray"
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="10sp"
-        app:boxCornerRadiusBottomStart="10sp"
-        app:boxCornerRadiusTopEnd="10sp"
-        app:boxCornerRadiusTopStart="10sp"
         app:boxStrokeColor="@color/text_input_outline_color_white"
         app:hintTextColor="@color/gray"
         app:layout_constraintTop_toBottomOf="@id/rvChatting"
@@ -62,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

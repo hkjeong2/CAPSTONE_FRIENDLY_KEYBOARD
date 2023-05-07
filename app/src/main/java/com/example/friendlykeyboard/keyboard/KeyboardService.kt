@@ -266,7 +266,9 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun notifyChance(){
-        val intent = Intent(this, ChattingActivity::class.java)
+        val intent = Intent(this, ChattingActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         val text = "키보드를 복구하기 위해 미션을 수행해 주세요!"
 
         createNotification(text, R.drawable.tasks, 2, intent)
