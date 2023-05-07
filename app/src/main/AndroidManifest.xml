@@ -70,7 +70,8 @@
             android:name=".LoginActivity"
             android:exported="true" />
         <activity android:name=".ChattingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
