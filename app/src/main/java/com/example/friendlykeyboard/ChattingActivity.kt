@@ -105,8 +105,7 @@ class ChattingActivity : AppCompatActivity() {
             missionText = "죄송합니다"
         val text = "'" + missionText + "'를 " + missionCount + "번 입력하세요 !"
 
-        chattingList.add(arrayOf(2, text, currentTime()))
-        notifyAdapter()
+        addAndnotifyAdapter(2, text)
     }
 
     private fun initListener(){
@@ -120,11 +119,8 @@ class ChattingActivity : AppCompatActivity() {
                 val enteredText = binding.textInputEditText.text.toString()
                 binding.textInputEditText.setText("")
 
-                // add할 때 서버에 저장해야함
-                chattingList.add(arrayOf(1, enteredText, currentTime()))
-
-                //recyclerview에 notify하여 view 변경
-                notifyAdapter()
+                //입력된 text 서버에 저장 및 recyclerview에 notify하여 view 변경
+                addAndnotifyAdapter(1, enteredText)
 
                 // 과제 성공했는지 검사
                 checkMissionAccomplished(enteredText)
@@ -137,6 +133,9 @@ class ChattingActivity : AppCompatActivity() {
     private fun checkMissionAccomplished(enteredText : String){
         if (enteredText.equals(missionText)){
             count++
+            if (count == missionCount - 1){
+                addAndnotifyAdapter(2, "마지막 한 번!")
+            }
             if (count == missionCount){
                 count = 0
                 initStage()
@@ -150,7 +149,10 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun notifyAdapter(){
+    private fun addAndnotifyAdapter(id : Int, text : String){
+        // add할 때 서버에 저장해야함
+        chattingList.add(arrayOf(id, text, currentTime()))
+
         //recyclerview에 notify하여 view 변경
         binding.rvChatting.adapter!!.notifyDataSetChanged()
         binding.rvChatting.layoutManager!!.scrollToPosition(chattingRVAdapter.itemCount - 1)
