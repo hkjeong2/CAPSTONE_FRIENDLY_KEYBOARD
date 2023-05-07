@@ -48,11 +48,10 @@ class ChattingActivity : AppCompatActivity() {
     private fun initRecyclerView(chatList : ArrayList<Array<Any>>){
         chattingRVAdapter = ChattingRVAdapter(chatList)
         binding.rvChatting.adapter = chattingRVAdapter
-        var manager = LinearLayoutManager(applicationContext)
-        manager.scrollToPosition(0)
-//        manager.stackFromEnd
+        val manager = LinearLayoutManager(applicationContext)
+        manager.stackFromEnd = true
+        manager.scrollToPositionWithOffset(chattingRVAdapter.getItemCount() - 1, 0);
         binding.rvChatting.layoutManager = manager
-
     }
 
     private fun initChatListData(){
