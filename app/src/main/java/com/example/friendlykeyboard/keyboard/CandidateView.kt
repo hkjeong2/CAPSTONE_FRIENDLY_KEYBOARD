@@ -13,6 +13,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.KeyboardKorean
@@ -73,10 +74,10 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
         // 설정 변경 시 동적으로 button들 update 보여주기 위해 저장
         button.add(child)
 
-        mCandidateLL.addView(child)
+        mCandidateLL.addView(child.rootView)
     }
 
-    fun getMyCandidateClickListener(ic: InputConnection, child: Button, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean): OnClickListener{
+    private fun getMyCandidateClickListener(ic: InputConnection, child: Button, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean): OnClickListener{
         return OnClickListener {
             ic.finishComposingText()
             ic.setSelection(stIdx, edIdx)
