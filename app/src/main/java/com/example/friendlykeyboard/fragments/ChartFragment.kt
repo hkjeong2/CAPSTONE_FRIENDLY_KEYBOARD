@@ -19,7 +19,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +29,6 @@ class ChartFragment : Fragment() {
     private val binding get() = _binding!!
     private val service = RetrofitClient.getApiService()
     private val mutableList = mutableListOf<Entry>()
-    private val counts = MutableList(9) { mapOf<String, Int>() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,17 +42,9 @@ class ChartFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-
         // 서버에서 혐오 표현 사용 횟수 데이터를 가져옴.
-        runBlocking {
+        val counts = runBlocking {
             getData()
-        }
-
-        // TODO: 임시로 작성하였으며 나중에 삭제할 것
-        for (map in counts) {
-            for (key in map.keys) {
-                println("key: $key, value: ${map[key]}")
-            }
         }
 
         val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
@@ -168,52 +159,40 @@ class ChartFragment : Fragment() {
     }
 
     // 서버에서 혐오 표현 사용 횟수 데이터를 가져옴.
-    private fun getData() {
+    private suspend fun getData(): MutableList<Map<String, Int>> {
         val accountID = requireActivity()
             .getSharedPreferences("cbAuto", 0)
             .getString("id", "")!!
 
         val account = Account(accountID, "?")
+        val counts = MutableList(9) { mapOf<String, Int>() }
 
-        service.getHateSpeechCounts(account).enqueue(object : Callback<HateSpeechCountDataModel> {
-            override fun onResponse(
-                call: Call<HateSpeechCountDataModel>,
-                response: Response<HateSpeechCountDataModel>
-            ) {
-                if (response.isSuccessful) {
-                    val result = response.body()!!
-                    counts[0] = result.count1
-                    counts[1] = result.count2
-                    counts[2] = result.count3
-                    counts[3] = result.count4
-                    counts[4] = result.count5
-                    counts[5] = result.count6
-                    counts[6] = result.count7
-                    counts[7] = result.count8
-                    counts[8] = result.count9
+        CoroutineScope(Dispatchers.IO).async {
+            val response = service.getHateSpeechCounts(account)
 
-                    // TODO
+            if (response.isSuccessful) {
+                val result = response.body()!!
+                counts[0] = result.count1
+                counts[1] = result.count2
+                counts[2] = result.count3
+                counts[3] = result.count4
+                counts[4] = result.count5
+                counts[5] = result.count6
+                counts[6] = result.count7
+                counts[7] = result.count8
+                counts[8] = result.count9
 
-                    //setData()
-                } else {
-                    // 통신이 실패한 경우
-                    Log.d("ChartFragment", response.message())
-                    Toast.makeText(
-                        requireContext(),
-                        "오류가 발생하였습니다.",
-                        Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<HateSpeechCountDataModel>, t: Throwable) {
-                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
-                t.printStackTrace()
+            } else {
+                // 통신이 실패한 경우
+                Log.d("ChartFragment", response.message())
                 Toast.makeText(
                     requireContext(),
-                    "서버와의 통신이 실패하였습니다.",
+                    "오류가 발생하였습니다.",
                     Toast.LENGTH_SHORT).show()
             }
-        })
+        }.await()
+
+        return counts
     }
 
     // TODO

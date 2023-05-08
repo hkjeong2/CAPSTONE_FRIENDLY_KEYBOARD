@@ -1,6 +1,7 @@
 package com.example.friendlykeyboard.retrofit_util
 
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface RetrofitInterface {
@@ -20,5 +21,5 @@ interface RetrofitInterface {
     fun getChatList(@Body chat: Chat) : Call<ChatDataModel>
 
     @POST("get_hate_speech_counts")
-    fun getHateSpeechCounts(@Body account: Account): Call<HateSpeechCountDataModel>
+    suspend fun getHateSpeechCounts(@Body account: Account): Response<HateSpeechCountDataModel>
 }
