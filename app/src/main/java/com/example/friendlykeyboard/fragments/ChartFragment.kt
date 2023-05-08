@@ -44,9 +44,10 @@ class ChartFragment : Fragment() {
 
         val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
-            color = Color.GREEN
+            color = Color.BLUE
             setCircleColor(Color.BLUE) // 데이터 원형 색 지정
             valueTextSize = 10f // 값 글자 크기
+            valueTextColor = Color.BLUE
             lineWidth = 2f // 라인 두께
             circleRadius = 4f // 원 크기
             fillAlpha = 0 // 라인 색 투명도
@@ -56,6 +57,15 @@ class ChartFragment : Fragment() {
 
         val lineData = LineData(lineDateSet)
         binding.lineChart.data = lineData
+
+        // 범례 설정
+        binding.lineChart.legend.apply {
+            textSize = 15f
+            verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+            orientation = Legend.LegendOrientation.HORIZONTAL
+            setDrawInside(false)
+        }
 
         // x축 설정
         binding.lineChart.xAxis.apply {
@@ -73,20 +83,12 @@ class ChartFragment : Fragment() {
         }
 
         // 오른쪽 y축 설정
-        binding.lineChart.axisRight.apply {
-            setDrawLabels(false)
-            setDrawAxisLine(false)
-            setDrawGridLines(false)
-        }
-
-        val description = Description().apply {
-            text = ""
-        }
+        binding.lineChart.axisRight.isEnabled = false
 
         with (binding.lineChart) {
             isDoubleTapToZoomEnabled = false
             setDrawGridBackground(false)
-            this.description = description
+            description.text = ""
             animateY(1000, Easing.EaseInCubic)
             invalidate()
         }
