@@ -151,6 +151,7 @@ class KeyBoardService : InputMethodService() {
 
             override fun onFailure(call: Call<HateSpeechDataModel>, t: Throwable) {
                 // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
+                sendEnterKey()
                 t.printStackTrace()
                 Toast.makeText(
                     applicationContext,
