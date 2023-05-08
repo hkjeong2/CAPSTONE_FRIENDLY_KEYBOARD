@@ -1,14 +1,17 @@
 package com.example.friendlykeyboard.fragments
 
-import android.app.Activity
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.friendlykeyboard.databinding.FragmentChartBinding
+import com.example.friendlykeyboard.retrofit_util.Account
+import com.example.friendlykeyboard.retrofit_util.HateSpeechCountDataModel
+import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -16,10 +19,17 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.coroutines.runBlocking
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChartFragment : Fragment() {
     private var _binding: FragmentChartBinding? = null
     private val binding get() = _binding!!
+    private val service = RetrofitClient.getApiService()
+    private val mutableList = mutableListOf<Entry>()
+    private val counts = MutableList(9) { mapOf<String, Int>() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +43,18 @@ class ChartFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+
         // 서버에서 혐오 표현 사용 횟수 데이터를 가져옴.
-        val mutableList = getData()
+        runBlocking {
+            getData()
+        }
+
+        // TODO: 임시로 작성하였으며 나중에 삭제할 것
+        for (map in counts) {
+            for (key in map.keys) {
+                println("key: $key, value: ${map[key]}")
+            }
+        }
 
         val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
@@ -147,15 +167,59 @@ class ChartFragment : Fragment() {
         }
     }
 
-    // TODO: 서버에서 혐오 표현 사용 횟수 데이터를 가져옴.
-    private fun getData(): MutableList<Entry> {
+    // 서버에서 혐오 표현 사용 횟수 데이터를 가져옴.
+    private fun getData() {
         val accountID = requireActivity()
             .getSharedPreferences("cbAuto", 0)
             .getString("id", "")!!
-        
-        // TODO: 서버에서 데이터 가져오기
 
-        val mutableList = mutableListOf<Entry>().apply {
+        val account = Account(accountID, "?")
+
+        service.getHateSpeechCounts(account).enqueue(object : Callback<HateSpeechCountDataModel> {
+            override fun onResponse(
+                call: Call<HateSpeechCountDataModel>,
+                response: Response<HateSpeechCountDataModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result = response.body()!!
+                    counts[0] = result.count1
+                    counts[1] = result.count2
+                    counts[2] = result.count3
+                    counts[3] = result.count4
+                    counts[4] = result.count5
+                    counts[5] = result.count6
+                    counts[6] = result.count7
+                    counts[7] = result.count8
+                    counts[8] = result.count9
+
+                    // TODO
+
+                    //setData()
+                } else {
+                    // 통신이 실패한 경우
+                    Log.d("ChartFragment", response.message())
+                    Toast.makeText(
+                        requireContext(),
+                        "오류가 발생하였습니다.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<HateSpeechCountDataModel>, t: Throwable) {
+                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
+                t.printStackTrace()
+                Toast.makeText(
+                    requireContext(),
+                    "서버와의 통신이 실패하였습니다.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    // TODO
+    private fun setData() {
+        // TODO
+        with (mutableList) {
             add(Entry(1f, 1f))
             add(Entry(2f, 2f))
             add(Entry(3f, 0f))
@@ -188,7 +252,5 @@ class ChartFragment : Fragment() {
             add(Entry(30f, 38f))
             add(Entry(31f, 24f))
         }
-
-        return mutableList
     }
 }
