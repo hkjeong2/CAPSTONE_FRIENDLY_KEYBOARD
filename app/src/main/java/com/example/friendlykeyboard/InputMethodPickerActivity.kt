@@ -50,11 +50,6 @@ class InputMethodPickerActivity : AppCompatActivity() {
                 val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
                 startActivity(intent)
             }, 1000)
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                inputMethodManager.showInputMethodPicker()
-                state = State.PICKING
-            }, 3000)
         }
         else{
             Handler(Looper.getMainLooper()).postDelayed({
