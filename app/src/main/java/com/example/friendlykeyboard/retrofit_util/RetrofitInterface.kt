@@ -18,4 +18,7 @@ interface RetrofitInterface {
 
     @POST("get_chat_list")
     fun getChatList(@Body chat: Chat) : Call<ChatDataModel>
+
+    @POST("get_hate_speech_counts")
+    fun getHateSpeechCounts(@Body account: Account): Call<HateSpeechCountDataModel>
 }
