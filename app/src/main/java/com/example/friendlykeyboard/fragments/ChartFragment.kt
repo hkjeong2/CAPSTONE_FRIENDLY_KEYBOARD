@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.friendlykeyboard.databinding.FragmentChartBinding
 import com.example.friendlykeyboard.retrofit_util.Account
-import com.example.friendlykeyboard.retrofit_util.HateSpeechCountDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
@@ -20,15 +19,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ChartFragment : Fragment() {
     private var _binding: FragmentChartBinding? = null
     private val binding get() = _binding!!
     private val service = RetrofitClient.getApiService()
-    private val mutableList = mutableListOf<Entry>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +41,8 @@ class ChartFragment : Fragment() {
         val counts = runBlocking {
             getData()
         }
+
+        val mutableList = mutableListOf<Entry>()
 
         val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
@@ -109,53 +106,7 @@ class ChartFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.button1.setOnClickListener {
-            // TODO
-        }
 
-        binding.button2.setOnClickListener {
-            // TODO
-        }
-
-        binding.button3.setOnClickListener {
-            // TODO
-        }
-
-        binding.button4.setOnClickListener {
-            // TODO
-        }
-
-        binding.button5.setOnClickListener {
-            // TODO
-        }
-
-        binding.button6.setOnClickListener {
-            // TODO
-        }
-
-        binding.button7.setOnClickListener {
-            // TODO
-        }
-
-        binding.button8.setOnClickListener {
-            // TODO
-        }
-
-        binding.button9.setOnClickListener {
-            // TODO
-        }
-
-        binding.button10.setOnClickListener {
-            // TODO
-        }
-
-        binding.button11.setOnClickListener {
-            // TODO
-        }
-
-        binding.button12.setOnClickListener {
-            // TODO
-        }
     }
 
     // 서버에서 혐오 표현 사용 횟수 데이터를 가져옴.
@@ -196,7 +147,7 @@ class ChartFragment : Fragment() {
     }
 
     // TODO
-    private fun setData() {
+    private fun setData(mutableList: MutableList<Entry>) {
         // TODO
         with (mutableList) {
             add(Entry(1f, 1f))
