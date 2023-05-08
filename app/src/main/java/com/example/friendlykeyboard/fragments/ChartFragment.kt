@@ -37,7 +37,9 @@ class ChartFragment : Fragment() {
             add(Entry(2f, 2f))
             add(Entry(3f, 0f))
             add(Entry(4f, 14f))
-            add(Entry(6f, 3f))
+            add(Entry(5f, 30f))
+            add(Entry(6f, 25f))
+            add(Entry(7f, 50f))
         }
 
         val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
@@ -55,18 +57,23 @@ class ChartFragment : Fragment() {
         val lineData = LineData(lineDateSet)
         binding.lineChart.data = lineData
 
-        val xAxis = binding.lineChart.xAxis.apply {
+        // x축 설정
+        binding.lineChart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             textColor = Color.BLUE
-            enableGridDashedLine(1f, 24f, 0f)
+            granularity = 1f
+            enableGridDashedLine(10f, 20f, 0f)
         }
 
-        val yLAxis = binding.lineChart.axisLeft.apply {
+        // 왼쪽 y축 설정
+        binding.lineChart.axisLeft.apply {
             textColor = Color.BLUE
             axisMinimum = 0f
+            granularity = 10f
         }
 
-        val yRAxis = binding.lineChart.axisRight.apply {
+        // 오른쪽 y축 설정
+        binding.lineChart.axisRight.apply {
             setDrawLabels(false)
             setDrawAxisLine(false)
             setDrawGridLines(false)
