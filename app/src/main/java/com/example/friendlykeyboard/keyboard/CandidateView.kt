@@ -41,7 +41,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
         mCandidateHSV = mCandidateView.findViewById(R.id.candidate_horizontal_view)
         mCandidateLL = mCandidateView.findViewById(R.id.candidate_linear_layout)
 
-        mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", 0))
+        mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", Color.parseColor("#dddddd")))
     }
 
     //대체어 UI 생성
@@ -91,7 +91,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
 
     fun updateSetting(){
         // layout 색
-        mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", 0))
+        mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", Color.parseColor("#dddddd")))
         // button 설정
         for (button in button){
             updateCandidates(button)
@@ -100,7 +100,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
 
     fun updateCandidates(button : Button){
         // font 색
-        button.setTextColor(spf.getInt("candidateFontColor", 0))
+        button.setTextColor(spf.getInt("candidateFontColor", Color.parseColor("#000000")))
         // font type
         if (spf.getBoolean("candidateFontStyle", false)) {
             button.setTypeface(null, Typeface.BOLD)
@@ -110,7 +110,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
         // button 배경 색
         val drawable = ContextCompat.getDrawable(context, R.drawable.candidate_button)
         val gradientDrawable = drawable as GradientDrawable
-        gradientDrawable.setColor(spf.getInt("candidateButtonColor", 0))
+        gradientDrawable.setColor(spf.getInt("candidateButtonColor", Color.parseColor("#d3d3d3")))
         button.background = gradientDrawable
     }
 
