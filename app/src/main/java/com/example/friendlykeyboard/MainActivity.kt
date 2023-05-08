@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.tab_chart -> {
                     changeFragment(chartFragment)
                     runOnUiThread {
-                        supportActionBar?.title = "알림"
+                        supportActionBar?.title = "통계"
                     }
                 }
                 R.id.tab_settings -> {
