@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -61,10 +62,15 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
     fun generateCandidates(i: Int, text: String, ic: InputConnection, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean){
         mCandidateItem = layoutInflater.inflate(R.layout.keyboard_candidate_item, null)
         val child = mCandidateItem.findViewById<Button>(R.id.candidate_word)
+        // 대체어 텍스트 지정
         child.text = mSuggestion[text]!![i]
+        // 텍스트 사이즈 지정
         child.setTextSize(2, 12.0f)
+        // 대체어 설정 지정
         updateCandidates(child)
+        // 클릭 설정 지정
         child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx, keyboardKorean))
+        // 설정 변경 시 동적으로 button들 update 보여주기 위해 저장
         button.add(child)
 
         mCandidateLL.addView(child)
@@ -85,6 +91,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
     fun updateSetting(){
         // layout 색
         mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", 0))
+        // button 설정
         for (button in button){
             updateCandidates(button)
         }
@@ -99,7 +106,11 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPref
         } else {
             button.setTypeface(null, Typeface.NORMAL)
         }
-        button.setBackgroundColor(spf.getInt("candidateButtonColor", 0))
+        // button 배경 색
+        val drawable = ContextCompat.getDrawable(context, R.drawable.candidate_button)
+        val gradientDrawable = drawable as GradientDrawable
+        gradientDrawable.setColor(spf.getInt("candidateButtonColor", 0))
+        button.background = gradientDrawable
     }
 
     fun eraseViews(){

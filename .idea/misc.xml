@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/button_background.xml" value="0.2325" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/candidate_button.xml" value="0.2405" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/chat_bubble.xml" value="0.241" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/checkbox.xml" value="0.2325" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/custom_ripple_borderless.xml" value="0.2405" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_caps_lock.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_caps_unlock.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_enter.xml" value="0.1" />
@@ -13,6 +15,7 @@
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_lock_gray_24dp.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/ic_space_bar.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/key_background.xml" value="0.1" />
+        <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/menu_selector_color.xml" value="0.2405" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/normal.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/pressed.xml" value="0.1" />
         <entry key="..\:/Users/chali/AndroidStudioProjects/Capstone_FriendlyKeyboard/app/src/main/res/drawable/send_button_color.xml" value="0.237" />
