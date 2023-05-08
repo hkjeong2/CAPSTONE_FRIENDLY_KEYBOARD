@@ -42,19 +42,19 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardSize.attribute.text =
             "높이: ${height}%, 좌측: ${paddingLeft}dp, 우측: ${paddingRight}dp, 하단: ${paddingBottom}dp"
 
-        val fontColor = pref.getInt("keyboardFontColor", 0)
+        val fontColor = pref.getInt("keyboardFontColor", Color.parseColor("#FF018786"))
         with (binding.settingsItemKeyboardFont) {
             imageView.drawable.setTint(fontColor)
             attribute.setTextColor(fontColor)
         }
 
-        val color = pref.getInt("keyboardColor", 0)
+        val color = pref.getInt("keyboardColor", Color.parseColor("#FFBB86FC"))
         with (binding.settingsItemKeyboardColor) {
             imageView.drawable.setTint(color)
             attribute.setTextColor(color)
         }
 
-        val background_color = pref.getInt("keyboardBackground", 0)
+        val background_color = pref.getInt("keyboardBackground", Color.parseColor("#86BBFC"))
         with (binding.settingsItemKeyboardBackground) {
             imageView.drawable.setTint(background_color)
             attribute.setTextColor(background_color)
@@ -84,19 +84,19 @@ class SettingsFragment : Fragment() {
         binding.stage23.setTextColor(settingRandomColor)
 
         //대체어 설정
-        val candidateFontColor = pref.getInt("candidateFontColor", 0)
+        val candidateFontColor = pref.getInt("candidateFontColor", Color.parseColor("#000000"))
         with (binding.settingsCandidateFont) {
             imageView.drawable.setTint(candidateFontColor)
             attribute.setTextColor(candidateFontColor)
         }
 
-        val candidateButtonColor = pref.getInt("candidateButtonColor", 0)
+        val candidateButtonColor = pref.getInt("candidateButtonColor", Color.parseColor("#d3d3d3"))
         with (binding.settingsCandidateButtonColor) {
             imageView.drawable.setTint(candidateButtonColor)
             attribute.setTextColor(candidateButtonColor)
         }
 
-        val candidateLayoutColor = pref.getInt("candidateLayoutColor", 0)
+        val candidateLayoutColor = pref.getInt("candidateLayoutColor", Color.parseColor("#dddddd"))
         with (binding.settingsCandidateLayoutColor) {
             imageView.drawable.setTint(candidateLayoutColor)
             attribute.setTextColor(candidateLayoutColor)

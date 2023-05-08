@@ -1,7 +1,10 @@
 package com.example.friendlykeyboard.keyboard
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +12,11 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.KeyboardKorean
 
-class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(context) {
+class CandidateView(context: Context, layoutInflater: LayoutInflater, sharedPreferences: SharedPreferences) : View(context) {
 
     private var mCandidateView : View
     private var mCandidateItem : View
@@ -20,9 +24,8 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
     private var mCandidateLL : LinearLayout
     private var mSuggestion = HashMap<String, ArrayList<String>>()
     private var layoutInflater = layoutInflater
-    private lateinit var mColorBackground : String
-    private lateinit var mColorText : String
-    private var mTextSize : Float = 0.0f
+    private var spf = sharedPreferences
+    private var button = ArrayList<Button>()
 
     init{
         loadDic()
@@ -36,6 +39,7 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         mCandidateHSV = mCandidateView.findViewById(R.id.candidate_horizontal_view)
         mCandidateLL = mCandidateView.findViewById(R.id.candidate_linear_layout)
 
+        mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", 0))
     }
 
     //대체어 UI 생성
@@ -57,20 +61,13 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
     fun generateCandidates(i: Int, text: String, ic: InputConnection, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean){
         mCandidateItem = layoutInflater.inflate(R.layout.keyboard_candidate_item, null)
         val child = mCandidateItem.findViewById<Button>(R.id.candidate_word)
-        child.text = mSuggestion[text]!!.get(i)
-        child.setTextColor(Color.parseColor(mColorText))
-        child.setTextSize(2, mTextSize)
+        child.text = mSuggestion[text]!![i]
+        child.setTextSize(2, 12.0f)
+        updateCandidates(child)
         child.setOnClickListener(getMyCandidateClickListener(ic, child, stIdx, edIdx, keyboardKorean))
+        button.add(child)
 
         mCandidateLL.addView(child)
-    }
-
-    // 추후 설정 관련
-    fun setting(textSize: Float, colorBackground: String, colorText: String){
-        mColorBackground = colorBackground
-        mColorText = colorText
-        mTextSize = textSize
-        mCandidateHSV.setBackgroundColor(Color.parseColor(mColorBackground))
     }
 
     fun getMyCandidateClickListener(ic: InputConnection, child: Button, stIdx: Int, edIdx: Int, keyboardKorean: KeyboardKorean): OnClickListener{
@@ -85,7 +82,28 @@ class CandidateView(context: Context, layoutInflater: LayoutInflater) : View(con
         }
     }
 
+    fun updateSetting(){
+        // layout 색
+        mCandidateHSV.setBackgroundColor(spf.getInt("candidateLayoutColor", 0))
+        for (button in button){
+            updateCandidates(button)
+        }
+    }
+
+    fun updateCandidates(button : Button){
+        // font 색
+        button.setTextColor(spf.getInt("candidateFontColor", 0))
+        // font type
+        if (spf.getBoolean("candidateFontStyle", false)) {
+            button.setTypeface(null, Typeface.BOLD)
+        } else {
+            button.setTypeface(null, Typeface.NORMAL)
+        }
+        button.setBackgroundColor(spf.getInt("candidateButtonColor", 0))
+    }
+
     fun eraseViews(){
+        button.clear()
         mCandidateLL.removeAllViews()
     }
 
