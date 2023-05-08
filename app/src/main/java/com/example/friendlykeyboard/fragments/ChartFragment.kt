@@ -3,11 +3,11 @@ package com.example.friendlykeyboard.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.friendlykeyboard.databinding.FragmentChartBinding
 import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
@@ -18,7 +18,10 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ChartFragment : Fragment() {
     private var _binding: FragmentChartBinding? = null
@@ -118,7 +121,7 @@ class ChartFragment : Fragment() {
         val account = Account(accountID, "?")
         val counts = MutableList(9) { mapOf<String, Int>() }
 
-        CoroutineScope(Dispatchers.IO).async {
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             val response = service.getHateSpeechCounts(account)
 
             if (response.isSuccessful) {
@@ -139,9 +142,10 @@ class ChartFragment : Fragment() {
                 Toast.makeText(
                     requireContext(),
                     "오류가 발생하였습니다.",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        }.await()
+        }
 
         return counts
     }
