@@ -215,17 +215,17 @@ class KeyBoardService : InputMethodService() {
     private fun releasePreviousMode(){
         when (stage){
             3 -> {
-                //2단계 모드 해제
+                //2단계 모드 해제 (투명 모드)
                 pref.edit().putInt("keyboardFontColor", pref.getInt("tempKeyboardFontColor", 0)).apply()
                 keyboardKorean.updateKeyboard()
                 keyboardEnglish.updateKeyboard()
             }
             4 -> {
-                //3단계 모드 해제
+                //3단계 모드 해제 (영어 모드)
                 keyboardEnglish.setChangingModeAvailability(true)
             }
             5 -> {
-                //4단계 모드 해제
+                //4단계 모드 해제 (무작위 모드)
                 keyboardKorean.restoreKeyboard()
                 if (keyboardMode == 1){
                     // 한글 키보드를 사용중이었다면 복구된 한글 키보드로 교체
@@ -537,11 +537,16 @@ class KeyBoardService : InputMethodService() {
             // 키보드 배경색 업데이트
             keyboardKorean.updateKeyboard()
             keyboardEnglish.updateKeyboard()
+            // 대체어 뷰 레이아웃 , 버튼 , 폰트 업데이트
+            if (::mCandidateView.isInitialized){
+                mCandidateView.updateSetting()
+            }
         }
     }
 
     override fun updateInputViewShown() {
         updateKeyboard()
+
         Log.d("키보드 수정", "111")
         //현재 필요한 키보드를 결정하고 수정
         super.updateInputViewShown()
@@ -552,7 +557,7 @@ class KeyBoardService : InputMethodService() {
             keyboardFrame.addView(KeyboardNumpad.newInstance(applicationContext, layoutInflater, currentInputConnection, keyboardInterationListener))
         }
         else{
-            // 키보드 올릴 때 2단계 제재 여부 확인
+            // 키보드 올릴 때 영어 모드 제재 여부 확인
             if (keyboardEnglish.blockMode){
                 keyboardInterationListener.modechange(0)
             }
@@ -565,7 +570,7 @@ class KeyBoardService : InputMethodService() {
     //화면이 위로 스크롤 되면서 candidate view도 자리를 차지
     override fun onComputeInsets(outInsets: Insets?) {
         super.onComputeInsets(outInsets)
-        if (!isFullscreenMode()) {
+        if (!isFullscreenMode) {
             outInsets?.contentTopInsets = outInsets?.visibleTopInsets
         }
     }
@@ -573,10 +578,8 @@ class KeyBoardService : InputMethodService() {
     override fun onCreateCandidatesView(): View {
         //sharedPreference로 textSize, colorBackground, colorText 지정 가능
         //키보드 생성시 함께 1회만 생성되는 듯 (동적으로 바꾸고자 할 시 다른 곳에서 mCandidateView 수정해주면 어떨지?)
-        mCandidateView = CandidateView(this, layoutInflater)
-        mCandidateView.setting(12.0f, "#dddddd", "#ffffff")
+        mCandidateView = CandidateView(this, layoutInflater, getSharedPreferences("setting", 0))
         return mCandidateView.getCandidate()
-
     }
 
     private fun checkStageHasChanged(){

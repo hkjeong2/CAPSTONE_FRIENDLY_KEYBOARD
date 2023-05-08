@@ -36,6 +36,15 @@
         <activity
             android:name=".SettingsKeyboardSizeActivity"
             android:exported="false" /> <!-- editText 클릭 시 custom keyboard 나오도록 service 추가 -->
+        <activity
+            android:name=".SettingsCandidateFontActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsCandidateButtonColorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsCandidateLayoutColorActivity"
+            android:exported="false" />
         <service
             android:name=".keyboard.KeyBoardService"
             android:enabled="true"

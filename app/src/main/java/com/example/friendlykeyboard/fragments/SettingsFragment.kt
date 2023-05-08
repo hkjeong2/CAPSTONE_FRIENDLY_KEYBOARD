@@ -9,10 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.friendlykeyboard.SettingsKeyboardBackgroundActivity
-import com.example.friendlykeyboard.SettingsKeyboardColorActivity
-import com.example.friendlykeyboard.SettingsKeyboardFontActivity
-import com.example.friendlykeyboard.SettingsKeyboardSizeActivity
+import com.example.friendlykeyboard.*
 import com.example.friendlykeyboard.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -37,6 +34,7 @@ class SettingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        //키보드 설정
         val height = pref.getInt("keyboardHeight", 150) - 50
         val paddingLeft = pref.getInt("keyboardPaddingLeft", 0)
         val paddingRight = pref.getInt("keyboardPaddingRight", 0)
@@ -44,24 +42,25 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardSize.attribute.text =
             "높이: ${height}%, 좌측: ${paddingLeft}dp, 우측: ${paddingRight}dp, 하단: ${paddingBottom}dp"
 
-        val fontColor = pref.getInt("keyboardFontColor", 0)
+        val fontColor = pref.getInt("keyboardFontColor", Color.parseColor("#FF018786"))
         with (binding.settingsItemKeyboardFont) {
             imageView.drawable.setTint(fontColor)
             attribute.setTextColor(fontColor)
         }
 
-        val color = pref.getInt("keyboardColor", 0)
+        val color = pref.getInt("keyboardColor", Color.parseColor("#FFBB86FC"))
         with (binding.settingsItemKeyboardColor) {
             imageView.drawable.setTint(color)
             attribute.setTextColor(color)
         }
 
-        val background_color = pref.getInt("keyboardBackground", 0)
+        val background_color = pref.getInt("keyboardBackground", Color.parseColor("#86BBFC"))
         with (binding.settingsItemKeyboardBackground) {
             imageView.drawable.setTint(background_color)
             attribute.setTextColor(background_color)
         }
 
+        //기능 설정
         val settingAlarmColor = pref.getInt("settingAlarmColor", Color.parseColor("#000000"))
         binding.stage1Text.setTextColor(settingAlarmColor)
         binding.stage1.setTextColor(settingAlarmColor)
@@ -83,6 +82,25 @@ class SettingsFragment : Fragment() {
         val settingRandomColor = pref.getInt("settingRandomColor", Color.parseColor("#000000"))
         binding.stage23Text.setTextColor(settingRandomColor)
         binding.stage23.setTextColor(settingRandomColor)
+
+        //대체어 설정
+        val candidateFontColor = pref.getInt("candidateFontColor", Color.parseColor("#000000"))
+        with (binding.settingsCandidateFont) {
+            imageView.drawable.setTint(candidateFontColor)
+            attribute.setTextColor(candidateFontColor)
+        }
+
+        val candidateButtonColor = pref.getInt("candidateButtonColor", Color.parseColor("#d3d3d3"))
+        with (binding.settingsCandidateButtonColor) {
+            imageView.drawable.setTint(candidateButtonColor)
+            attribute.setTextColor(candidateButtonColor)
+        }
+
+        val candidateLayoutColor = pref.getInt("candidateLayoutColor", Color.parseColor("#dddddd"))
+        with (binding.settingsCandidateLayoutColor) {
+            imageView.drawable.setTint(candidateLayoutColor)
+            attribute.setTextColor(candidateLayoutColor)
+        }
 
     }
 
@@ -108,5 +126,17 @@ class SettingsFragment : Fragment() {
             startActivity(Intent(activity, SettingsKeyboardBackgroundActivity::class.java))
         }
 
+        binding.settingsCandidateFont.item.setOnClickListener{
+            startActivity(Intent(activity, SettingsCandidateFontActivity::class.java))
+        }
+
+        binding.settingsCandidateButtonColor.item.setOnClickListener{
+            startActivity(Intent(activity, SettingsCandidateButtonColorActivity::class.java))
+        }
+
+        binding.settingsCandidateLayoutColor.item.setOnClickListener{
+            startActivity(Intent(activity, SettingsCandidateLayoutColorActivity::class.java))
+        }
     }
+
 }
