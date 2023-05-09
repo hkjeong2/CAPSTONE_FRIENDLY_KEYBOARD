@@ -6,12 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.drawable.Icon
 import android.inputmethodservice.InputMethodService
 import android.os.Build
-import android.os.SystemClock
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
@@ -25,12 +24,8 @@ import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import com.example.friendlykeyboard.retrofit_util.HateSpeech
-import com.example.friendlykeyboard.retrofit_util.HateSpeechDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class KeyBoardService : InputMethodService() {
     private lateinit var pref: SharedPreferences
@@ -96,69 +91,65 @@ class KeyBoardService : InputMethodService() {
 
         //Enter키로 전송된 text AI로 검사
         override fun checkText(text: String) {
-            checkTexts(text)
+            lateinit var response : String
+            runBlocking{
+                response = checkTexts(text)
+            }
+            checkResponse(response)
         }
     }
 
-    private fun checkTexts(text : String) {
+    private fun checkResponse(response : String){
+        // 오류 케이스
+        if (response == "")
+            return
+
+        // 무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
+        if (stage == 4 && keyboardMode == 1){
+            keyboardKorean.shuffleKeyboard()
+            keyboardInterationListener.modechange(1)
+        }
+
+        // 10개의 Labels
+        // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
+        // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
+        when (response) {
+            "clean" -> {
+            }
+            else -> {
+                count++
+                checkCount(response)
+            }
+        }
+    }
+
+    private suspend fun checkTexts(text : String) : String {
 
         // 서버에서 혐오 표현 존재 여부를 판별함.
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
         val hateSpeech = HateSpeech(id, text)
+        lateinit var result : String
 
-        service.inferenceHateSpeech(hateSpeech).enqueue(object : Callback<HateSpeechDataModel> {
-            override fun onResponse(
-                call: Call<HateSpeechDataModel>,
-                response: Response<HateSpeechDataModel>
-            ) {
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    Toast.makeText(
-                        applicationContext,
-                        result?.inference_hate_speech_result,
-                        Toast.LENGTH_SHORT
-                    ).show()
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext){
+            val response = service.inferenceHateSpeech(hateSpeech)
+            if (response.isSuccessful) {
+                result = response.body()?.inference_hate_speech_result!!
 
-                    //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
-                    if (stage == 4 && keyboardMode == 1){
-                        keyboardKorean.shuffleKeyboard()
-                        keyboardInterationListener.modechange(1)
-                    }
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
+                }
 
-                    // 10개의 Labels
-                    // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
-                    // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
-                    when (result?.inference_hate_speech_result) {
-                        "clean" -> {
-                            // 텍스트 전송
-                            sendEnterKey()
-                        }
-                        else -> {
-                            count++
-                            checkCount(result?.inference_hate_speech_result!!)
-                        }
-                    }
-                } else {
-                    sendEnterKey()
-                    // 통신이 실패한 경우
-                    Log.d("KeyboardService", response.message())
-                    Toast.makeText(
-                        applicationContext,
-                        "오류가 발생하였습니다.",
-                        Toast.LENGTH_SHORT).show()
+            } else {
+                // 통신이 실패한 경우
+                result = ""
+                Log.d("KeyboardService", response.message())
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(applicationContext,"오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
                 }
             }
+        }
 
-            override fun onFailure(call: Call<HateSpeechDataModel>, t: Throwable) {
-                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
-                sendEnterKey()
-                t.printStackTrace()
-                Toast.makeText(
-                    applicationContext,
-                    "서버와의 통신이 실패하였습니다.",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
+        return result
     }
 
     // count 횟수에 따른 3단계 기능 적용
@@ -172,7 +163,7 @@ class KeyBoardService : InputMethodService() {
             releasePreviousMode()
             // 변경된 단계 실행
             implementStage(text)
-            if (stage>=2){
+            if (stage >= 2){
                 // 키보드 복구를 위한 수행 과제 알림
                 notifyChance()
             }
@@ -189,8 +180,6 @@ class KeyBoardService : InputMethodService() {
             }
         }
 
-        // 엔터 키 누르기 --> ex) kakaotalk 텍스트 전송
-        sendEnterKey()
     }
 
     private fun changeUI(){
@@ -273,24 +262,6 @@ class KeyBoardService : InputMethodService() {
         val text = "키보드를 복구하기 위해 미션을 수행해 주세요!"
 
         createNotification(text, R.drawable.tasks, 2, intent)
-    }
-
-    private fun sendEnterKey(){
-        val eventTime = SystemClock.uptimeMillis()
-        //key ActionDown --> 키 눌렸을 때
-        currentInputConnection.sendKeyEvent(
-            KeyEvent(eventTime, eventTime,
-                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD)
-        )
-
-        //key ActionUp --> 눌린 키 떼지도록
-        currentInputConnection.sendKeyEvent(
-            KeyEvent(
-                SystemClock.uptimeMillis(), eventTime,
-                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD)
-        )
     }
 
     // 일정 횟수 이상 비속어 사용 시 푸시 알림 생성
