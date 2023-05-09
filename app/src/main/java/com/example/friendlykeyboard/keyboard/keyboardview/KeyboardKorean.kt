@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.inputmethodservice.Keyboard
 import android.media.AudioManager
 import android.os.*
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -490,8 +491,24 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             if (inputConnection?.getExtractedText(ExtractedTextRequest(), InputConnection.GET_TEXT_WITH_STYLES)?.text.toString().length >= 1){
                 playVibrate()
                 hangulMaker.directlyCommit()
+                val eventTime = SystemClock.uptimeMillis()
 
                 enterText()
+
+                //key ActionDown --> 키 눌렸을 때
+                inputConnection?.sendKeyEvent(
+                    KeyEvent(eventTime, eventTime,
+                        KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                        KeyEvent.FLAG_SOFT_KEYBOARD)
+                )
+
+                //key ActionUp --> 눌린 키 떼지도록
+                inputConnection?.sendKeyEvent(
+                    KeyEvent(
+                        SystemClock.uptimeMillis(), eventTime,
+                        KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
+                        KeyEvent.FLAG_SOFT_KEYBOARD)
+                )
 
             }
         }
