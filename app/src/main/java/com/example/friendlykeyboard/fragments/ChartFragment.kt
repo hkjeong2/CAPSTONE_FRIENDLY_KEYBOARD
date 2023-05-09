@@ -158,14 +158,17 @@ class ChartFragment : Fragment() {
 
     // TODO
     private fun setData() {
-        binding.lineChart.resetZoom()
+        binding.lineChart.fitScreen()
 
         // TODO
         val mutableList = mutableListOf<Entry>().apply {
             when (binding.tabLayout.selectedTabPosition) {
                 1 -> {
                     // 30일
-                    binding.lineChart.zoom(3f, 0f, 0f, 0f)
+                    //binding.lineChart.zoom(3f, 0f, 0f, 0f)
+                    add(Entry(1f, 10f))
+                    add(Entry(2f, 25f))
+                    add(Entry(3f, 5f))
                 }
                 2 -> {
                     // 90일
@@ -178,7 +181,6 @@ class ChartFragment : Fragment() {
                 }
                 else -> {
                     // 7일
-                    binding.lineChart.zoom(3f, 0f, 0f, 0f)
                     add(Entry(1f, 1f))
                     add(Entry(2f, 2f))
                     add(Entry(3f, 0f))
@@ -210,6 +212,7 @@ class ChartFragment : Fragment() {
                     add(Entry(29f, 23f))
                     add(Entry(30f, 38f))
                     add(Entry(31f, 24f))
+                    binding.lineChart.zoom(3f, 0f, 0f, 0f)
                 }
             }
         }
