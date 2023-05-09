@@ -200,7 +200,7 @@ class ChartFragment : Fragment() {
 
         initChartAttributes()
 
-        val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
+        val lineDateSet = LineDataSet(mutableList, "혐오표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
             color = Color.BLUE
             setCircleColor(Color.BLUE) // 데이터 원형 색 지정
