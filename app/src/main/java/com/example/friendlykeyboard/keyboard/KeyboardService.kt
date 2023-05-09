@@ -91,35 +91,14 @@ class KeyBoardService : InputMethodService() {
 
         //Enter키로 전송된 text AI로 검사
         override fun checkText(text: String) {
+
             lateinit var response : String
+
             runBlocking{
                 response = checkTexts(text)
             }
             checkResponse(response)
-        }
-    }
 
-    private fun checkResponse(response : String){
-        // 오류 케이스
-        if (response == "")
-            return
-
-        // 무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
-        if (stage == 4 && keyboardMode == 1){
-            keyboardKorean.shuffleKeyboard()
-            keyboardInterationListener.modechange(1)
-        }
-
-        // 10개의 Labels
-        // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
-        // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
-        when (response) {
-            "clean" -> {
-            }
-            else -> {
-                count++
-                checkCount(response)
-            }
         }
     }
 
@@ -150,6 +129,30 @@ class KeyBoardService : InputMethodService() {
         }
 
         return result
+    }
+
+    private fun checkResponse(response : String){
+        // 오류 케이스
+        if (response == "")
+            return
+
+        // 무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
+        if (stage == 4 && keyboardMode == 1){
+            keyboardKorean.shuffleKeyboard()
+            keyboardInterationListener.modechange(1)
+        }
+
+        // 10개의 Labels
+        // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
+        // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
+        when (response) {
+            "clean" -> {
+            }
+            else -> {
+                count++
+                checkCount(response)
+            }
+        }
     }
 
     // count 횟수에 따른 3단계 기능 적용
