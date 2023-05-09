@@ -18,6 +18,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,13 +30,13 @@ class ChartFragment : Fragment() {
     private val binding get() = _binding!!
     private val service = RetrofitClient.getApiService()
     private lateinit var countData: MutableMap<String, MutableMap<String, Int>>
+    private lateinit var labels: MutableList<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChartBinding.inflate(layoutInflater, container, false)
-        initChartAttributes()
         initTabLayoutListener()
         return binding.root
     }
@@ -72,9 +73,12 @@ class ChartFragment : Fragment() {
             position = XAxis.XAxisPosition.BOTTOM
             textColor = Color.BLUE
             granularity = 1f
-            axisMinimum = 1f
-            axisMaximum = 31f
-            labelCount = 3
+            labelCount = labels.size
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return labels[value.toInt()]
+                }
+            }
             enableGridDashedLine(10f, 20f, 0f)
         }
 
@@ -82,7 +86,6 @@ class ChartFragment : Fragment() {
         binding.lineChart.axisLeft.apply {
             textColor = Color.BLUE
             axisMinimum = 0f
-            granularity = 10f
         }
 
         // 오른쪽 y축이 보이지 않도록 설정
@@ -156,66 +159,46 @@ class ChartFragment : Fragment() {
         }
     }
 
-    // TODO
     private fun setData() {
         binding.lineChart.fitScreen()
+        labels = mutableListOf()
 
-        // TODO
         val mutableList = mutableListOf<Entry>().apply {
             when (binding.tabLayout.selectedTabPosition) {
                 1 -> {
-                    // 30일
-                    //binding.lineChart.zoom(3f, 0f, 0f, 0f)
-                    add(Entry(1f, 10f))
-                    add(Entry(2f, 25f))
-                    add(Entry(3f, 5f))
+                    // TODO: 7일
+                    /*
+                    labels.add("2023-05-08")
+                    labels.add("2023-05-09")
+                    labels.add("2023-05-10")
+                    add(Entry(0f, 10f))
+                    add(Entry(1f, 25f))
+                    add(Entry(2f, 5f))
+                    */
                 }
                 2 -> {
-                    // 90일
+                    // TODO: 30일
                 }
                 3 -> {
-                    // 1년
-                }
-                4 -> {
-                    // 모든 시간
+                    // TODO: 1년
                 }
                 else -> {
-                    // 7일
-                    add(Entry(1f, 1f))
-                    add(Entry(2f, 2f))
-                    add(Entry(3f, 0f))
-                    add(Entry(4f, 14f))
-                    add(Entry(5f, 30f))
-                    add(Entry(6f, 25f))
-                    add(Entry(7f, 50f))
-                    add(Entry(8f, 37f))
-                    add(Entry(9f, 25f))
-                    add(Entry(10f, 51f))
-                    add(Entry(11f, 22f))
-                    add(Entry(12f, 17f))
-                    add(Entry(13f, 16f))
-                    add(Entry(14f, 13f))
-                    add(Entry(15f, 20f))
-                    add(Entry(16f, 34f))
-                    add(Entry(17f, 39f))
-                    add(Entry(18f, 40f))
-                    add(Entry(19f, 35f))
-                    add(Entry(20f, 21f))
-                    add(Entry(21f, 0f))
-                    add(Entry(22f, 5f))
-                    add(Entry(23f, 4f))
-                    add(Entry(24f, 40f))
-                    add(Entry(25f, 31f))
-                    add(Entry(26f, 22f))
-                    add(Entry(27f, 25f))
-                    add(Entry(28f, 47f))
-                    add(Entry(29f, 23f))
-                    add(Entry(30f, 38f))
-                    add(Entry(31f, 24f))
-                    binding.lineChart.zoom(3f, 0f, 0f, 0f)
+                    // 모든 시간
+                    var x = 0f
+                    for (key in countData.keys) {
+                        labels.add(key)
+                        var sum = 0
+                        for (i in 0..8) {
+                            sum += countData[key]?.get("count$i") ?: 0
+                        }
+                        add(Entry(x, sum.toFloat()))
+                        x++
+                    }
                 }
             }
         }
+
+        initChartAttributes()
 
         val lineDateSet = LineDataSet(mutableList, "혐오 표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
