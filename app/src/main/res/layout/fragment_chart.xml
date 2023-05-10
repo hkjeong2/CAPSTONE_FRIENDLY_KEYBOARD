@@ -36,11 +36,6 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="모든 시간" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="7일" />
 
         <com.google.android.material.tabs.TabItem
@@ -52,6 +47,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1년" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모든 시간" />
 
     </com.google.android.material.tabs.TabLayout>
 

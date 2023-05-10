@@ -24,6 +24,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChartFragment : Fragment() {
     private var _binding: FragmentChartBinding? = null
@@ -165,24 +167,7 @@ class ChartFragment : Fragment() {
 
         val mutableList = mutableListOf<Entry>().apply {
             when (binding.tabLayout.selectedTabPosition) {
-                1 -> {
-                    // TODO: 7일
-                    /*
-                    labels.add("2023-05-08")
-                    labels.add("2023-05-09")
-                    labels.add("2023-05-10")
-                    add(Entry(0f, 10f))
-                    add(Entry(1f, 25f))
-                    add(Entry(2f, 5f))
-                    */
-                }
-                2 -> {
-                    // TODO: 30일
-                }
                 3 -> {
-                    // TODO: 1년
-                }
-                else -> {
                     // 모든 시간
                     var x = 0f
                     for (key in countData.keys) {
@@ -193,6 +178,30 @@ class ChartFragment : Fragment() {
                         }
                         add(Entry(x, sum.toFloat()))
                         x++
+                    }
+                }
+                else -> {
+                    val period = when (binding.tabLayout.selectedTabPosition) {
+                        0 -> 7L
+                        1 -> 30L
+                        else -> 356L
+                    }
+
+                    val currentDate = System.currentTimeMillis()
+                    var x = 0f
+                    for (key in countData.keys) {
+                        val date = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).parse(key)?.time ?: 0L
+                        val diffSec = (currentDate - date) / 1000
+                        val diffDays = diffSec / (24 * 60 * 60)
+                        if (diffDays < period) {
+                            labels.add(key)
+                            var sum = 0
+                            for (i in 0..8) {
+                                sum += countData[key]?.get("count$i") ?: 0
+                            }
+                            add(Entry(x, sum.toFloat()))
+                            x++
+                        }
                     }
                 }
             }
