@@ -78,6 +78,9 @@ class ChartFragment : Fragment() {
             labelCount = labels.size
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
+                    if (value.toInt() >= labels.size) {
+                        return "????-??-??"
+                    }
                     return labels[value.toInt()]
                 }
             }
