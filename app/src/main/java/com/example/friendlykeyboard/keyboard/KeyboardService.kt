@@ -24,8 +24,12 @@ import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import com.example.friendlykeyboard.retrofit_util.HateSpeech
+import com.example.friendlykeyboard.retrofit_util.HateSpeechDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class KeyBoardService : InputMethodService() {
     private lateinit var pref: SharedPreferences
@@ -92,11 +96,18 @@ class KeyBoardService : InputMethodService() {
         //Enter키로 전송된 text AI로 검사
         override fun checkText(text: String) {
             lateinit var response : String
-            runBlocking{
-                response = checkTexts(text)
+
+            if (stage >= 5){    // masking 모드일 시만 동기적 수행
+                runBlocking{
+                    response = checkTextsSync(text)
+                }
+                checkResponse(response)
             }
-            checkResponse(response)
+            else {  // 그 외 모드 중엔 비동기적 수행
+                checkTextsAsync(text)
+            }
         }
+
     }
 
     private fun checkResponse(response : String){
@@ -123,7 +134,7 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
-    private suspend fun checkTexts(text : String) : String {
+    private suspend fun checkTextsSync(text : String) : String {
         // 서버에서 혐오 표현 존재 여부를 판별함.
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
         val hateSpeech = HateSpeech(id, text)
@@ -158,6 +169,62 @@ class KeyBoardService : InputMethodService() {
         }
 
         return result
+    }
+
+    private fun checkTextsAsync(text : String){
+        // 서버에서 혐오 표현 존재 여부를 판별함.
+        val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
+        val hateSpeech = HateSpeech(id, text)
+
+        service.inferenceHateSpeechCall(hateSpeech).enqueue(object : Callback<HateSpeechDataModel> {
+            override fun onResponse(
+                call: Call<HateSpeechDataModel>,
+                response: Response<HateSpeechDataModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result = response.body()
+                    Toast.makeText(
+                        applicationContext,
+                        result?.inference_hate_speech_result,
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    //무작위 배치 단계의 제재 중일 시 typing 마다 계속 shuffle
+                    if (stage == 4 && keyboardMode == 1){
+                        keyboardKorean.shuffleKeyboard()
+                        keyboardInterationListener.modechange(1)
+                    }
+
+                    // 10개의 Labels
+                    // "여성/가족", "남성", "성소수자", "인종/국적", "연령"
+                    // "지역", "종교", "기타 혐오", "악플/욕설", "clean"
+                    when (result?.inference_hate_speech_result) {
+                        "clean" -> {
+
+                        }
+                        else -> {
+                            count++
+                            checkCount(result?.inference_hate_speech_result!!)
+                        }
+                    }
+                } else {
+                    Log.d("KeyboardService", response.message())
+                    Toast.makeText(
+                        applicationContext,
+                        "오류가 발생하였습니다.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<HateSpeechDataModel>, t: Throwable) {
+                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
+                t.printStackTrace()
+                Toast.makeText(
+                    applicationContext,
+                    "서버와의 통신이 실패하였습니다.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     // count 횟수에 따른 3단계 기능 적용
@@ -493,7 +560,7 @@ class KeyBoardService : InputMethodService() {
         //1) text field 내에서 사용자 클릭에 의해 커서가 변경될 때마다
         //2) text 추가될 때마다
         // call back
-        
+
         //현재 커서 인덱스 저장
         idx = newSelStart
 

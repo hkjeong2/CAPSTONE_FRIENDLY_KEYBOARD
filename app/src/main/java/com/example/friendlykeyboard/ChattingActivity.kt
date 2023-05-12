@@ -69,31 +69,31 @@ class ChattingActivity : AppCompatActivity() {
         chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", "20230507"))
         initRecyclerView(chattingList)
 
-        val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
-        service.getChatList(Chat(id)).enqueue(object : Callback<ChatDataModel>{
-            override fun onResponse(call: Call<ChatDataModel>, response: Response<ChatDataModel>) {
-                if (response.isSuccessful){
-                    val result = response.body()
-
-                    //서버로부터 chatting list 받아오기
-                    chattingList = result!!.chatList
-
-                    //Recyclerview 초기화
-                    initRecyclerView(chattingList)
-                }
-                else {
-                    // 통신이 실패한 경우
-                    Toast.makeText(applicationContext, "오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(call: Call<ChatDataModel>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(
-                    applicationContext,
-                    "통신이 실패하였습니다.",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
+//        val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
+//        service.getChatList(Chat(id)).enqueue(object : Callback<ChatDataModel>{
+//            override fun onResponse(call: Call<ChatDataModel>, response: Response<ChatDataModel>) {
+//                if (response.isSuccessful){
+//                    val result = response.body()
+//
+//                    //서버로부터 chatting list 받아오기
+//                    chattingList = result!!.chatList
+//
+//                    //Recyclerview 초기화
+//                    initRecyclerView(chattingList)
+//                }
+//                else {
+//                    // 통신이 실패한 경우
+//                    Toast.makeText(applicationContext, "오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            override fun onFailure(call: Call<ChatDataModel>, t: Throwable) {
+//                t.printStackTrace()
+//                Toast.makeText(
+//                    applicationContext,
+//                    "통신이 실패하였습니다.",
+//                    Toast.LENGTH_SHORT).show()
+//            }
+//        })
 
     }
 
