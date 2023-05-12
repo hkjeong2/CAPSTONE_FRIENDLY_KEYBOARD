@@ -21,7 +21,7 @@ interface RetrofitInterface {
     fun inferenceHateSpeechCall(@Body hateSpeech: HateSpeech): Call<HateSpeechDataModel>
 
     @POST("get_chat_list")
-    fun getChatList(@Body chat: Chat) : Call<ChatDataModel>
+    suspend fun getChatList(@Body chat: Chat) : Response<ChatDataModel>
 
     @POST("get_hate_speech_counts")
     suspend fun getHateSpeechCounts(@Body account: Account): Response<HateSpeechCountDataModel>

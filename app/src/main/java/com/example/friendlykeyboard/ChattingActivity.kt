@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,9 +14,7 @@ import com.example.friendlykeyboard.databinding.ActivityChattingBinding
 import com.example.friendlykeyboard.retrofit_util.Chat
 import com.example.friendlykeyboard.retrofit_util.ChatDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +41,9 @@ class ChattingActivity : AppCompatActivity() {
         spf = getSharedPreferences("setting", 0)
 
         // chatting 내역 view로 가져오기
-        initChatListData()
+        runBlocking {
+            initChatListData()
+        }
         // chatGPT로 순화된 표현 가져오기
         loadMissionText()
         // editText 엔터 시 처리
@@ -57,44 +60,61 @@ class ChattingActivity : AppCompatActivity() {
         binding.rvChatting.layoutManager!!.scrollToPosition(chattingRVAdapter.itemCount - 1)
     }
 
-    private fun initChatListData(){
-
-        chattingList.add(arrayOf(2, "욕설하지 마세요", "20230507"))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", "20230507"))
-        chattingList.add(arrayOf(1, "욕설하지 마세요", "20230507"))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", "20230507"))
-        chattingList.add(arrayOf(2, "욕설하지 마세요", "20230507"))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", "20230507"))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", "20230507"))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", "20230507"))
-        initRecyclerView(chattingList)
-
+    private suspend fun initChatListData(){
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(Date())
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
-        service.getChatList(Chat(id)).enqueue(object : Callback<ChatDataModel>{
-            override fun onResponse(call: Call<ChatDataModel>, response: Response<ChatDataModel>) {
-                if (response.isSuccessful){
-                    val result = response.body()
 
-                    //서버로부터 chatting list 받아오기
-                    chattingList = result!!.chatList
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            try {
+                val response = service.getChatList(Chat(id))
+
+                if (response.isSuccessful) {
+                    val result = response.body()!!
+                    val idList = result.idList
+                    val textList = result.textList
+                    val dateList = result.dateList
+
+                    chattingList = arrayListOf<Array<Any>>().apply {
+                        for (i in idList.indices) {
+                            add(arrayOf(idList[i], textList[i], dateList[i]))
+                        }
+                    }
 
                     //Recyclerview 초기화
                     initRecyclerView(chattingList)
-                }
-                else {
-                    // 통신이 실패한 경우
-                    Toast.makeText(applicationContext, "오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(call: Call<ChatDataModel>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(
-                    applicationContext,
-                    "통신이 실패하였습니다.",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
 
+                } else {
+                    // 통신이 실패한 경우
+                    Log.d("ChattingActivity", response.message())
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            applicationContext,
+                            "오류가 발생하였습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("ChattingActivity", "Connection Error")
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        applicationContext,
+                        "서버와의 통신이 실패하였습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
+        chattingList.add(arrayOf(2, "욕설하지 마세요", currentDate))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
+        chattingList.add(arrayOf(1, "욕설하지 마세요", currentDate))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
+        chattingList.add(arrayOf(2, "욕설하지 마세요", currentDate))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
+        initRecyclerView(chattingList)
     }
 
     private fun loadMissionText(){
