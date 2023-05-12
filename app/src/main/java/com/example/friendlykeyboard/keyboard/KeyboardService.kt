@@ -131,20 +131,29 @@ class KeyBoardService : InputMethodService() {
         lateinit var result : String
 
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext){
-            val response = service.inferenceHateSpeech(hateSpeech)
-            if (response.isSuccessful) {
-                result = response.body()?.inference_hate_speech_result!!
+            try {
+                val response = service.inferenceHateSpeech(hateSpeech)
 
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful) {
+                    result = response.body()?.inference_hate_speech_result!!
+
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
+                    }
+
+                } else {
+                    // 통신이 실패한 경우
+                    result = ""
+                    Log.d("KeyboardService", response.message())
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(applicationContext,"오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                    }
                 }
-
-            } else {
-                // 통신이 실패한 경우
+            } catch (e: Exception) {
                 result = ""
-                Log.d("KeyboardService", response.message())
+                Log.d("KeyboardService", "Connection Error")
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(applicationContext,"오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"서버와의 통신이 실패하였습니다.",Toast.LENGTH_SHORT).show()
                 }
             }
         }
