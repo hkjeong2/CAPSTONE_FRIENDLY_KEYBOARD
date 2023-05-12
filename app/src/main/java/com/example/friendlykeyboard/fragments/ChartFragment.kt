@@ -2,6 +2,8 @@ package com.example.friendlykeyboard.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -126,28 +128,41 @@ class ChartFragment : Fragment() {
         val counts = MutableList(9) { mapOf<String, Int>() }
 
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val response = service.getHateSpeechCounts(account)
+            try {
+                val response = service.getHateSpeechCounts(account)
 
-            if (response.isSuccessful) {
-                val result = response.body()!!
-                counts[0] = result.count1
-                counts[1] = result.count2
-                counts[2] = result.count3
-                counts[3] = result.count4
-                counts[4] = result.count5
-                counts[5] = result.count6
-                counts[6] = result.count7
-                counts[7] = result.count8
-                counts[8] = result.count9
+                if (response.isSuccessful) {
+                    val result = response.body()!!
+                    counts[0] = result.count1
+                    counts[1] = result.count2
+                    counts[2] = result.count3
+                    counts[3] = result.count4
+                    counts[4] = result.count5
+                    counts[5] = result.count6
+                    counts[6] = result.count7
+                    counts[7] = result.count8
+                    counts[8] = result.count9
 
-            } else {
-                // 통신이 실패한 경우
-                Log.d("ChartFragment", response.message())
-                Toast.makeText(
-                    requireContext(),
-                    "오류가 발생하였습니다.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                } else {
+                    // 통신이 실패한 경우
+                    Log.d("ChartFragment", response.message())
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            requireContext(),
+                            "오류가 발생하였습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("ChartFragment", "Connection Error")
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(
+                        requireContext(),
+                        "서버와의 통신이 실패하였습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
