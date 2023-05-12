@@ -124,7 +124,6 @@ class KeyBoardService : InputMethodService() {
     }
 
     private suspend fun checkTexts(text : String) : String {
-
         // 서버에서 혐오 표현 존재 여부를 판별함.
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
         val hateSpeech = HateSpeech(id, text)
