@@ -101,30 +101,21 @@ class ChattingActivity : AppCompatActivity() {
             }
         }
 
-        /*
-        chattingList.add(arrayOf(2, "욕설하지 마세요", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(1, "욕설하지 마세요", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(2, "욕설하지 마세요", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        */
-
         initRecyclerView(chattingList)
     }
 
     private fun loadMissionText(){
         // 영문 모드일 시 고려
-        if (spf.getInt("stageNumber", 0) == 3)
-            missionText = "very sorry"
-        else
-            missionText = "죄송합니다"
-        val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
+        if (spf.getInt("stageNumber", 0) >= 2){
+            if (spf.getInt("stageNumber", 0) == 3)
+                missionText = "very sorry"
+            else
+                missionText = "죄송합니다"
+            val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
 
-        runBlocking {
-            addAndnotifyAdapter(2, text)
+            runBlocking {
+                addAndnotifyAdapter(2, text)
+            }
         }
     }
 
