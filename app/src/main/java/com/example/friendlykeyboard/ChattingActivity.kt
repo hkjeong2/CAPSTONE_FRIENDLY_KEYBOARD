@@ -11,17 +11,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.friendlykeyboard.databinding.ActivityChattingBinding
+import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.Chat
-import com.example.friendlykeyboard.retrofit_util.ChatDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 class ChattingActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChattingBinding
@@ -61,12 +57,11 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     private suspend fun initChatListData(){
-        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(Date())
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
 
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             try {
-                val response = service.getChatList(Chat(id))
+                val response = service.getChatList(Account(id, "?"))
 
                 if (response.isSuccessful) {
                     val result = response.body()!!
@@ -106,14 +101,17 @@ class ChattingActivity : AppCompatActivity() {
             }
         }
 
-        chattingList.add(arrayOf(2, "욕설하지 마세요", currentDate))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
-        chattingList.add(arrayOf(1, "욕설하지 마세요", currentDate))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
-        chattingList.add(arrayOf(2, "욕설하지 마세요", currentDate))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentDate))
+        /*
+        chattingList.add(arrayOf(2, "욕설하지 마세요", currentTime))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
+        chattingList.add(arrayOf(1, "욕설하지 마세요", currentTime))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
+        chattingList.add(arrayOf(2, "욕설하지 마세요", currentTime))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
+        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
+        */
+
         initRecyclerView(chattingList)
     }
 
@@ -123,9 +121,11 @@ class ChattingActivity : AppCompatActivity() {
             missionText = "very sorry"
         else
             missionText = "죄송합니다"
-        val text = "'" + missionText + "'를 " + missionCount + "번 입력하세요 !"
+        val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
 
-        addAndnotifyAdapter(2, text)
+        runBlocking {
+            addAndnotifyAdapter(2, text)
+        }
     }
 
     private fun initListener(){
@@ -140,7 +140,9 @@ class ChattingActivity : AppCompatActivity() {
                 binding.textInputEditText.setText("")
 
                 //입력된 text 서버에 저장 및 recyclerview에 notify하여 view 변경
-                addAndnotifyAdapter(1, enteredText)
+                runBlocking {
+                    addAndnotifyAdapter(1, enteredText)
+                }
 
                 // 과제 성공했는지 검사
                 checkMissionAccomplished(enteredText)
@@ -154,13 +156,15 @@ class ChattingActivity : AppCompatActivity() {
         if (enteredText.equals(missionText)){
             count++
             if (count == missionCount - 1){
-                addAndnotifyAdapter(2, "마지막 한 번!")
+                runBlocking {
+                    addAndnotifyAdapter(2, "마지막 한 번!")
+                }
             }
             if (count == missionCount){
                 count = 0
                 initStage()
                 Toast.makeText(applicationContext, "당신은 용서받았습니다", Toast.LENGTH_SHORT).show()
-                GlobalScope.launch{
+                CoroutineScope(Dispatchers.Main).launch{
                     delay(1000)
                     finish()
                 }
@@ -169,9 +173,27 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun addAndnotifyAdapter(id : Int, text : String){
-        // add할 때 서버에 저장해야함
-        chattingList.add(arrayOf(id, text, currentTime()))
+    private suspend fun addAndnotifyAdapter(id : Int, text : String) {
+        val accountID = getSharedPreferences("cbAuto", 0).getString("id", "")!!
+        val currentTime = currentTime()
+        val chat = Chat(accountID, id, text, currentTime)
+
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            try {
+                val response = service.saveChat(chat)
+                if (response.isSuccessful) {
+                    Log.d("ChattingActivity", "Saved successfully.")
+                } else {
+                    // 통신이 실패한 경우
+                    Log.d("ChattingActivity", response.message())
+                }
+            } catch (e: Exception) {
+                // 통신 실패 (인터넷 끊김, 예외 발생 등 시스템적인 이유)
+                e.printStackTrace()
+            }
+        }
+
+        chattingList.add(arrayOf(id, text, currentTime))
 
         //recyclerview에 notify하여 view 변경
         binding.rvChatting.adapter!!.notifyDataSetChanged()
@@ -179,9 +201,12 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     private fun currentTime() : String {
+        /*
         val calendar: Calendar = Calendar.getInstance() // 캘린더 객체 인스턴스 calendar
         val dateFormat = SimpleDateFormat("HH:mm") // SimpleDataFormat 이라는 날짜와 시간을 출력하는 객체 생성, hh을 HH로 변경했더니 24시각제로 바뀜
         return dateFormat.format(calendar.time) // 캘린더 날짜시간 값을 가져와서 문자열인 datatime 으로 변환함
+        */
+        return SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREAN).format(Date())
     }
 
     private fun initStage(){
