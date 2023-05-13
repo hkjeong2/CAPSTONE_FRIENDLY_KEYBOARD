@@ -101,7 +101,7 @@ class KeyBoardService : InputMethodService() {
                 runBlocking{
                     response = checkTextsSync(text)
                 }
-                checkResponse(response)
+                checkResponse(text, response)
             }
             else {  // 그 외 모드 중엔 비동기적 수행
                 checkTextsAsync(text)
@@ -110,7 +110,7 @@ class KeyBoardService : InputMethodService() {
 
     }
 
-    private fun checkResponse(response : String){
+    private fun checkResponse(curse: String, response : String){
         // 오류 케이스
         if (response == "")
             return
@@ -129,7 +129,7 @@ class KeyBoardService : InputMethodService() {
             }
             else -> {
                 count++
-                checkCount(response)
+                checkCount(curse, response)
             }
         }
     }
@@ -204,7 +204,7 @@ class KeyBoardService : InputMethodService() {
                         }
                         else -> {
                             count++
-                            checkCount(result?.inference_hate_speech_result!!)
+                            checkCount(text, result?.inference_hate_speech_result!!)
                         }
                     }
                 } else {
@@ -228,7 +228,7 @@ class KeyBoardService : InputMethodService() {
     }
 
     // count 횟수에 따른 3단계 기능 적용
-    private fun checkCount(text: String) {
+    private fun checkCount(curse: String, text: String) {
         if (count >= 2){
             stage++
             pref.edit().putInt("stageNumber", stage).apply()
@@ -240,7 +240,7 @@ class KeyBoardService : InputMethodService() {
             implementStage(text)
             if (stage >= 2){
                 // 키보드 복구를 위한 수행 과제 알림
-                notifyChance()
+                notifyChance(curse)
             }
             count = 0
         }
@@ -330,10 +330,12 @@ class KeyBoardService : InputMethodService() {
         }
     }
 
-    private fun notifyChance(){
+    private fun notifyChance(curse: String){
         val intent = Intent(this, ChattingActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("curse", curse)
         }
+        Log.d("curse", curse)
         val text = "키보드를 복구하기 위해 미션을 수행해 주세요!"
 
         createNotification(text, R.drawable.tasks, 2, intent)

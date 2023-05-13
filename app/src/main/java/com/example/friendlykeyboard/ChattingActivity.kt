@@ -15,9 +15,16 @@ import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.Chat
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class ChattingActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChattingBinding
@@ -28,6 +35,7 @@ class ChattingActivity : AppCompatActivity() {
     private var missionText : String = ""
     private val missionCount = 3
     private var count = 0
+    private var client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +48,12 @@ class ChattingActivity : AppCompatActivity() {
         runBlocking {
             initChatListData()
         }
-        // chatGPT로 순화된 표현 가져오기
-        loadMissionText()
         // editText 엔터 시 처리
         initListener()
+        // 본 activity를 오도록 했던 욕설
+        Log.d("curse", intent.getStringExtra("curse")!!)
+        val curse = intent.getStringExtra("curse")!!
+        callChatGPTAPI(curse)
 
     }
 
@@ -105,19 +115,12 @@ class ChattingActivity : AppCompatActivity() {
         initRecyclerView(chattingList)
     }
 
-    private fun loadMissionText(){
-        // 교정 2단계 이상일 때만
-        if (spf.getInt("stageNumber", 0) >= 2){
-            // 영문 모드일 시 고려
-            if (spf.getInt("stageNumber", 0) == 3)
-                missionText = "very sorry"
-            else
-                missionText = "죄송합니다"
-            val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
+    private fun loadMissionText(text : String){
+        missionText = text
+        val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
 
-            runBlocking {
-                addAndNotifyAdapter(2, text)
-            }
+        runBlocking {
+            addAndNotifyAdapter(2, text)
         }
     }
 
@@ -214,6 +217,84 @@ class ChattingActivity : AppCompatActivity() {
 
         // 키보드 폰트색 복구
         spf.edit().putInt("keyboardFontColor", spf.getInt("tempKeyboardFontColor", 0)).apply()
+    }
+
+    private fun callChatGPTAPI(curse: String){
+        // 교정 2단계 이상일 때만
+        if (spf.getInt("stageNumber", 0) >= 2){
+            //okhttp
+            runBlocking {
+                addAndNotifyAdapter(2, "미션 생성 중...")
+            }
+
+            var ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 표현해줘"
+            // 영문 모드일 시 고려
+            if (spf.getInt("stageNumber", 0) == 3)
+                ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 영어로 표현해줘"
+
+            val arr = JSONArray()
+            val baseAi = JSONObject()
+            val userMsg = JSONObject()
+            try {
+                //AI 속성설정
+                baseAi.put("role", "user")
+                baseAi.put("content", "You are a helpful and kind AI Assistant.")
+                //유저 메세지
+                userMsg.put("role", "user")
+                userMsg.put("content", curse + ask)
+                //array에 담아서 한번에
+                arr.put(baseAi)
+                arr.put(userMsg)
+            } catch (e: JSONException) {
+                throw RuntimeException(e)
+            }
+            val obj = JSONObject()
+            try {
+                //모델명 변경
+                obj.put("model", "gpt-3.5-turbo")
+                obj.put("messages", arr)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
+            val body = obj.toString().toRequestBody(JSON)
+            val request = Request.Builder()
+                .url("https://api.openai.com/v1/chat/completions")
+                .header("Authorization", "Bearer " + BuildConfig.MY_KEY)
+                .post(body)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                @Throws(IOException::class)
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        var jsonObject: JSONObject? = null
+                        try {
+                            jsonObject = JSONObject(response.body!!.string())
+                            val jsonArray = jsonObject.getJSONArray("choices")
+                            val result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
+
+                            runBlocking{
+                                addAndNotifyAdapter(2, result)
+                            }
+
+                            // chatGPT로 순화된 표현 가져오기
+                            loadMissionText(result)
+
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+
+                    } else {
+                        Toast.makeText(applicationContext,"api 오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(applicationContext,"api 통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
     }
 
 
