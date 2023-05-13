@@ -51,9 +51,14 @@ class ChattingActivity : AppCompatActivity() {
         // editText 엔터 시 처리
         initListener()
         // 본 activity를 오도록 했던 욕설
-        Log.d("curse", intent.getStringExtra("curse")!!)
         val curse = intent.getStringExtra("curse")!!
-        callChatGPTAPI(curse)
+
+        // chatGPT prompt
+        var ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 표현해줘"
+        // 영문 모드일 시 고려
+        if (spf.getInt("stageNumber", 0) == 3)
+            ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 영어로 표현해줘"
+        callChatGPTAPI(curse, ask)
 
     }
 
@@ -159,9 +164,10 @@ class ChattingActivity : AppCompatActivity() {
             if (count == missionCount){
                 count = 0
                 initStage()
-                Toast.makeText(applicationContext, "당신은 용서받았습니다", Toast.LENGTH_SHORT).show()
+//                callChatGPTAPI("", "50토큰 이내로 칭찬해줘")
                 CoroutineScope(Dispatchers.Main).launch{
                     delay(1000)
+                    Toast.makeText(applicationContext, "채팅 종료", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -219,7 +225,8 @@ class ChattingActivity : AppCompatActivity() {
         spf.edit().putInt("keyboardFontColor", spf.getInt("tempKeyboardFontColor", 0)).apply()
     }
 
-    private fun callChatGPTAPI(curse: String){
+    private fun callChatGPTAPI(curse: String, ask: String){
+        Log.d("curse", curse)
         // 교정 2단계 이상일 때만
         if (spf.getInt("stageNumber", 0) >= 2){
             //okhttp
@@ -227,23 +234,13 @@ class ChattingActivity : AppCompatActivity() {
                 addAndNotifyAdapter(2, "미션 생성 중...")
             }
 
-            var ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 표현해줘"
-            // 영문 모드일 시 고려
-            if (spf.getInt("stageNumber", 0) == 3)
-                ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 영어로 표현해줘"
-
             val arr = JSONArray()
-            val baseAi = JSONObject()
             val userMsg = JSONObject()
             try {
-                //AI 속성설정
-                baseAi.put("role", "user")
-                baseAi.put("content", "You are a helpful and kind AI Assistant.")
                 //유저 메세지
                 userMsg.put("role", "user")
                 userMsg.put("content", curse + ask)
                 //array에 담아서 한번에
-                arr.put(baseAi)
                 arr.put(userMsg)
             } catch (e: JSONException) {
                 throw RuntimeException(e)
@@ -274,26 +271,29 @@ class ChattingActivity : AppCompatActivity() {
                             val jsonArray = jsonObject.getJSONArray("choices")
                             val result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
 
-                            runBlocking{
-                                addAndNotifyAdapter(2, result)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                // chatGPT로 표현 결과 가져오기
+                                loadMissionText(result)
                             }
-
-                            // chatGPT로 순화된 표현 가져오기
-                            loadMissionText(result)
 
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
 
                     } else {
-                        Toast.makeText(applicationContext,"api 오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(applicationContext,"api 오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
-                    Toast.makeText(applicationContext,"api 통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(applicationContext,"api 통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
+
         }
     }
 

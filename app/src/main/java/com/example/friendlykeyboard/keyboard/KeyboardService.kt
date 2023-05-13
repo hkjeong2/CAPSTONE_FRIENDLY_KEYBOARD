@@ -1,7 +1,7 @@
 package com.example.friendlykeyboard.keyboard
 
 import android.app.*
-import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -360,7 +360,7 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun createNotification(text : String, image : Int, notificationID : Int, intent : Intent){
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent = getActivity(this,0,intent,FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
 
         //노티피케이션 생성
         val notification: Notification = NotificationCompat.Builder(this, "channelID")
