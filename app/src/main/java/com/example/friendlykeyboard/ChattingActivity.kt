@@ -52,6 +52,7 @@ class ChattingActivity : AppCompatActivity() {
         binding.rvChatting.adapter = chattingRVAdapter
         val manager = LinearLayoutManager(applicationContext)
         manager.stackFromEnd = true
+        binding.rvChatting.setHasFixedSize(true)    // view changing size 고정하여 리소스 save
         binding.rvChatting.layoutManager = manager
         binding.rvChatting.layoutManager!!.scrollToPosition(chattingRVAdapter.itemCount - 1)
     }
@@ -105,8 +106,9 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     private fun loadMissionText(){
-        // 영문 모드일 시 고려
+        // 교정 2단계 이상일 때만
         if (spf.getInt("stageNumber", 0) >= 2){
+            // 영문 모드일 시 고려
             if (spf.getInt("stageNumber", 0) == 3)
                 missionText = "very sorry"
             else
@@ -114,7 +116,7 @@ class ChattingActivity : AppCompatActivity() {
             val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
 
             runBlocking {
-                addAndnotifyAdapter(2, text)
+                addAndNotifyAdapter(2, text)
             }
         }
     }
@@ -132,7 +134,7 @@ class ChattingActivity : AppCompatActivity() {
 
                 //입력된 text 서버에 저장 및 recyclerview에 notify하여 view 변경
                 runBlocking {
-                    addAndnotifyAdapter(1, enteredText)
+                    addAndNotifyAdapter(1, enteredText)
                 }
 
                 // 과제 성공했는지 검사
@@ -148,7 +150,7 @@ class ChattingActivity : AppCompatActivity() {
             count++
             if (count == missionCount - 1){
                 runBlocking {
-                    addAndnotifyAdapter(2, "마지막 한 번!")
+                    addAndNotifyAdapter(2, "마지막 한 번!")
                 }
             }
             if (count == missionCount){
@@ -164,7 +166,7 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private suspend fun addAndnotifyAdapter(id : Int, text : String) {
+    private suspend fun addAndNotifyAdapter(id : Int, text : String) {
         val accountID = getSharedPreferences("cbAuto", 0).getString("id", "")!!
         val currentTime = currentTime()
         val chat = Chat(accountID, id, text, currentTime)

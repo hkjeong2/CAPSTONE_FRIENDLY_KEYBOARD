@@ -63,4 +63,7 @@ dependencies {
 
     // 그래프를 그리기 위한 MPAndroidChart 라이브러리
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // 통신
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 }
