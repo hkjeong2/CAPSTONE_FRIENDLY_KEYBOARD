@@ -15,9 +15,16 @@ import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.Chat
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import kotlinx.coroutines.*
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class ChattingActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChattingBinding
@@ -28,6 +35,8 @@ class ChattingActivity : AppCompatActivity() {
     private var missionText : String = ""
     private val missionCount = 3
     private var count = 0
+    private var client = OkHttpClient()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,15 +44,30 @@ class ChattingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         spf = getSharedPreferences("setting", 0)
+        // 채팅중이라면 비속어 test x
+        spf.edit().putBoolean("chatting", true).apply()
 
         // chatting 내역 view로 가져오기
         runBlocking {
             initChatListData()
         }
-        // chatGPT로 순화된 표현 가져오기
-        loadMissionText()
         // editText 엔터 시 처리
         initListener()
+        // 본 activity를 오도록 했던 욕설
+        val curse = intent.getStringExtra("curse")!!
+        // chatGPT prompt
+        val ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 대체해줘"
+
+        runBlocking {
+            addAndNotifyAdapter(2, "미션 생성 중...")
+        }
+        // 영문 모드일 시 고려
+        if (spf.getInt("stageNumber", 0) == 3) {
+            loadMissionText("Sorry for swearing")
+        }
+        else{
+            callChatGPTAPI(curse, ask)
+        }
 
     }
 
@@ -52,6 +76,7 @@ class ChattingActivity : AppCompatActivity() {
         binding.rvChatting.adapter = chattingRVAdapter
         val manager = LinearLayoutManager(applicationContext)
         manager.stackFromEnd = true
+        binding.rvChatting.setHasFixedSize(true)    // view changing size 고정하여 리소스 save
         binding.rvChatting.layoutManager = manager
         binding.rvChatting.layoutManager!!.scrollToPosition(chattingRVAdapter.itemCount - 1)
     }
@@ -101,30 +126,15 @@ class ChattingActivity : AppCompatActivity() {
             }
         }
 
-        /*
-        chattingList.add(arrayOf(2, "욕설하지 마세요", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(1, "욕설하지 마세요", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(2, "욕설하지 마세요", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        chattingList.add(arrayOf(1, "죄송합니다ㅠㅠ", currentTime))
-        */
-
         initRecyclerView(chattingList)
     }
 
-    private fun loadMissionText(){
-        // 영문 모드일 시 고려
-        if (spf.getInt("stageNumber", 0) == 3)
-            missionText = "very sorry"
-        else
-            missionText = "죄송합니다"
+    private fun loadMissionText(text : String){
+        missionText = text
         val text = "[" + missionText + "]를 " + missionCount + "번 입력하세요 !"
 
         runBlocking {
-            addAndnotifyAdapter(2, text)
+            addAndNotifyAdapter(2, text)
         }
     }
 
@@ -141,7 +151,7 @@ class ChattingActivity : AppCompatActivity() {
 
                 //입력된 text 서버에 저장 및 recyclerview에 notify하여 view 변경
                 runBlocking {
-                    addAndnotifyAdapter(1, enteredText)
+                    addAndNotifyAdapter(1, enteredText)
                 }
 
                 // 과제 성공했는지 검사
@@ -157,15 +167,15 @@ class ChattingActivity : AppCompatActivity() {
             count++
             if (count == missionCount - 1){
                 runBlocking {
-                    addAndnotifyAdapter(2, "마지막 한 번!")
+                    addAndNotifyAdapter(2, "마지막 한 번!")
                 }
             }
             if (count == missionCount){
                 count = 0
                 initStage()
-                Toast.makeText(applicationContext, "당신은 용서받았습니다", Toast.LENGTH_SHORT).show()
                 CoroutineScope(Dispatchers.Main).launch{
-                    delay(1000)
+                    delay(500)
+                    Toast.makeText(applicationContext, "미션 성공", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -173,7 +183,7 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private suspend fun addAndnotifyAdapter(id : Int, text : String) {
+    private suspend fun addAndNotifyAdapter(id : Int, text : String) {
         val accountID = getSharedPreferences("cbAuto", 0).getString("id", "")!!
         val currentTime = currentTime()
         val chat = Chat(accountID, id, text, currentTime)
@@ -221,6 +231,80 @@ class ChattingActivity : AppCompatActivity() {
 
         // 키보드 폰트색 복구
         spf.edit().putInt("keyboardFontColor", spf.getInt("tempKeyboardFontColor", 0)).apply()
+    }
+
+    private fun callChatGPTAPI(curse: String, ask: String){
+        Log.d("curse", curse)
+        // 교정 2단계 이상일 때만
+        if (spf.getInt("stageNumber", 0) >= 2){
+            //okhttp
+
+            val arr = JSONArray()
+            val userMsg = JSONObject()
+            try {
+                //유저 메세지
+                userMsg.put("role", "user")
+                userMsg.put("content", curse + ask)
+                //array에 담아서 한번에
+                arr.put(userMsg)
+            } catch (e: JSONException) {
+                throw RuntimeException(e)
+            }
+            val obj = JSONObject()
+            try {
+                //모델명 변경
+                obj.put("model", "gpt-3.5-turbo")
+                obj.put("messages", arr)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
+            val body = obj.toString().toRequestBody(JSON)
+            val request = Request.Builder()
+                .url("https://api.openai.com/v1/chat/completions")
+                .header("Authorization", "Bearer " + BuildConfig.MY_KEY)
+                .post(body)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                @Throws(IOException::class)
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        var jsonObject: JSONObject? = null
+                        try {
+                            jsonObject = JSONObject(response.body!!.string())
+                            val jsonArray = jsonObject.getJSONArray("choices")
+                            val result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                // chatGPT로 표현 결과 가져오기
+                                loadMissionText(result)
+                            }
+
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+
+                    } else {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(applicationContext,"api 오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(applicationContext,"api 통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        spf.edit().putBoolean("chatting", false).apply()
     }
 
 

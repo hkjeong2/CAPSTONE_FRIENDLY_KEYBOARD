@@ -3,6 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+// 선언 및 key 값 가져오기
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdk 32
 
@@ -21,9 +25,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String","MY_KEY",properties['my_key']
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String","MY_KEY",properties['my_key']
         }
     }
     compileOptions {
@@ -63,4 +72,7 @@ dependencies {
 
     // 그래프를 그리기 위한 MPAndroidChart 라이브러리
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // 통신
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 }
