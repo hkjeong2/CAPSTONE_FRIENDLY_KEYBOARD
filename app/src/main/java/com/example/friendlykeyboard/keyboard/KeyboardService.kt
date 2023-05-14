@@ -97,15 +97,19 @@ class KeyBoardService : InputMethodService() {
         override fun checkText(text: String) {
             lateinit var response : String
 
-            if (stage >= 5){    // masking 모드일 시만 동기적 수행
-                runBlocking{
-                    response = checkTextsSync(text)
+            // 채팅중이라면 비속어 test x
+            if (!pref.getBoolean("chatting", false)){
+                if (stage >= 5){    // masking 모드일 시만 동기적 수행
+                    runBlocking{
+                        response = checkTextsSync(text)
+                    }
+                    checkResponse(text, response)
                 }
-                checkResponse(text, response)
+                else {  // 그 외 모드 중엔 비동기적 수행
+                    checkTextsAsync(text)
+                }
             }
-            else {  // 그 외 모드 중엔 비동기적 수행
-                checkTextsAsync(text)
-            }
+
         }
 
     }

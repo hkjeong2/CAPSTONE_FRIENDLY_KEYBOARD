@@ -37,12 +37,15 @@ class ChattingActivity : AppCompatActivity() {
     private var count = 0
     private var client = OkHttpClient()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChattingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         spf = getSharedPreferences("setting", 0)
+        // 채팅중이라면 비속어 test x
+        spf.edit().putBoolean("chatting", true).apply()
 
         // chatting 내역 view로 가져오기
         runBlocking {
@@ -52,13 +55,19 @@ class ChattingActivity : AppCompatActivity() {
         initListener()
         // 본 activity를 오도록 했던 욕설
         val curse = intent.getStringExtra("curse")!!
-
         // chatGPT prompt
-        var ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 표현해줘"
+        val ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 대체해줘"
+
+        runBlocking {
+            addAndNotifyAdapter(2, "미션 생성 중...")
+        }
         // 영문 모드일 시 고려
-        if (spf.getInt("stageNumber", 0) == 3)
-            ask = "이라는 문장을 비속어 및 욕설 없이 50토큰 이내로 완화해서 영어로 표현해줘"
-        callChatGPTAPI(curse, ask)
+        if (spf.getInt("stageNumber", 0) == 3) {
+            loadMissionText("Sorry for swearing")
+        }
+        else{
+            callChatGPTAPI(curse, ask)
+        }
 
     }
 
@@ -164,10 +173,9 @@ class ChattingActivity : AppCompatActivity() {
             if (count == missionCount){
                 count = 0
                 initStage()
-//                callChatGPTAPI("", "50토큰 이내로 칭찬해줘")
                 CoroutineScope(Dispatchers.Main).launch{
-                    delay(1000)
-                    Toast.makeText(applicationContext, "채팅 종료", Toast.LENGTH_SHORT).show()
+                    delay(500)
+                    Toast.makeText(applicationContext, "미션 성공", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -230,9 +238,6 @@ class ChattingActivity : AppCompatActivity() {
         // 교정 2단계 이상일 때만
         if (spf.getInt("stageNumber", 0) >= 2){
             //okhttp
-            runBlocking {
-                addAndNotifyAdapter(2, "미션 생성 중...")
-            }
 
             val arr = JSONArray()
             val userMsg = JSONObject()
@@ -295,6 +300,11 @@ class ChattingActivity : AppCompatActivity() {
             })
 
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        spf.edit().putBoolean("chatting", false).apply()
     }
 
 
