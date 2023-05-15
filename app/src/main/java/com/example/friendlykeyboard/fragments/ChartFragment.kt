@@ -77,17 +77,12 @@ class ChartFragment : Fragment() {
         // x축 설정
         binding.lineChart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
-            textColor = Color.BLUE
+            textColor = Color.BLACK
             granularity = 1f
             labelCount = labels.size
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    if (value.toInt() >= labels.size) {
-                        return ""
-                    } else if (value.toInt() < 0) {
-                        return ""
-                    }
-                    return labels[value.toInt()]
+                    return ""
                 }
             }
             enableGridDashedLine(10f, 20f, 0f)
@@ -95,7 +90,7 @@ class ChartFragment : Fragment() {
 
         // 왼쪽 y축 설정
         binding.lineChart.axisLeft.apply {
-            textColor = Color.BLUE
+            textColor = Color.BLACK
             axisMinimum = 0f
         }
 
@@ -255,6 +250,7 @@ class ChartFragment : Fragment() {
         binding.lineChart.data = lineData
 
         val markerView = MyMarkerView(context, R.layout.mymarkerview)
+        markerView.dateData = labels.toTypedArray()
         markerView.markerData = markerData.toTypedArray()
         binding.lineChart.marker = markerView
     }

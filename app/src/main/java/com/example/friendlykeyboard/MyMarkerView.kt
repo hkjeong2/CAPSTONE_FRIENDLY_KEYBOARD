@@ -3,12 +3,12 @@ package com.example.friendlykeyboard
 import android.content.Context
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
-import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 
 class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context, layoutResource) {
+    lateinit var dateData: Array<String>
     lateinit var markerData: Array<IntArray>
 
     override fun refreshContent(e: Entry, highlight: Highlight?) {
@@ -24,7 +24,7 @@ class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context,
         val countTextView8 = findViewById<TextView>(R.id.countTextView8)
 
         val index = e.x.toInt()
-        dateTextView.text = "????-??-??"
+        dateTextView.text = dateData[index]
         countTextView0.text = markerData[index][0].toString()
         countTextView1.text = markerData[index][1].toString()
         countTextView2.text = markerData[index][2].toString()
