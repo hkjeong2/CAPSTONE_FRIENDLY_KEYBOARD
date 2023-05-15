@@ -233,7 +233,7 @@ class KeyBoardService : InputMethodService() {
 
     // count 횟수에 따른 3단계 기능 적용
     private fun checkCount(curse: String, text: String) {
-        if (count >= 2){
+        if (count >= 1){
             stage++
             pref.edit().putInt("stageNumber", stage).apply()
             // 단계 변경에 따른 UI 변경
