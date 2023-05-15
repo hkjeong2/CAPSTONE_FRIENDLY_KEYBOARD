@@ -75,7 +75,7 @@ class ChartFragment : Fragment() {
         // x축 설정
         binding.lineChart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
-            textColor = Color.BLUE
+            textColor = Color.BLACK
             granularity = 1f
             labelCount = labels.size
             valueFormatter = object : ValueFormatter() {
@@ -93,7 +93,7 @@ class ChartFragment : Fragment() {
 
         // 왼쪽 y축 설정
         binding.lineChart.axisLeft.apply {
-            textColor = Color.BLUE
+            textColor = Color.BLACK
             axisMinimum = 0f
         }
 
@@ -231,14 +231,14 @@ class ChartFragment : Fragment() {
 
         val lineDateSet = LineDataSet(mutableList, "혐오표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
-            color = Color.BLUE
-            setCircleColor(Color.BLUE) // 데이터 원형 색 지정
+            color = Color.BLACK
+            setCircleColor(Color.BLACK) // 데이터 원형 색 지정
             valueTextSize = 15f // 값 글자 크기
-            valueTextColor = Color.WHITE
+            valueTextColor = Color.BLACK
             lineWidth = 2f // 라인 두께
             circleRadius = 4f // 원 크기
             fillAlpha = 0 // 라인 색 투명도
-            highLightColor = Color.BLUE // 하이라이트 색깔 지정
+            highLightColor = Color.BLACK // 하이라이트 색깔 지정
             setDrawValues(true) // 값을 그리기
         }
 

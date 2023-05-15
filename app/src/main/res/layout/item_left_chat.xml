@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="FriendlyKeyboard"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/tvChatImg"
         app:layout_constraintTop_toTopOf="@id/tvChatImg"
         android:layout_marginStart="5dp"/>

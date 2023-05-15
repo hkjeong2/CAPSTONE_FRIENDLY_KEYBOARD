@@ -116,13 +116,13 @@ class HomeFragment : Fragment() {
 
         // 왼쪽 y축 설정
         binding.barChart.axisLeft.apply {
-            textColor = Color.BLUE
+            textColor = Color.BLACK
             axisMinimum = 0f
         }
 
         // 오른쪽 y축 설정
         binding.barChart.axisRight.apply {
-            textColor = Color.BLUE
+            textColor = Color.BLACK
             axisMinimum = 0f
         }
 
@@ -200,7 +200,7 @@ class HomeFragment : Fragment() {
         val barDataSet = BarDataSet(mutableList, "혐오표현 전체 사용 횟수").apply {
             colors = ColorTemplate.MATERIAL_COLORS.toList()
             valueTextSize = 15f // 값 글자 크기
-            valueTextColor = Color.RED
+            valueTextColor = Color.BLACK
         }
 
         val barData = BarData(barDataSet)

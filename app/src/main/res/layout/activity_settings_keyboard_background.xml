@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@color/background_gray"
     tools:context=".SettingsKeyboardColorActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_action_arrow_back"
         app:title="키보드 배경색"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/black" />
 
     <ScrollView
         android:layout_width="0dp"
