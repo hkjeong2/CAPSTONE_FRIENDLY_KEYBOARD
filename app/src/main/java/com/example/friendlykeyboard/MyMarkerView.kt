@@ -25,15 +25,15 @@ class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context,
 
         val index = e.x.toInt()
         dateTextView.text = dateData[index]
-        countTextView0.text = markerData[index][0].toString()
-        countTextView1.text = markerData[index][1].toString()
-        countTextView2.text = markerData[index][2].toString()
-        countTextView3.text = markerData[index][3].toString()
-        countTextView4.text = markerData[index][4].toString()
-        countTextView5.text = markerData[index][5].toString()
-        countTextView6.text = markerData[index][6].toString()
-        countTextView7.text = markerData[index][7].toString()
-        countTextView8.text = markerData[index][8].toString()
+        countTextView0.text = "여성/가족: ${markerData[index][0]}"
+        countTextView1.text = "남성: ${markerData[index][1]}"
+        countTextView2.text = "성소수자: ${markerData[index][2]}"
+        countTextView3.text = "인종/국적: ${markerData[index][3]}"
+        countTextView4.text = "연령: ${markerData[index][4]}"
+        countTextView5.text = "지역: ${markerData[index][5]}"
+        countTextView6.text = "종교: ${markerData[index][6]}"
+        countTextView7.text = "기타 혐오: ${markerData[index][7]}"
+        countTextView8.text = "악플/욕설: ${markerData[index][8]}"
 
         super.refreshContent(e, highlight)
     }
