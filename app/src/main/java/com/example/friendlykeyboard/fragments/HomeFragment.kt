@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
         // x축 설정
         binding.barChart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
-            textSize = 10f
+            textSize = 7f
             granularity = 1f
             labelCount = labels.size
             valueFormatter = object : ValueFormatter() {
