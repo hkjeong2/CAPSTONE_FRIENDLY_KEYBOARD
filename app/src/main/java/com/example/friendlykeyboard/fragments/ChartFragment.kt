@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.friendlykeyboard.MyMarkerView
+import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.databinding.FragmentChartBinding
 import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
@@ -184,6 +186,7 @@ class ChartFragment : Fragment() {
     private fun setData() {
         binding.lineChart.fitScreen()
         labels = mutableListOf()
+        val markerData = mutableListOf<IntArray>()
 
         val mutableList = mutableListOf<Entry>().apply {
             when (binding.tabLayout.selectedTabPosition) {
@@ -192,11 +195,14 @@ class ChartFragment : Fragment() {
                     var x = 0f
                     for (key in countData.keys) {
                         labels.add(key)
+                        val arr = IntArray(9) { 0 }
                         var sum = 0
                         for (i in 0..8) {
                             sum += countData[key]?.get("count$i") ?: 0
+                            arr[i] = countData[key]?.get("count$i") ?: 0
                         }
                         add(Entry(x, sum.toFloat()))
+                        markerData.add(arr)
                         x++
                     }
                 }
@@ -215,11 +221,14 @@ class ChartFragment : Fragment() {
                         val diffDays = diffSec / (24 * 60 * 60)
                         if (diffDays < period) {
                             labels.add(key)
+                            val arr = IntArray(9) { 0 }
                             var sum = 0
                             for (i in 0..8) {
                                 sum += countData[key]?.get("count$i") ?: 0
+                                arr[i] = countData[key]?.get("count$i") ?: 0
                             }
                             add(Entry(x, sum.toFloat()))
+                            markerData.add(arr)
                             x++
                         }
                     }
@@ -244,5 +253,9 @@ class ChartFragment : Fragment() {
 
         val lineData = LineData(lineDateSet)
         binding.lineChart.data = lineData
+
+        val markerView = MyMarkerView(context, R.layout.mymarkerview)
+        markerView.markerData = markerData.toTypedArray()
+        binding.lineChart.marker = markerView
     }
 }
