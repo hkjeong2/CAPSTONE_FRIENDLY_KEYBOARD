@@ -267,7 +267,7 @@ class UpAndDownActivity : AppCompatActivity() {
             binding.understandCheckBox.visibility = View.VISIBLE
         }
         else {
-            binding.cardView3.visibility = View.INVISIBLE
+            binding.cardView3.visibility = View.GONE
             binding.advice.visibility = View.INVISIBLE
             binding.understandCheckBox.visibility = View.INVISIBLE
             binding.check.visibility = View.INVISIBLE
