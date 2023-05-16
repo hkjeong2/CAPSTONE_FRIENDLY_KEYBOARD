@@ -3,6 +3,7 @@ package com.example.friendlykeyboard
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.example.friendlykeyboard.databinding.ActivityUpAndDownBinding
 import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.HateSpeechCountDataModel
@@ -132,30 +134,26 @@ class UpAndDownActivity : AppCompatActivity() {
             if (isChecked){
                 binding.understandCheckBox.isClickable = false
 
-                initStage()
-                CoroutineScope(Dispatchers.Main).launch{
-                    delay(500)
-                    Toast.makeText(applicationContext, "미션 성공", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
+                terminate()
             }
         }
     }
 
     private fun checkAnswer(){
+        val shake: Animation = AnimationUtils.loadAnimation(this, R.anim.shake)
         val text = binding.editText.text
         binding.editText.setText("")
 
         if (text.toString() == ""){
             binding.inputNumber.text= ""
             binding.updown.text = "숫자를 입력해주세요!"
-            binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle)
+            binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
+            binding.inputNumber.startAnimation(shake)
             setVisibility(false)
         }
         else{
             binding.inputNumber.text = text
             val inputNumber = text.toString().toInt()
-            val shake: Animation = AnimationUtils.loadAnimation(this, R.anim.shake)
 
             //틀렸을 시
             if (inputNumber > answer){
@@ -173,12 +171,21 @@ class UpAndDownActivity : AppCompatActivity() {
             else{   //정답일 시
                 binding.updown.text = "정답!"
                 binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_correct)
-                val sentence = "내가 " + list[randomIndex] + " 혐오적인 표현을 " + answer + "번 사용했어. " +
+
+                var word = ""
+                if (list[randomIndex] != "악플/욕설")
+                    word = " 혐오적인 표현을 "
+                else{
+                    word = "을 "
+                }
+
+                val sentence = "내가 " + list[randomIndex] + word + answer + "번 사용했어. " +
                         "앞으로 더 이상 이런 말을 쓰지 않고 언어 습관을 고칠 수 있도록 짧고 강하게 충고해줘"
                 loadResponse(sentence)
+                loadAnim()
                 binding.advice.text = "피드백 생성중..."
-                binding.cardView3.visibility = View.VISIBLE
                 binding.advice.visibility = View.VISIBLE
+                binding.cardView3.visibility = View.VISIBLE
             }
         }
     }
@@ -254,14 +261,39 @@ class UpAndDownActivity : AppCompatActivity() {
         if (flag){
             binding.cardView3.visibility = View.VISIBLE
             binding.advice.visibility = View.VISIBLE
-            binding.understand.visibility = View.VISIBLE
             binding.understandCheckBox.visibility = View.VISIBLE
         }
         else {
             binding.cardView3.visibility = View.INVISIBLE
             binding.advice.visibility = View.INVISIBLE
-            binding.understand.visibility = View.INVISIBLE
             binding.understandCheckBox.visibility = View.INVISIBLE
+            binding.check.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun loadAnim(){
+        binding.check.visibility = View.VISIBLE
+
+        val avd : AnimatedVectorDrawableCompat
+        val avd2 : AnimatedVectorDrawable
+        val drawable = binding.check.drawable
+
+        if (drawable is AnimatedVectorDrawableCompat){
+            avd = drawable as AnimatedVectorDrawableCompat
+            avd.start()
+        }
+        else if(drawable is AnimatedVectorDrawable){
+            avd2 = drawable as AnimatedVectorDrawable
+            avd2.start();
+        }
+    }
+
+    private fun terminate(){
+        initStage()
+        CoroutineScope(Dispatchers.Main).launch{
+            delay(500)
+            Toast.makeText(applicationContext, "미션 성공", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
@@ -278,6 +310,5 @@ class UpAndDownActivity : AppCompatActivity() {
         // 키보드 폰트색 복구
         spf.edit().putInt("keyboardFontColor", spf.getInt("tempKeyboardFontColor", 0)).apply()
     }
-
 
 }
