@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat
 import com.example.friendlykeyboard.ChattingActivity
 import com.example.friendlykeyboard.MainActivity
 import com.example.friendlykeyboard.R
+import com.example.friendlykeyboard.UpAndDownActivity
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import com.example.friendlykeyboard.retrofit_util.HateSpeech
 import com.example.friendlykeyboard.retrofit_util.HateSpeechDataModel
@@ -335,11 +336,19 @@ class KeyBoardService : InputMethodService() {
     }
 
     private fun notifyChance(curse: String){
-        val intent = Intent(this, ChattingActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("curse", curse)
+        val intent : Intent
+        if (stage <= 6){
+            intent = Intent(this, UpAndDownActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra("curse", curse)
+            }
         }
-        Log.d("curse", curse)
+        else{
+            intent = Intent(this, ChattingActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra("curse", curse)
+            }
+        }
         val text = "키보드를 복구하기 위해 미션을 수행해 주세요!"
 
         createNotification(text, R.drawable.tasks, 2, intent)

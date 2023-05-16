@@ -36,4 +36,8 @@ interface RetrofitInterface {
     // 특정 계정의 혐오표현 사용 횟수 가져오기
     @POST("get_hate_speech_counts")
     suspend fun getHateSpeechCounts(@Body account: Account): Response<HateSpeechCountDataModel>
+
+    // 특정 계정의 혐오표현 사용 횟수 가져오기
+    @POST("get_hate_speech_counts")
+    fun getHateSpeechCountsCall(@Body account: Account): Call<HateSpeechCountDataModel>
 }
