@@ -143,7 +143,9 @@ class UpAndDownActivity : AppCompatActivity() {
         binding.editText.setText("")
 
         if (text.toString() == ""){
-            binding.inputNumber.text = "숫자를 입력해주세요!"
+            binding.inputNumber.text= ""
+            binding.updown.text = "숫자를 입력해주세요!"
+            setVisibility(false)
         }
         else{
             binding.inputNumber.text = text
@@ -162,6 +164,8 @@ class UpAndDownActivity : AppCompatActivity() {
                 val sentence = "내가 " + list[randomIndex] + " 혐오적인 표현을 " + answer + "번 사용했어. " +
                         "앞으로 더 이상 이런 말을 쓰지 않고 언어 습관을 고칠 수 있도록 짧고 강하게 충고해줘"
                 loadResponse(sentence)
+                binding.advice.text = "피드백 생성중..."
+                binding.cardView3.visibility = View.VISIBLE
                 binding.advice.visibility = View.VISIBLE
             }
         }
@@ -235,11 +239,13 @@ class UpAndDownActivity : AppCompatActivity() {
 
     private fun setVisibility(flag : Boolean){
         if (flag){
+            binding.cardView3.visibility = View.VISIBLE
             binding.advice.visibility = View.VISIBLE
             binding.understand.visibility = View.VISIBLE
             binding.understandCheckBox.visibility = View.VISIBLE
         }
         else {
+            binding.cardView3.visibility = View.INVISIBLE
             binding.advice.visibility = View.INVISIBLE
             binding.understand.visibility = View.INVISIBLE
             binding.understandCheckBox.visibility = View.INVISIBLE
