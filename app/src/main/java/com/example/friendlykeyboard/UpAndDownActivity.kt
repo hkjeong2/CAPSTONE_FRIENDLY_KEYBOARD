@@ -3,7 +3,6 @@ package com.example.friendlykeyboard
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,8 +11,12 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.friendlykeyboard.databinding.ActivityUpAndDownBinding
 import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.HateSpeechCountDataModel
@@ -31,6 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.util.*
+
 
 class UpAndDownActivity : AppCompatActivity() {
 
@@ -145,22 +149,30 @@ class UpAndDownActivity : AppCompatActivity() {
         if (text.toString() == ""){
             binding.inputNumber.text= ""
             binding.updown.text = "숫자를 입력해주세요!"
+            binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle)
             setVisibility(false)
         }
         else{
             binding.inputNumber.text = text
             val inputNumber = text.toString().toInt()
+            val shake: Animation = AnimationUtils.loadAnimation(this, R.anim.shake)
 
+            //틀렸을 시
             if (inputNumber > answer){
                 binding.updown.text = "Down"
+                binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
+                binding.inputNumber.startAnimation(shake)
                 setVisibility(false)
             }
             else if (inputNumber < answer){
                 binding.updown.text = "Up"
+                binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
+                binding.inputNumber.startAnimation(shake)
                 setVisibility(false)
             }
-            else{
+            else{   //정답일 시
                 binding.updown.text = "정답!"
+                binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_correct)
                 val sentence = "내가 " + list[randomIndex] + " 혐오적인 표현을 " + answer + "번 사용했어. " +
                         "앞으로 더 이상 이런 말을 쓰지 않고 언어 습관을 고칠 수 있도록 짧고 강하게 충고해줘"
                 loadResponse(sentence)
@@ -215,6 +227,7 @@ class UpAndDownActivity : AppCompatActivity() {
                         CoroutineScope(Dispatchers.Main).launch {
                             // ChatGPT 응답 결과 처리
                             binding.advice.text = "\"" + result + "\""
+                            delay(3000)
                             setVisibility(true)
                         }
 

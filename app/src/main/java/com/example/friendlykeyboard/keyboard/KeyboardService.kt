@@ -337,7 +337,7 @@ class KeyBoardService : InputMethodService() {
 
     private fun notifyChance(curse: String){
         val intent : Intent
-        if (stage <= 3){
+        if (stage <= 6){
             intent = Intent(this, UpAndDownActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra("curse", curse)
