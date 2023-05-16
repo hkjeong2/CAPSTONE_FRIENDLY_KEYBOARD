@@ -102,12 +102,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/updown"
-                android:layout_marginStart="70dp"
-                android:layout_marginEnd="70dp"
-                android:layout_marginTop="60dp"
-                android:text="답변"
+                android:layout_marginTop="40dp"
+                android:text="피드백 생성중..."
+                android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="20sp"
+                android:maxWidth="350dp"
                 android:visibility="invisible"/>
 
             <TextView
@@ -122,7 +122,7 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 android:text="이해했습니다"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:visibility="invisible"/>
 
             <CheckBox
@@ -147,8 +147,9 @@
                 app:layout_constraintTop_toBottomOf="@id/understand"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/input_button"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/input_button"

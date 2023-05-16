@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.opengl.Visibility
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -17,9 +19,17 @@ import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.HateSpeechCountDataModel
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
 import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.util.*
 
 class UpAndDownActivity : AppCompatActivity() {
@@ -149,16 +159,78 @@ class UpAndDownActivity : AppCompatActivity() {
             }
             else{
                 binding.updown.text = "정답!"
-                loadResponse()
-                setVisibility(true)
+                val sentence = "내가 " + list[randomIndex] + " 혐오적인 표현을 " + answer + "번 사용했어. " +
+                        "앞으로 더 이상 이런 말을 쓰지 않고 언어 습관을 고칠 수 있도록 짧고 강하게 충고해줘"
+                loadResponse(sentence)
+                binding.advice.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun loadResponse(){
+    private fun loadResponse(sentence : String){
         //chatGPT 호출
+        var client = OkHttpClient()
+        val arr = JSONArray()
+        val userMsg = JSONObject()
 
+        try {
+            //유저 메세지
+            userMsg.put("role", "user")
+            userMsg.put("content", sentence)
+            //array에 담아서 한번에
+            arr.put(userMsg)
+        } catch (e: JSONException) {
+            throw RuntimeException(e)
+        }
+        val obj = JSONObject()
+        try {
+            //모델명 변경
+            obj.put("model", "gpt-3.5-turbo")
+            obj.put("messages", arr)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
+        val body = obj.toString().toRequestBody(JSON)
+        val request = Request.Builder()
+            .url("https://api.openai.com/v1/chat/completions")
+            .header("Authorization", "Bearer " + BuildConfig.MY_KEY)
+            .post(body)
+            .build()
 
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            @Throws(IOException::class)
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (response.isSuccessful) {
+                    var jsonObject: JSONObject? = null
+                    try {
+                        jsonObject = JSONObject(response.body!!.string())
+                        val jsonArray = jsonObject.getJSONArray("choices")
+                        val result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content")
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            // ChatGPT 응답 결과 처리
+                            binding.advice.text = "\"" + result + "\""
+                            setVisibility(true)
+                        }
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+
+                } else {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(applicationContext,"api 오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                e.printStackTrace()
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(applicationContext,"api 통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     private fun setVisibility(flag : Boolean){
