@@ -155,7 +155,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/bell"
-                                app:tint="@color/black" />
+                                app:tint="#AA00FF" />
 
                             <TextView
                                 android:id="@+id/stage1"
@@ -226,7 +226,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/ic_keyboard"
-                                app:tint="@color/black" />
+                                app:tint="#00BFA5" />
 
                             <TextView
                                 android:id="@+id/stage2"
@@ -474,7 +474,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/masking"
-                                app:tint="@color/black" />
+                                app:tint="#0091EA" />
 
                             <TextView
                                 android:id="@+id/stage3"
