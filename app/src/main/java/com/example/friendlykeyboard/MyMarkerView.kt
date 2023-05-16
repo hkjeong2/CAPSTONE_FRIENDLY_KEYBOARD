@@ -22,6 +22,7 @@ class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context,
         val countTextView6 = findViewById<TextView>(R.id.countTextView6)
         val countTextView7 = findViewById<TextView>(R.id.countTextView7)
         val countTextView8 = findViewById<TextView>(R.id.countTextView8)
+        val countSumTextView = findViewById<TextView>(R.id.countSumTextView)
 
         val index = e.x.toInt()
         dateTextView.text = dateData[index]
@@ -34,6 +35,7 @@ class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context,
         countTextView6.text = markerData[index][6].toString()
         countTextView7.text = markerData[index][7].toString()
         countTextView8.text = markerData[index][8].toString()
+        countSumTextView.text = markerData[index].sum().toString()
 
         super.refreshContent(e, highlight)
     }
