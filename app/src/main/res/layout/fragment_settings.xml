@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
-    tools:context=".fragments.SettingsFragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".fragments.SettingsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -51,8 +50,8 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="70dp"/>
+                    android:layout_marginLeft="70dp"
+                    android:background="#1e000000" />
 
                 <include
                     android:id="@+id/settings_item_keyboard_font"
@@ -65,8 +64,8 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="70dp"/>
+                    android:layout_marginLeft="70dp"
+                    android:background="#1e000000" />
 
                 <include
                     android:id="@+id/settings_item_keyboard_color"
@@ -79,8 +78,8 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="70dp"/>
+                    android:layout_marginLeft="70dp"
+                    android:background="#1e000000" />
 
                 <include
                     android:id="@+id/settings_item_keyboard_background"
@@ -135,8 +134,8 @@
                         android:layout_height="0dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:outlineProvider="none"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:outlineProvider="none"
                         app:cardBackgroundColor="@color/transparent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -151,36 +150,36 @@
                                 android:id="@+id/stage1_img"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:srcCompat="@drawable/bell"
-                                android:layout_marginLeft="10dp"
-                                app:tint="@color/black"/>
+                                app:tint="@color/black" />
 
                             <TextView
                                 android:id="@+id/stage1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage1_img"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="알림 기능"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="22sp"/>
+                                android:text="알림 기능"
+                                android:textColor="@color/black"
+                                android:textSize="22sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage1_img"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/stage1_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage1"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="푸시 알림을 활성화 합니다"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="15sp"/>
+                                android:text="푸시 알림을 활성화 합니다"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage1"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -190,8 +189,8 @@
                     android:id="@+id/stage1_view"
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="60dp"/>
+                    android:layout_marginLeft="60dp"
+                    android:background="#1e000000" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/stage2_cl"
@@ -200,58 +199,58 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/stage2_cv"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:outlineProvider="none"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/stage2_cv"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:outlineProvider="none"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-                        <ImageView
-                            android:id="@+id/stage2_img"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:srcCompat="@drawable/ic_keyboard"
-                            android:layout_marginLeft="10dp"
-                            app:tint="@color/black"/>
+                            <ImageView
+                                android:id="@+id/stage2_img"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_keyboard"
+                                app:tint="@color/black" />
 
-                        <TextView
-                            android:id="@+id/stage2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintStart_toEndOf="@id/stage2_img"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:textColor="@color/black"
-                            android:text="교정 기능"
-                            android:layout_marginLeft="10dp"
-                            android:textSize="22sp"/>
+                            <TextView
+                                android:id="@+id/stage2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="교정 기능"
+                                android:textColor="@color/black"
+                                android:textSize="22sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage2_img"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/stage2_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintStart_toEndOf="@id/stage2"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:textColor="@color/black"
-                            android:text="키보드를 변환시킵니다"
-                            android:layout_marginLeft="10dp"
-                            android:textSize="15sp"/>
+                            <TextView
+                                android:id="@+id/stage2_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="키보드를 변환시킵니다"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage2"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -261,8 +260,8 @@
                     android:id="@+id/stage2_view"
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="60dp"/>
+                    android:layout_marginLeft="60dp"
+                    android:background="#1e000000" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -276,8 +275,8 @@
                         android:layout_height="0dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:outlineProvider="none"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:outlineProvider="none"
                         app:cardBackgroundColor="@color/transparent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -292,25 +291,25 @@
                                 android:id="@+id/stage2_1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="          - 투명 키보드"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="20sp"/>
+                                android:text="          - 투명 키보드"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/stage2_1_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage2_1"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="글씨를 보이지 않게 합니다"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="15sp"/>
+                                android:text="글씨를 보이지 않게 합니다"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage2_1"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -320,8 +319,8 @@
                     android:id="@+id/stage2_1_view"
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="80dp"/>
+                    android:layout_marginLeft="80dp"
+                    android:background="#1e000000" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -335,8 +334,8 @@
                         android:layout_height="0dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:outlineProvider="none"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:outlineProvider="none"
                         app:cardBackgroundColor="@color/transparent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -351,25 +350,25 @@
                                 android:id="@+id/stage2_2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="          - 영문 키보드"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="20sp"/>
+                                android:text="          - 영문 키보드"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/stage2_2_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage2_2"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="영문 키패드만 허용합니다"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="15sp"/>
+                                android:text="영문 키패드만 허용합니다"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage2_2"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -379,8 +378,8 @@
                     android:id="@+id/stage2_2_view"
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="80dp"/>
+                    android:layout_marginLeft="80dp"
+                    android:background="#1e000000" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -394,8 +393,8 @@
                         android:layout_height="0dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:outlineProvider="none"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:outlineProvider="none"
                         app:cardBackgroundColor="@color/transparent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -410,25 +409,25 @@
                                 android:id="@+id/stage2_3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="          - 랜덤 키보드"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="20sp"/>
+                                android:text="          - 랜덤 키보드"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/stage2_3_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage2_3"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="키패드를 무작위 배치합니다"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="15sp"/>
+                                android:text="키패드를 무작위 배치합니다"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage2_3"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -438,8 +437,8 @@
                     android:id="@+id/stage2_3_view"
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="80dp"/>
+                    android:layout_marginLeft="80dp"
+                    android:background="#1e000000" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/stage3_cl"
@@ -454,8 +453,8 @@
                         android:layout_height="0dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:outlineProvider="none"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:outlineProvider="none"
                         app:cardBackgroundColor="@color/transparent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -470,36 +469,36 @@
                                 android:id="@+id/stage3_img"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
+                                android:layout_marginLeft="10dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:srcCompat="@drawable/masking"
-                                android:layout_marginLeft="10dp"
-                                app:tint="@color/black"/>
+                                app:tint="@color/black" />
 
                             <TextView
                                 android:id="@+id/stage3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage3_img"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="마스킹 기능"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="22sp"/>
+                                android:text="마스킹 기능"
+                                android:textColor="@color/black"
+                                android:textSize="22sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage3_img"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/stage3_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@id/stage3"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                android:textColor="@color/black"
-                                android:text="입력된 텍스트를 변환시킵니다"
                                 android:layout_marginLeft="10dp"
-                                android:textSize="15sp"/>
+                                android:text="입력된 텍스트를 변환시킵니다"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/stage3"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -518,10 +517,10 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView2"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/cardView2">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -549,8 +548,8 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="70dp"/>
+                    android:layout_marginLeft="70dp"
+                    android:background="#1e000000" />
 
                 <include
                     android:id="@+id/settings_candidate_button_color"
@@ -563,8 +562,8 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="#1e000000"
-                    android:layout_marginLeft="70dp"/>
+                    android:layout_marginLeft="70dp"
+                    android:background="#1e000000" />
 
                 <include
                     android:id="@+id/settings_candidate_layout_color"
@@ -579,523 +578,523 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <LinearLayout xmlns:tools="http://schemas.android.com/tools"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="@color/background_gray"-->
-<!--        android:orientation="vertical"-->
-<!--        tools:context=".fragments.SettingsFragment">-->
+    <!--    <LinearLayout xmlns:tools="http://schemas.android.com/tools"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:background="@color/background_gray"-->
+    <!--        android:orientation="vertical"-->
+    <!--        tools:context=".fragments.SettingsFragment">-->
 
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="16dp"-->
-<!--            android:text="키보드 설정"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold" />-->
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="16dp"-->
+    <!--            android:text="키보드 설정"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textStyle="bold" />-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_item_keyboard_size"-->
-<!--            layout="@layout/settings_item_keyboard_size"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_item_keyboard_size"-->
+    <!--            layout="@layout/settings_item_keyboard_size"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--        <View-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="70dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="70dp"/>-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_item_keyboard_font"-->
-<!--            layout="@layout/settings_item_keyboard_font"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_item_keyboard_font"-->
+    <!--            layout="@layout/settings_item_keyboard_font"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--        <View-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="70dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="70dp"/>-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_item_keyboard_color"-->
-<!--            layout="@layout/settings_item_keyboard_color"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_item_keyboard_color"-->
+    <!--            layout="@layout/settings_item_keyboard_color"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--        <View-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="70dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="70dp"/>-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_item_keyboard_background"-->
-<!--            layout="@layout/settings_item_keyboard_background"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_item_keyboard_background"-->
+    <!--            layout="@layout/settings_item_keyboard_background"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--        <View-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="70dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="70dp"/>-->
 
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="16dp"-->
-<!--            android:text="기능 설정"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold" />-->
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="16dp"-->
+    <!--            android:text="기능 설정"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textStyle="bold" />-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/stage1_cl"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:id="@+id/stage1_cl"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp">-->
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/stage1_cv"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:outlineProvider="none"-->
-<!--                android:foreground="?android:attr/selectableItemBackground"-->
-<!--                app:cardBackgroundColor="@color/transparent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
+    <!--            <androidx.cardview.widget.CardView-->
+    <!--                android:id="@+id/stage1_cv"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:outlineProvider="none"-->
+    <!--                android:foreground="?android:attr/selectableItemBackground"-->
+    <!--                app:cardBackgroundColor="@color/transparent"-->
+    <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                app:layout_constraintStart_toStartOf="parent"-->
+    <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/stage1_img"-->
-<!--                        android:layout_width="30dp"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:srcCompat="@drawable/bell"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        app:tint="@color/black"/>-->
+    <!--                    <ImageView-->
+    <!--                        android:id="@+id/stage1_img"-->
+    <!--                        android:layout_width="30dp"-->
+    <!--                        android:layout_height="30dp"-->
+    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        app:srcCompat="@drawable/bell"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        app:tint="@color/black"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage1"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage1_img"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="알림 기능"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="22sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage1"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage1_img"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="알림 기능"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="22sp"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage1_text"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage1"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="푸시 알림을 활성화 합니다"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="15sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage1_text"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage1"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="푸시 알림을 활성화 합니다"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="15sp"/>-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.cardview.widget.CardView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--            </androidx.cardview.widget.CardView>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <View-->
-<!--            android:id="@+id/stage1_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="60dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/stage1_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="60dp"/>-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/stage2_cl"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:id="@+id/stage2_cl"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp">-->
 
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/stage2_cv"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:outlineProvider="none"-->
-<!--            android:foreground="?android:attr/selectableItemBackground"-->
-<!--            app:cardBackgroundColor="@color/transparent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
+    <!--        <androidx.cardview.widget.CardView-->
+    <!--            android:id="@+id/stage2_cv"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:clickable="true"-->
+    <!--            android:focusable="true"-->
+    <!--            android:outlineProvider="none"-->
+    <!--            android:foreground="?android:attr/selectableItemBackground"-->
+    <!--            app:cardBackgroundColor="@color/transparent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent">-->
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
+    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent">-->
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/stage2_img"-->
-<!--                    android:layout_width="30dp"-->
-<!--                    android:layout_height="30dp"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:srcCompat="@drawable/ic_keyboard"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    app:tint="@color/black"/>-->
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/stage2_img"-->
+    <!--                    android:layout_width="30dp"-->
+    <!--                    android:layout_height="30dp"-->
+    <!--                    app:layout_constraintStart_toStartOf="parent"-->
+    <!--                    app:layout_constraintTop_toTopOf="parent"-->
+    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                    app:srcCompat="@drawable/ic_keyboard"-->
+    <!--                    android:layout_marginLeft="10dp"-->
+    <!--                    app:tint="@color/black"/>-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/stage2"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintStart_toEndOf="@id/stage2_img"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:text="교정 기능"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:textSize="22sp"/>-->
+    <!--                <TextView-->
+    <!--                    android:id="@+id/stage2"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    app:layout_constraintStart_toEndOf="@id/stage2_img"-->
+    <!--                    app:layout_constraintTop_toTopOf="parent"-->
+    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:text="교정 기능"-->
+    <!--                    android:layout_marginLeft="10dp"-->
+    <!--                    android:textSize="22sp"/>-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/stage2_text"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintStart_toEndOf="@id/stage2"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:text="키보드를 변환시킵니다"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:textSize="15sp"/>-->
+    <!--                <TextView-->
+    <!--                    android:id="@+id/stage2_text"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    app:layout_constraintStart_toEndOf="@id/stage2"-->
+    <!--                    app:layout_constraintTop_toTopOf="parent"-->
+    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:text="키보드를 변환시킵니다"-->
+    <!--                    android:layout_marginLeft="10dp"-->
+    <!--                    android:textSize="15sp"/>-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.cardview.widget.CardView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--            </androidx.cardview.widget.CardView>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <View-->
-<!--            android:id="@+id/stage2_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="60dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/stage2_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="60dp"/>-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp">-->
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/stage2_1_cv"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:outlineProvider="none"-->
-<!--                android:foreground="?android:attr/selectableItemBackground"-->
-<!--                app:cardBackgroundColor="@color/transparent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
+    <!--            <androidx.cardview.widget.CardView-->
+    <!--                android:id="@+id/stage2_1_cv"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:outlineProvider="none"-->
+    <!--                android:foreground="?android:attr/selectableItemBackground"-->
+    <!--                app:cardBackgroundColor="@color/transparent"-->
+    <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                app:layout_constraintStart_toStartOf="parent"-->
+    <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent">-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage2_1"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="          - 투명 키보드"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="20sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage2_1"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="          - 투명 키보드"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="20sp"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage2_1_text"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage2_1"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="글씨를 보이지 않게 합니다"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="15sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage2_1_text"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage2_1"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="글씨를 보이지 않게 합니다"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="15sp"/>-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.cardview.widget.CardView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--            </androidx.cardview.widget.CardView>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <View-->
-<!--            android:id="@+id/stage2_1_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="80dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/stage2_1_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="80dp"/>-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp">-->
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/stage2_2_cv"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:outlineProvider="none"-->
-<!--                android:foreground="?android:attr/selectableItemBackground"-->
-<!--                app:cardBackgroundColor="@color/transparent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
+    <!--            <androidx.cardview.widget.CardView-->
+    <!--                android:id="@+id/stage2_2_cv"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:outlineProvider="none"-->
+    <!--                android:foreground="?android:attr/selectableItemBackground"-->
+    <!--                app:cardBackgroundColor="@color/transparent"-->
+    <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                app:layout_constraintStart_toStartOf="parent"-->
+    <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent">-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage2_2"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="          - 영문 키보드"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="20sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage2_2"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="          - 영문 키보드"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="20sp"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage2_2_text"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage2_2"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="영문 키패드만 허용합니다"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="15sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage2_2_text"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage2_2"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="영문 키패드만 허용합니다"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="15sp"/>-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.cardview.widget.CardView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--            </androidx.cardview.widget.CardView>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <View-->
-<!--            android:id="@+id/stage2_2_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="80dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/stage2_2_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="80dp"/>-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp">-->
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/stage2_3_cv"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:outlineProvider="none"-->
-<!--                android:foreground="?android:attr/selectableItemBackground"-->
-<!--                app:cardBackgroundColor="@color/transparent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
+    <!--            <androidx.cardview.widget.CardView-->
+    <!--                android:id="@+id/stage2_3_cv"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:outlineProvider="none"-->
+    <!--                android:foreground="?android:attr/selectableItemBackground"-->
+    <!--                app:cardBackgroundColor="@color/transparent"-->
+    <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                app:layout_constraintStart_toStartOf="parent"-->
+    <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent">-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage2_3"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="          - 랜덤 키보드"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="20sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage2_3"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="          - 랜덤 키보드"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="20sp"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage2_3_text"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage2_3"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="키패드를 무작위 배치합니다"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="15sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage2_3_text"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage2_3"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="키패드를 무작위 배치합니다"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="15sp"/>-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.cardview.widget.CardView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--            </androidx.cardview.widget.CardView>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <View-->
-<!--            android:id="@+id/stage2_3_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="80dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/stage2_3_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="80dp"/>-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/stage3_cl"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginLeft="15dp"-->
-<!--            android:layout_marginRight="15dp">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--            android:id="@+id/stage3_cl"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginLeft="15dp"-->
+    <!--            android:layout_marginRight="15dp">-->
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/stage3_cv"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:outlineProvider="none"-->
-<!--                android:foreground="?android:attr/selectableItemBackground"-->
-<!--                app:cardBackgroundColor="@color/transparent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
+    <!--            <androidx.cardview.widget.CardView-->
+    <!--                android:id="@+id/stage3_cv"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="0dp"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:outlineProvider="none"-->
+    <!--                android:foreground="?android:attr/selectableItemBackground"-->
+    <!--                app:cardBackgroundColor="@color/transparent"-->
+    <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                app:layout_constraintStart_toStartOf="parent"-->
+    <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent">-->
+    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/stage3_img"-->
-<!--                        android:layout_width="30dp"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:srcCompat="@drawable/masking"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        app:tint="@color/black"/>-->
+    <!--                    <ImageView-->
+    <!--                        android:id="@+id/stage3_img"-->
+    <!--                        android:layout_width="30dp"-->
+    <!--                        android:layout_height="30dp"-->
+    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        app:srcCompat="@drawable/masking"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        app:tint="@color/black"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage3"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage3_img"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="마스킹 기능"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="22sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage3"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage3_img"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="마스킹 기능"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="22sp"/>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/stage3_text"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:layout_constraintStart_toEndOf="@id/stage3"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:text="입력된 텍스트를 변환시킵니다"-->
-<!--                        android:layout_marginLeft="10dp"-->
-<!--                        android:textSize="15sp"/>-->
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/stage3_text"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/stage3"-->
+    <!--                        app:layout_constraintTop_toTopOf="parent"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:text="입력된 텍스트를 변환시킵니다"-->
+    <!--                        android:layout_marginLeft="10dp"-->
+    <!--                        android:textSize="15sp"/>-->
 
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--            </androidx.cardview.widget.CardView>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--            </androidx.cardview.widget.CardView>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--        <View-->
-<!--            android:id="@+id/stage3_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="60dp"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/stage3_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="60dp"/>-->
 
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="16dp"-->
-<!--            android:text="대체어 설정"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold" />-->
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="16dp"-->
+    <!--            android:text="대체어 설정"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textStyle="bold" />-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_candidate_font"-->
-<!--            layout="@layout/settings_candidate_font"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_candidate_font"-->
+    <!--            layout="@layout/settings_candidate_font"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--        <View-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="70dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="70dp"/>-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_candidate_button_color"-->
-<!--            layout="@layout/settings_candidate_button_color"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_candidate_button_color"-->
+    <!--            layout="@layout/settings_candidate_button_color"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--        <View-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="#1e000000"-->
-<!--            android:layout_marginLeft="70dp"/>-->
+    <!--        <View-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="1dp"-->
+    <!--            android:background="#1e000000"-->
+    <!--            android:layout_marginLeft="70dp"/>-->
 
-<!--        <include-->
-<!--            android:id="@+id/settings_candidate_layout_color"-->
-<!--            layout="@layout/settings_candidate_layout_color"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="12dp"-->
-<!--            android:layout_marginEnd="12dp" />-->
+    <!--        <include-->
+    <!--            android:id="@+id/settings_candidate_layout_color"-->
+    <!--            layout="@layout/settings_candidate_layout_color"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="80dp"-->
+    <!--            android:layout_marginStart="12dp"-->
+    <!--            android:layout_marginEnd="12dp" />-->
 
-<!--    </LinearLayout>-->
+    <!--    </LinearLayout>-->
 
 </androidx.core.widget.NestedScrollView>
 
