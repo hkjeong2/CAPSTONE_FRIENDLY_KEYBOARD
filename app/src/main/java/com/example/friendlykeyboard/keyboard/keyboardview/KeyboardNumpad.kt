@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.example.friendlykeyboard.*
 import com.example.friendlykeyboard.keyboard.KeyboardInteractionListener
+import com.example.friendlykeyboard.keyboard.keyboardview.KeyboardChunjiin.Companion.getOnTouchListener
 
 class KeyboardNumpad constructor(var context: Context, var layoutInflater: LayoutInflater, var keyboardInterationListener: KeyboardInteractionListener){
 
@@ -133,6 +134,13 @@ class KeyboardNumpad constructor(var context: Context, var layoutInflater: Layou
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
                 actionButton.text = myText[item]
 
+                when (actionButton.text.toString()){
+                    "DEL" -> {
+                        actionButton.setOnClickListener(getDeleteAction())
+                        actionButton.setOnTouchListener(getOnTouchListener(getDeleteAction()))
+                    }
+                }
+
                 buttons.add(actionButton)
 
                 val clickListener = (View.OnClickListener {
@@ -148,7 +156,7 @@ class KeyboardNumpad constructor(var context: Context, var layoutInflater: Layou
                     when (actionButton.text.toString()) {
 
                         "DEL" -> {
-                            inputConnection?.deleteSurroundingText(1,0)
+//                            inputConnection?.deleteSurroundingText(1,0)
                         }
                         "Enter" -> {
                             val eventTime = SystemClock.uptimeMillis()
@@ -174,6 +182,16 @@ class KeyboardNumpad constructor(var context: Context, var layoutInflater: Layou
                 actionButton.setOnClickListener(clickListener)
                 children[item].setOnClickListener(clickListener)
 
+            }
+        }
+    }
+
+    fun getDeleteAction(): View.OnClickListener{
+        return View.OnClickListener{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                inputConnection?.deleteSurroundingTextInCodePoints(1, 0)
+            }else{
+                inputConnection?.deleteSurroundingText(1,0)
             }
         }
     }

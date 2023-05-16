@@ -136,6 +136,15 @@ class UpAndDownActivity : AppCompatActivity() {
                 terminate()
             }
         }
+        binding.editText.setOnEditorActionListener { v, actionId, event ->
+            //엔터시 actionId = 0
+            // 엔터키를 눌렀을 때 실행할 동작을 여기에 작성합니다.
+            if (actionId == 0 && event.action.toString().equals("0")) {
+                checkAnswer()
+                true
+            } else false
+        }
+
     }
 
     private fun checkAnswer(){
