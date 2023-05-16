@@ -235,7 +235,7 @@ class UpAndDownActivity : AppCompatActivity() {
                         CoroutineScope(Dispatchers.Main).launch {
                             // ChatGPT 응답 결과 처리
                             binding.advice.text = "\"" + result + "\""
-                            delay(3000)
+                            delay(5000)
                             setVisibility(true)
                         }
 
