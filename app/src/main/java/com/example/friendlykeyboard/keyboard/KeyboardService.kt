@@ -39,6 +39,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardKorean:KeyboardKorean
     lateinit var keyboardEnglish:KeyboardEnglish
     lateinit var keyboardSymbols:KeyboardSymbols
+    lateinit var keyboardNumpad:KeyboardNumpad
     lateinit var mCandidateView: CandidateView
     lateinit var notificationManager : NotificationManager
     var keyboardMode = -1 //keyboard 종류
@@ -515,12 +516,15 @@ class KeyBoardService : InputMethodService() {
         keyboardKorean = KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardEnglish = KeyboardEnglish(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardSymbols = KeyboardSymbols(applicationContext, layoutInflater, keyboardInterationListener)
+        keyboardNumpad = KeyboardNumpad(applicationContext, layoutInflater, keyboardInterationListener)
         keyboardKorean.inputConnection = currentInputConnection
         keyboardKorean.init()
         keyboardEnglish.inputConnection = currentInputConnection
         keyboardEnglish.init()
         keyboardSymbols.inputConnection = currentInputConnection
         keyboardSymbols.init()
+        keyboardNumpad.inputConnection = currentInputConnection
+        keyboardNumpad.init()
 
         initStage()
 
@@ -598,6 +602,7 @@ class KeyBoardService : InputMethodService() {
             // 키보드 배경색 업데이트
             keyboardKorean.updateKeyboard()
             keyboardEnglish.updateKeyboard()
+            keyboardNumpad.updateKeyboard()
             // 대체어 뷰 레이아웃 , 버튼 , 폰트 업데이트
             if (::mCandidateView.isInitialized){
                 mCandidateView.updateSetting()
@@ -615,7 +620,8 @@ class KeyBoardService : InputMethodService() {
         //숫자 입력 editText일 시 Numpad로 변환
         if(currentInputEditorInfo.inputType == EditorInfo.TYPE_CLASS_NUMBER){
             keyboardFrame.removeAllViews()
-            keyboardFrame.addView(KeyboardNumpad.newInstance(applicationContext, layoutInflater, currentInputConnection, keyboardInterationListener))
+            keyboardNumpad.inputConnection = currentInputConnection
+            keyboardFrame.addView(keyboardNumpad.getLayout())
         }
         else{
             // 키보드 올릴 때 영어 모드 제재 여부 확인
