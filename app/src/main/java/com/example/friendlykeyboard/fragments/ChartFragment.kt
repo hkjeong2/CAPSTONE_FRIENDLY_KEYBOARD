@@ -78,6 +78,8 @@ class ChartFragment : Fragment() {
         binding.lineChart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             textColor = Color.BLACK
+            axisMinimum = 0f
+            axisMaximum = (labels.size - 1).toFloat()
             granularity = 1f
             labelCount = labels.size
             valueFormatter = object : ValueFormatter() {

@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
             add("연령")
             add("지역")
             add("종교")
-            add("기타혐오")
+            add("기타 혐오")
             add("악플/욕설")
         }
         pref = requireActivity().getSharedPreferences("setting", Activity.MODE_PRIVATE)
