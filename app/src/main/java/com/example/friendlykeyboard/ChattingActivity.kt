@@ -24,6 +24,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class ChattingActivity : AppCompatActivity() {
@@ -35,8 +36,6 @@ class ChattingActivity : AppCompatActivity() {
     private var missionText : String = ""
     private val missionCount = 3
     private var count = 0
-    private var client = OkHttpClient()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +108,7 @@ class ChattingActivity : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(
                             applicationContext,
-                            "오류가 발생하였습니다.",
+                            "조금 뒤 다시 시도해주세요.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -234,6 +233,12 @@ class ChattingActivity : AppCompatActivity() {
     }
 
     private fun callChatGPTAPI(curse: String, ask: String){
+        val client = OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS)
+            .writeTimeout(100, TimeUnit.SECONDS)
+            .build()
+
         Log.d("curse", curse)
         // 교정 2단계 이상일 때만
         if (spf.getInt("stageNumber", 0) >= 2){

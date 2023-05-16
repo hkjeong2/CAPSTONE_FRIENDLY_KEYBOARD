@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -36,6 +35,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class UpAndDownActivity : AppCompatActivity() {
@@ -65,7 +65,6 @@ class UpAndDownActivity : AppCompatActivity() {
     }
 
     private fun initScreen(){
-//        randomIndex = (list.indices).random()
         randomIndex = Random().nextInt(list.size)
         val randomWords = list[randomIndex]
         var words = "\"" + randomWords + "\""
@@ -143,13 +142,13 @@ class UpAndDownActivity : AppCompatActivity() {
         val shake: Animation = AnimationUtils.loadAnimation(this, R.anim.shake)
         val text = binding.editText.text
         binding.editText.setText("")
+        setVisibility(false)
 
         if (text.toString() == ""){
             binding.inputNumber.text= ""
             binding.updown.text = "숫자를 입력해주세요!"
             binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
             binding.inputNumber.startAnimation(shake)
-            setVisibility(false)
         }
         else{
             binding.inputNumber.text = text
@@ -160,13 +159,11 @@ class UpAndDownActivity : AppCompatActivity() {
                 binding.updown.text = "Down"
                 binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
                 binding.inputNumber.startAnimation(shake)
-                setVisibility(false)
             }
             else if (inputNumber < answer){
                 binding.updown.text = "Up"
                 binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
                 binding.inputNumber.startAnimation(shake)
-                setVisibility(false)
             }
             else{   //정답일 시
                 binding.updown.text = "정답!"
@@ -192,7 +189,11 @@ class UpAndDownActivity : AppCompatActivity() {
 
     private fun loadResponse(sentence : String){
         //chatGPT 호출
-        var client = OkHttpClient()
+        var client = OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS)
+            .writeTimeout(100, TimeUnit.SECONDS)
+            .build()
         val arr = JSONArray()
         val userMsg = JSONObject()
 
@@ -243,15 +244,17 @@ class UpAndDownActivity : AppCompatActivity() {
                     }
 
                 } else {
+                    Log.d("errorUpAndDownActivity", response.toString())
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(applicationContext,"api 오류가 발생하였습니다.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"다시 시도해주세요.",Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 e.printStackTrace()
+                Log.d("UpAndDownActivity", e.toString())
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(applicationContext,"api 통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"통신이 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         })
