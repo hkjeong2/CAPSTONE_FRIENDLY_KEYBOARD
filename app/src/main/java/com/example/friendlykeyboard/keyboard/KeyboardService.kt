@@ -338,13 +338,13 @@ class KeyBoardService : InputMethodService() {
 
     private fun notifyChance(curse: String){
         val intent : Intent
-        if (stage <= 6){
+        if (stage == 2 || stage == 4){
             intent = Intent(this, UpAndDownActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra("curse", curse)
             }
         }
-        else{
+        else {
             intent = Intent(this, ChattingActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra("curse", curse)
