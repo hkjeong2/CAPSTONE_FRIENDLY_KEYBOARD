@@ -65,12 +65,12 @@ class SettingsFragment : Fragment() {
         val settingAlarmColor = pref.getInt("settingAlarmColor", Color.parseColor("#000000"))
         binding.stage1Text.setTextColor(settingAlarmColor)
         binding.stage1.setTextColor(settingAlarmColor)
-        binding.stage1Img.drawable.setTint(settingAlarmColor)
+        //binding.stage1Img.drawable.setTint(settingAlarmColor)
 
         val settingCorrectColor = pref.getInt("settingCorrectColor", Color.parseColor("#000000"))
         binding.stage2Text.setTextColor(settingCorrectColor)
         binding.stage2.setTextColor(settingCorrectColor)
-        binding.stage2Img.drawable.setTint(settingCorrectColor)
+        //binding.stage2Img.drawable.setTint(settingCorrectColor)
 
         val settingInvisibleColor = pref.getInt("settingInvisibleColor", Color.parseColor("#000000"))
         binding.stage21Text.setTextColor(settingInvisibleColor)

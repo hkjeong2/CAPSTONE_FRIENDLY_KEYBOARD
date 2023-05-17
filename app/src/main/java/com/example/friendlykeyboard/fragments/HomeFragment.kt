@@ -62,23 +62,27 @@ class HomeFragment : Fragment() {
             1 -> {
                 binding.stageTextView.text = "알림 기능"
                 binding.imageView.setImageResource(R.drawable.bell)
+                binding.imageView.drawable.setTint(resources.getColor(R.color.purple_200))
             }
             2 -> {
                 binding.stageTextView.text = "투명 키보드"
                 binding.imageView.setImageResource(R.drawable.ic_keyboard)
-                binding.imageView.imageAlpha = 127
+                binding.imageView.drawable.setTint(resources.getColor(R.color.teal_200))
             }
             3 -> {
                 binding.stageTextView.text = "영문 키보드"
                 binding.imageView.setImageResource(R.drawable.ic_keyboard)
+                binding.imageView.drawable.setTint(resources.getColor(R.color.teal_200))
             }
             4 -> {
                 binding.stageTextView.text = "랜덤 키보드"
                 binding.imageView.setImageResource(R.drawable.ic_keyboard)
+                binding.imageView.drawable.setTint(resources.getColor(R.color.teal_200))
             }
             5 -> {
                 binding.stageTextView.text = "마스킹 기능"
                 binding.imageView.setImageResource(R.drawable.masking)
+                binding.imageView.drawable.setTint(resources.getColor(R.color.background_blue))
             }
             else -> {
                 binding.stageTextView.text = "없음"
