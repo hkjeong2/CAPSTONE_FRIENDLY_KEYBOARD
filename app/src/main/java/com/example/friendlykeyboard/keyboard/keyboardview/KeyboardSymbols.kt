@@ -1,7 +1,9 @@
 package com.example.friendlykeyboard.keyboard.keyboardview
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.inputmethodservice.Keyboard
 import android.media.AudioManager
 import android.os.*
@@ -33,8 +35,13 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
     lateinit var vibrator: Vibrator
+    lateinit var sharedPreferences: SharedPreferences
 
-
+    lateinit var numpadLine : LinearLayout
+    lateinit var firstLine: LinearLayout
+    lateinit var secondLine: LinearLayout
+    lateinit var thirdLine: LinearLayout
+    lateinit var fourthLine: LinearLayout
 
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
     val firstLineText = listOf<String>("+","×","÷","=","/","￦","<",">","♡","☆")
@@ -49,12 +56,58 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
     var sound = 0
     var capsView:ImageView? = null
 
+    // 키보드 속성 업데이트
+    fun updateKeyboard(){
+        val height = sharedPreferences.getInt("keyboardHeight", 150)
+        val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
+        val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
+        val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
+        val fontColor = sharedPreferences.getInt("keyboardFontColor", -16777216)
+        val fontStyle = sharedPreferences.getBoolean("keyboardFontStyle", false)
+        val keyboardColor = sharedPreferences.getInt("keyboardColor", -1)
+        val keyboardBackgroundColor = sharedPreferences.getInt("keyboardBackground", 0)
+
+        // 키보드 padding 업데이트
+        symbolsLayout.setPadding(paddingLeft, 0, paddingRight, paddingBottom)
+
+        // 키보드 높이 업데이트
+        if(context.getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
+            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
+            fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height * 0.7).toInt())
+        }else{
+            numpadLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            fourthLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+        }
+
+        // 키보드 폰트, 자판 색, 폰트 색 업데이트
+        for (button in buttons) {
+            if (fontStyle) {
+                button.setTypeface(null, Typeface.BOLD)
+            } else {
+                button.setTypeface(null, Typeface.NORMAL)
+            }
+
+            button.setTextColor(fontColor)
+            button.background.setTint(keyboardColor)
+        }
+
+        // 키보드 배경색 업데이트
+        symbolsLayout.setBackgroundColor(keyboardBackgroundColor)
+    }
+
     fun init(){
         symbolsLayout = layoutInflater.inflate(R.layout.keyboard_symbols, null) as LinearLayout
         inputConnection = inputConnection
         keyboardInterationListener = keyboardInterationListener
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         context = context
+        sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
 
         val config = context.getResources().configuration
         val sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
@@ -63,31 +116,23 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
-        val numpadLine = symbolsLayout.findViewById<LinearLayout>(
+        numpadLine = symbolsLayout.findViewById<LinearLayout>(
             R.id.numpad_line
         )
-        val firstLine = symbolsLayout.findViewById<LinearLayout>(
+        firstLine = symbolsLayout.findViewById<LinearLayout>(
             R.id.first_line
         )
-        val secondLine = symbolsLayout.findViewById<LinearLayout>(
+        secondLine = symbolsLayout.findViewById<LinearLayout>(
             R.id.second_line
         )
-        val thirdLine = symbolsLayout.findViewById<LinearLayout>(
+        thirdLine = symbolsLayout.findViewById<LinearLayout>(
             R.id.third_line
         )
-        val fourthLine = symbolsLayout.findViewById<LinearLayout>(
+        fourthLine = symbolsLayout.findViewById<LinearLayout>(
             R.id.fourth_line
         )
 
-        if(config.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (height*0.7).toInt())
-        }else{
-            firstLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-            secondLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-            thirdLine.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
-        }
+        updateKeyboard()
 
         myKeysText.clear()
         myKeysText.add(numpadText)

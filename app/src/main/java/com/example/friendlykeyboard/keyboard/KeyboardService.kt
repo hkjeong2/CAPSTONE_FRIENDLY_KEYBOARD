@@ -289,6 +289,8 @@ class KeyBoardService : InputMethodService() {
                 pref.edit().putInt("keyboardFontColor", pref.getInt("tempKeyboardFontColor", 0)).apply()
                 keyboardKorean.updateKeyboard()
                 keyboardEnglish.updateKeyboard()
+                keyboardSymbols.updateKeyboard()
+                keyboardNumpad.updateKeyboard()
             }
             4 -> {
                 //3단계 모드 해제 (영어 모드)
@@ -338,13 +340,13 @@ class KeyBoardService : InputMethodService() {
 
     private fun notifyChance(curse: String){
         val intent : Intent
-        if (stage <= 6){
+        if (stage == 2 || stage == 4){
             intent = Intent(this, UpAndDownActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra("curse", curse)
             }
         }
-        else{
+        else {
             intent = Intent(this, ChattingActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra("curse", curse)
@@ -414,6 +416,8 @@ class KeyBoardService : InputMethodService() {
         pref.edit().putInt("keyboardFontColor", keyboardColor).apply()
         keyboardKorean.updateKeyboard()
         keyboardEnglish.updateKeyboard()
+        keyboardSymbols.updateKeyboard()
+        keyboardNumpad.updateKeyboard()
 
 //        // 일정 시간 뒤 다시 폰트 글자가 보이도록 수정
 //        GlobalScope.launch(Dispatchers.Main) {
@@ -603,6 +607,7 @@ class KeyBoardService : InputMethodService() {
             keyboardKorean.updateKeyboard()
             keyboardEnglish.updateKeyboard()
             keyboardNumpad.updateKeyboard()
+            keyboardSymbols.updateKeyboard()
             // 대체어 뷰 레이아웃 , 버튼 , 폰트 업데이트
             if (::mCandidateView.isInitialized){
                 mCandidateView.updateSetting()
