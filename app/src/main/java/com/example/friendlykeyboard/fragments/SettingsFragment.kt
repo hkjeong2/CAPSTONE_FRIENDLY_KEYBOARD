@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.friendlykeyboard.*
 import com.example.friendlykeyboard.databinding.FragmentSettingsBinding
 
@@ -115,11 +116,20 @@ class SettingsFragment : Fragment() {
         }
 
         binding.settingsItemKeyboardFont.item.setOnClickListener {
-            startActivity(Intent(activity, SettingsKeyboardFontActivity::class.java))
+            if (pref.getInt("stageNumber", 0) != 2){
+                startActivity(Intent(activity, SettingsKeyboardFontActivity::class.java))
+            }
+            else{
+                Toast.makeText(requireContext(), "투명 모드 입니다!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.settingsItemKeyboardColor.item.setOnClickListener {
-            startActivity(Intent(activity, SettingsKeyboardColorActivity::class.java))
+            if (pref.getInt("stageNumber", 0) != 2){
+                startActivity(Intent(activity, SettingsKeyboardColorActivity::class.java))
+            }else{
+                Toast.makeText(requireContext(), "투명 모드 입니다!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.settingsItemKeyboardBackground.item.setOnClickListener {
