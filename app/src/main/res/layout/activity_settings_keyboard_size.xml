@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
+    android:background="@drawable/background"
     tools:context=".SettingsKeyboardColorActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_action_arrow_back"
         app:title="키보드 크기"
-        app:titleTextColor="@color/black" />
+        app:titleTextColor="@color/white" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" >
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView1"
