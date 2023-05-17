@@ -237,14 +237,16 @@ class ChartFragment : Fragment() {
 
         val lineDateSet = LineDataSet(mutableList, "혐오표현 사용 횟수").apply {
             axisDependency = YAxis.AxisDependency.LEFT // Y값 데이터를 왼쪽으로 배치
-            color = Color.BLACK
-            setCircleColor(Color.BLACK) // 데이터 원형 색 지정
+            color = resources.getColor(R.color.background_blue)
+            setCircleColor(resources.getColor(R.color.background_blue)) // 데이터 원형 색 지정
             valueTextSize = 15f // 값 글자 크기
             valueTextColor = Color.BLACK
             lineWidth = 2f // 라인 두께
-            circleRadius = 4f // 원 크기
-            fillAlpha = 0 // 라인 색 투명도
+            circleRadius = 5f // 원 크기
+            circleHoleRadius = 3f
             highLightColor = Color.BLACK // 하이라이트 색깔 지정
+            fillColor = resources.getColor(R.color.background_blue)
+            setDrawFilled(true)
             setDrawValues(true) // 값을 그리기
         }
 

@@ -26,21 +26,21 @@ class MyMarkerView(context: Context?, layoutResource: Int) : MarkerView(context,
 
         val index = e.x.toInt()
         dateTextView.text = dateData[index]
-        countTextView0.text = markerData[index][0].toString()
-        countTextView1.text = markerData[index][1].toString()
-        countTextView2.text = markerData[index][2].toString()
-        countTextView3.text = markerData[index][3].toString()
-        countTextView4.text = markerData[index][4].toString()
-        countTextView5.text = markerData[index][5].toString()
-        countTextView6.text = markerData[index][6].toString()
-        countTextView7.text = markerData[index][7].toString()
-        countTextView8.text = markerData[index][8].toString()
-        countSumTextView.text = markerData[index].sum().toString()
+        countTextView0.text = if (markerData[index][0] <= 99) markerData[index][0].toString() else "99+"
+        countTextView1.text = if (markerData[index][1] <= 99) markerData[index][1].toString() else "99+"
+        countTextView2.text = if (markerData[index][2] <= 99) markerData[index][2].toString() else "99+"
+        countTextView3.text = if (markerData[index][3] <= 99) markerData[index][3].toString() else "99+"
+        countTextView4.text = if (markerData[index][4] <= 99) markerData[index][4].toString() else "99+"
+        countTextView5.text = if (markerData[index][5] <= 99) markerData[index][5].toString() else "99+"
+        countTextView6.text = if (markerData[index][6] <= 99) markerData[index][6].toString() else "99+"
+        countTextView7.text = if (markerData[index][7] <= 99) markerData[index][7].toString() else "99+"
+        countTextView8.text = if (markerData[index][8] <= 99) markerData[index][8].toString() else "99+"
+        countSumTextView.text = if (markerData[index].sum() <= 99) markerData[index].sum().toString() else "99+"
 
         super.refreshContent(e, highlight)
     }
 
     override fun getOffset(): MPPointF {
-        return MPPointF((width / 2).toFloat() * (-1), height.toFloat() * (-1))
+        return MPPointF((width / 2).toFloat() * (-1) - 80, height.toFloat() * (-1))
     }
 }
