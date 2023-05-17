@@ -47,8 +47,8 @@ class KeyboardNumpad constructor(var context: Context, var layoutInflater: Layou
         val paddingLeft = sharedPreferences.getInt("keyboardPaddingLeft", 0)
         val paddingRight = sharedPreferences.getInt("keyboardPaddingRight", 0)
         val paddingBottom = sharedPreferences.getInt("keyboardPaddingBottom", 0)
-        val fontColor = sharedPreferences.getInt("keyboardFontColor", 0)
-        val keyboardColor = sharedPreferences.getInt("keyboardColor", 0)
+        val fontColor = sharedPreferences.getInt("keyboardFontColor", -16777216)
+        val keyboardColor = sharedPreferences.getInt("keyboardColor", -1)
         val keyboardBackgroundColor = sharedPreferences.getInt("keyboardBackground", 0)
         val config = context.getResources().configuration
 
