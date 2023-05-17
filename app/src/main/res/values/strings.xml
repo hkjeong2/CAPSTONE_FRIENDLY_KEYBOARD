@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FriendlyKeyboard</string>
+    <string name="app_name">Friendly Keyboard</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
