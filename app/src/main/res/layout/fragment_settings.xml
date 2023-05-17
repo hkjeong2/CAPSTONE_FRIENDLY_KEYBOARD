@@ -155,7 +155,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/bell"
-                                app:tint="#AA00FF" />
+                                app:tint="@color/purple_200" />
 
                             <TextView
                                 android:id="@+id/stage1"
@@ -164,7 +164,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="알림 기능"
                                 android:textColor="@color/black"
-                                android:textSize="22sp"
+                                android:textSize="20sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage1_img"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -176,7 +176,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="푸시 알림을 활성화 합니다"
                                 android:textColor="@color/black"
-                                android:textSize="15sp"
+                                android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage1"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -226,7 +226,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/ic_keyboard"
-                                app:tint="#00BFA5" />
+                                app:tint="@color/teal_200" />
 
                             <TextView
                                 android:id="@+id/stage2"
@@ -235,7 +235,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="교정 기능"
                                 android:textColor="@color/black"
-                                android:textSize="22sp"
+                                android:textSize="20sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage2_img"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -247,7 +247,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="키보드를 변환시킵니다"
                                 android:textColor="@color/black"
-                                android:textSize="15sp"
+                                android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage2"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -294,7 +294,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="          - 투명 키보드"
                                 android:textColor="@color/black"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -306,7 +306,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="글씨를 보이지 않게 합니다"
                                 android:textColor="@color/black"
-                                android:textSize="15sp"
+                                android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage2_1"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -353,7 +353,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="          - 영문 키보드"
                                 android:textColor="@color/black"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -365,7 +365,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="영문 키패드만 허용합니다"
                                 android:textColor="@color/black"
-                                android:textSize="15sp"
+                                android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage2_2"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -412,7 +412,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="          - 랜덤 키보드"
                                 android:textColor="@color/black"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -424,7 +424,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="키패드를 무작위 배치합니다"
                                 android:textColor="@color/black"
-                                android:textSize="15sp"
+                                android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage2_3"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -474,7 +474,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/masking"
-                                app:tint="#0091EA" />
+                                app:tint="@color/background_blue" />
 
                             <TextView
                                 android:id="@+id/stage3"
@@ -483,7 +483,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="마스킹 기능"
                                 android:textColor="@color/black"
-                                android:textSize="22sp"
+                                android:textSize="20sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage3_img"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -495,7 +495,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:text="입력된 텍스트를 변환시킵니다"
                                 android:textColor="@color/black"
-                                android:textSize="15sp"
+                                android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/stage3"
                                 app:layout_constraintTop_toTopOf="parent" />
