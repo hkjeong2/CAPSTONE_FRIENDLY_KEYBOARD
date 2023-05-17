@@ -43,26 +43,26 @@ class SettingsFragment : Fragment() {
         binding.settingsItemKeyboardSize.attribute.text =
             "높이: ${height}%, 좌측: ${paddingLeft}dp, 우측: ${paddingRight}dp, 하단: ${paddingBottom}dp"
 
-        val fontColor = pref.getInt("keyboardFontColor", Color.parseColor("#FF018786"))
+        val fontColor = pref.getInt("keyboardFontColor", Color.parseColor("#FF000000"))
         with (binding.settingsItemKeyboardFont) {
             imageView.drawable.setTint(fontColor)
             attribute.setTextColor(fontColor)
         }
 
-        val color = pref.getInt("keyboardColor", Color.parseColor("#FFBB86FC"))
+        val color = pref.getInt("keyboardColor", Color.parseColor("#FF000000"))
         with (binding.settingsItemKeyboardColor) {
             imageView.drawable.setTint(color)
             attribute.setTextColor(color)
         }
 
-        val background_color = pref.getInt("keyboardBackground", Color.parseColor("#86BBFC"))
+        val background_color = pref.getInt("keyboardBackground", Color.parseColor("#FF000000"))
         with (binding.settingsItemKeyboardBackground) {
             imageView.drawable.setTint(background_color)
             attribute.setTextColor(background_color)
         }
 
         //기능 설정
-        val settingAlarmColor = pref.getInt("settingAlarmColor", Color.parseColor("#000000"))
+        val settingAlarmColor = pref.getInt("settingAlarmColor", Color.parseColor("#FF000000"))
         binding.stage1Text.setTextColor(settingAlarmColor)
         binding.stage1.setTextColor(settingAlarmColor)
         //binding.stage1Img.drawable.setTint(settingAlarmColor)
