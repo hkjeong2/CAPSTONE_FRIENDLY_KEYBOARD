@@ -76,4 +76,7 @@ dependencies {
 
     // 통신
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
+    // ViewPager 를 사용하여 이미지를 넘길 때 이미지의 위치를 표시하는 라이브러리
+    implementation 'me.relex:circleindicator:2.1.6'
 }

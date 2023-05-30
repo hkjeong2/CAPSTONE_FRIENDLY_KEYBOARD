@@ -1,4 +1,4 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import com.example.friendlykeyboard.BuildConfig
+import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.databinding.ActivityUpAndDownBinding
 import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.HateSpeechCountDataModel
@@ -156,7 +158,9 @@ class UpAndDownActivity : AppCompatActivity() {
         if (text.toString() == ""){
             binding.inputNumber.text= ""
             binding.updown.text = "숫자를 입력해주세요!"
-            binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
+            binding.inputNumber.background = ContextCompat.getDrawable(this,
+                R.drawable.circle_wrong
+            )
             binding.inputNumber.startAnimation(shake)
         }
         else{
@@ -166,17 +170,23 @@ class UpAndDownActivity : AppCompatActivity() {
             //틀렸을 시
             if (inputNumber > answer){
                 binding.updown.text = "Down"
-                binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
+                binding.inputNumber.background = ContextCompat.getDrawable(this,
+                    R.drawable.circle_wrong
+                )
                 binding.inputNumber.startAnimation(shake)
             }
             else if (inputNumber < answer){
                 binding.updown.text = "Up"
-                binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_wrong)
+                binding.inputNumber.background = ContextCompat.getDrawable(this,
+                    R.drawable.circle_wrong
+                )
                 binding.inputNumber.startAnimation(shake)
             }
             else{   //정답일 시
                 binding.updown.text = "정답!"
-                binding.inputNumber.background = ContextCompat.getDrawable(this, R.drawable.circle_correct)
+                binding.inputNumber.background = ContextCompat.getDrawable(this,
+                    R.drawable.circle_correct
+                )
 
                 var word = ""
                 if (list[randomIndex] != "악플/욕설")

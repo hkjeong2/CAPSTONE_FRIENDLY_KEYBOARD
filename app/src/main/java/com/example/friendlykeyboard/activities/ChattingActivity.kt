@@ -1,4 +1,4 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
@@ -10,10 +10,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.friendlykeyboard.BuildConfig
 import com.example.friendlykeyboard.databinding.ActivityChattingBinding
 import com.example.friendlykeyboard.retrofit_util.Account
 import com.example.friendlykeyboard.retrofit_util.Chat
 import com.example.friendlykeyboard.retrofit_util.RetrofitClient
+import com.example.friendlykeyboard.utils.ChattingRVAdapter
 import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

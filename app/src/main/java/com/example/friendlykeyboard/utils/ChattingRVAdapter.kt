@@ -1,10 +1,11 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.utils
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.friendlykeyboard.R
 
 class ChattingRVAdapter(private val chatList: ArrayList<Array<Any>>) :
     RecyclerView.Adapter<ChattingRVAdapter.ViewHolder>() {

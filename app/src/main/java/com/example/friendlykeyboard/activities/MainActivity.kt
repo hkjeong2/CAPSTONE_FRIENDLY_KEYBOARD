@@ -1,4 +1,4 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.databinding.ActivityMainBinding
 import com.example.friendlykeyboard.fragments.HomeFragment
 import com.example.friendlykeyboard.fragments.ChartFragment

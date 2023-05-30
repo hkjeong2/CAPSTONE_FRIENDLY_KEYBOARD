@@ -19,10 +19,10 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import com.example.friendlykeyboard.ChattingActivity
-import com.example.friendlykeyboard.MainActivity
+import com.example.friendlykeyboard.activities.ChattingActivity
+import com.example.friendlykeyboard.activities.MainActivity
 import com.example.friendlykeyboard.R
-import com.example.friendlykeyboard.UpAndDownActivity
+import com.example.friendlykeyboard.activities.UpAndDownActivity
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import com.example.friendlykeyboard.retrofit_util.HateSpeech
 import com.example.friendlykeyboard.retrofit_util.HateSpeechDataModel

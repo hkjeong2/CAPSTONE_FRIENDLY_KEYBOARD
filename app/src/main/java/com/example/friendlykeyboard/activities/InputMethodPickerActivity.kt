@@ -1,17 +1,16 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.databinding.ActivityInputMethodPickerBinding
 
 class InputMethodPickerActivity : AppCompatActivity() {

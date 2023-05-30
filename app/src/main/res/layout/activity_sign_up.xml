@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:padding="10dp"
-    tools:context=".SignUpActivity">
+    tools:context=".activities.SignUpActivity">
 
     <TextView
         android:id="@+id/intro"
