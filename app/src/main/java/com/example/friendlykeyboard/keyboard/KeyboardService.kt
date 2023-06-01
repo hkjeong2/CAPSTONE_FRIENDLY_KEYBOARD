@@ -19,10 +19,10 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import com.example.friendlykeyboard.ChattingActivity
-import com.example.friendlykeyboard.MainActivity
+import com.example.friendlykeyboard.activities.ChattingActivity
+import com.example.friendlykeyboard.activities.MainActivity
 import com.example.friendlykeyboard.R
-import com.example.friendlykeyboard.UpAndDownActivity
+import com.example.friendlykeyboard.activities.UpAndDownActivity
 import com.example.friendlykeyboard.keyboard.keyboardview.*
 import com.example.friendlykeyboard.retrofit_util.HateSpeech
 import com.example.friendlykeyboard.retrofit_util.HateSpeechDataModel
@@ -143,7 +143,7 @@ class KeyBoardService : InputMethodService() {
     private suspend fun checkTextsSync(text : String) : String {
         // 서버에서 혐오 표현 존재 여부를 판별함.
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
-        val hateSpeech = HateSpeech(id, text)
+        val hateSpeech = HateSpeech(id, text, true)
         lateinit var result : String
 
         withContext(CoroutineScope(Dispatchers.IO).coroutineContext){
@@ -153,10 +153,12 @@ class KeyBoardService : InputMethodService() {
                 if (response.isSuccessful) {
                     result = response.body()?.inference_hate_speech_result!!
 
+                    currentInputConnection.deleteSurroundingText(1000, 1000)
+                    currentInputConnection.commitText(response.body()?.text, 0)
+
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(applicationContext, result, Toast.LENGTH_SHORT).show()
                     }
-
                 } else {
                     // 통신이 실패한 경우
                     result = ""
@@ -180,7 +182,7 @@ class KeyBoardService : InputMethodService() {
     private fun checkTextsAsync(text : String){
         // 서버에서 혐오 표현 존재 여부를 판별함.
         val id = getSharedPreferences("cbAuto", 0).getString("id", "")!!
-        val hateSpeech = HateSpeech(id, text)
+        val hateSpeech = HateSpeech(id, text, false)
 
         service.inferenceHateSpeechCall(hateSpeech).enqueue(object : Callback<HateSpeechDataModel> {
             override fun onResponse(
@@ -252,15 +254,14 @@ class KeyBoardService : InputMethodService() {
         }
 
         //아래 두 기능은 나머지와 달리 계속 실행해주는 기능
-        when (stage){
+        when (stage) {
             1 -> {
                 pushAlarm(text)
             }
             5 -> {
-                textMasking()
+                //textMasking()
             }
         }
-
     }
 
     private fun changeUI(){
@@ -329,7 +330,7 @@ class KeyBoardService : InputMethodService() {
                 keyboardInterationListener.modechange(1)
             }
             5 -> {
-                textMasking()
+                //textMasking()
             }
             6 -> {
                 stage--

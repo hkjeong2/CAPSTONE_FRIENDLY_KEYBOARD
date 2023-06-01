@@ -8,4 +8,8 @@ data class HateSpeechDataModel(
     @SerializedName("inference_hate_speech_result")
     @Expose
     val inference_hate_speech_result: String,
+
+    @SerializedName("text")
+    @Expose
+    val text: String
 )

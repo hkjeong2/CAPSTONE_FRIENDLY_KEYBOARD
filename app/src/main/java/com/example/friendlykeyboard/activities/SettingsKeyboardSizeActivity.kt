@@ -1,4 +1,4 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.app.Activity
 import android.content.Context
@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
+import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardSizeBinding
 
 class SettingsKeyboardSizeActivity : AppCompatActivity() {

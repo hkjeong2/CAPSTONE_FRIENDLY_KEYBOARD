@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingVertical="4dp"
     android:paddingHorizontal="2dp"
-    tools:context=".SettingsKeyboardColorActivity">
+    tools:context=".activities.SettingsKeyboardColorActivity">
 
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/candidate_word"

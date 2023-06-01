@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.friendlykeyboard.MyMarkerView
+import com.example.friendlykeyboard.utils.MyMarkerView
 import com.example.friendlykeyboard.R
 import com.example.friendlykeyboard.databinding.FragmentChartBinding
 import com.example.friendlykeyboard.retrofit_util.Account

@@ -1,4 +1,4 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.content.Intent
 import android.os.Bundle

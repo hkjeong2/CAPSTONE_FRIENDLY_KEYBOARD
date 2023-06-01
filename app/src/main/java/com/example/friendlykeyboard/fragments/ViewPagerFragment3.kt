@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.friendlykeyboard.R
-import com.example.friendlykeyboard.databinding.FragmentViewPager2Binding
+import com.example.friendlykeyboard.databinding.FragmentViewPager3Binding
 
-class ViewPagerFragment2 : Fragment() {
-    private var _binding: FragmentViewPager2Binding? = null
+class ViewPagerFragment3 : Fragment() {
+    private var _binding: FragmentViewPager3Binding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentViewPager2Binding.inflate(inflater, container, false)
+        _binding = FragmentViewPager3Binding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

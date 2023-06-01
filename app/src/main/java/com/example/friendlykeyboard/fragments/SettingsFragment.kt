@@ -10,7 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.friendlykeyboard.*
+import com.example.friendlykeyboard.activities.SettingsCandidateButtonColorActivity
+import com.example.friendlykeyboard.activities.SettingsCandidateFontActivity
+import com.example.friendlykeyboard.activities.SettingsCandidateLayoutColorActivity
+import com.example.friendlykeyboard.activities.SettingsKeyboardBackgroundActivity
+import com.example.friendlykeyboard.activities.SettingsKeyboardColorActivity
+import com.example.friendlykeyboard.activities.SettingsKeyboardFontActivity
+import com.example.friendlykeyboard.activities.SettingsKeyboardSizeActivity
 import com.example.friendlykeyboard.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {

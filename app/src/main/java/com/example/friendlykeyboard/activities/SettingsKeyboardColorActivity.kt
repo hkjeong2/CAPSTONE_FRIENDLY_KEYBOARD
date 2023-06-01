@@ -1,4 +1,4 @@
-package com.example.friendlykeyboard
+package com.example.friendlykeyboard.activities
 
 import android.app.Activity
 import android.content.Context
@@ -7,24 +7,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
-import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardBackgroundBinding
+import com.example.friendlykeyboard.R
+import com.example.friendlykeyboard.databinding.ActivitySettingsKeyboardColorBinding
 
-class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingsKeyboardBackgroundBinding
+class SettingsKeyboardColorActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsKeyboardColorBinding
     private lateinit var inputMethodManager: InputMethodManager
     private lateinit var pref: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySettingsKeyboardBackgroundBinding.inflate(layoutInflater)
+        binding = ActivitySettingsKeyboardColorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         with (supportActionBar!!) {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_action_arrow_back)
-            title = "키보드 배경색"
+            title = "키보드 색상"
         }
 
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -32,7 +33,7 @@ class SettingsKeyboardBackgroundActivity : AppCompatActivity() {
         editor = pref.edit()
 
         binding.colorPickerView.addOnColorChangedListener {
-            editor.putInt("keyboardBackground", binding.colorPickerView.selectedColor).apply()
+            editor.putInt("keyboardColor", binding.colorPickerView.selectedColor).apply()
             binding.textInputEditText.requestFocus()
             inputMethodManager.showSoftInput(binding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
         }
