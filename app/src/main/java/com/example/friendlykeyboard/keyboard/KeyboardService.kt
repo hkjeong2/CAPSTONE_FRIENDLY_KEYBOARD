@@ -99,6 +99,10 @@ class KeyBoardService : InputMethodService() {
         override fun checkText(text: String) {
             lateinit var response : String
 
+            // 로그아웃 상태면 검사 x
+            if (!getSharedPreferences("cbAuto", 0).getBoolean("check", false))
+                return
+
             // 채팅중이라면 비속어 test x
             if (!pref.getBoolean("chatting", false)){
                 if (stage >= 5){    // masking 모드일 시만 동기적 수행

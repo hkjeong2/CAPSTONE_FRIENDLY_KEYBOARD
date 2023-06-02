@@ -37,7 +37,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
             field = inputConnection
         }
     var sound = 0
-    var vibrate = 0
+    var vibrate = 1
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
     val firstLineText = listOf<String>("ㅂ","ㅈ","ㄷ","ㄱ","ㅅ","ㅛ","ㅕ","ㅑ","ㅐ","ㅔ")
     val secondLineText = listOf<String>("ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ")
@@ -156,7 +156,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
 
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
         sound = sharedPreferences.getInt("keyboardSound", -1)
-        vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
+        vibrate = 1
 
         numpadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.numpad_line
@@ -418,6 +418,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         buttons.add(actionButton)
                         myOnClickListener = object :View.OnClickListener{
                             override fun onClick(p0: View?) {
+                                playVibrate()
                                 keyboardInterationListener.modechange(0)
                             }
                         }
@@ -428,6 +429,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         buttons.add(actionButton)
                         myOnClickListener = object :View.OnClickListener{
                             override fun onClick(p0: View?) {
+                                playVibrate()
                                 keyboardInterationListener.modechange(2)
                             }
                         }

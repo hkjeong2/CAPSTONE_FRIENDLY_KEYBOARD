@@ -126,7 +126,7 @@ class KeyboardNumpad constructor(var context: Context, var layoutInflater: Layou
     private fun setLayoutComponents(){
         val sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
         val sound = sharedPreferences.getInt("keyboardSound", -1)
-        val vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
+        val vibrate = 1
         for(line in layoutLines.indices){
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]

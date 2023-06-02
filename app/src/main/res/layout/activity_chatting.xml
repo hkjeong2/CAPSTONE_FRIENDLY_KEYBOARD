@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="회개의 방"
+        app:title="바꿔 말해보아요"
         app:titleTextColor="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
