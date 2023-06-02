@@ -207,7 +207,7 @@ class KeyboardEnglish constructor(var context: Context, var layoutInflater: Layo
     }
 
     private fun playVibrate(){
-        if(vibrate > 0){
+        if(sharedPreferences.getBoolean("vibrate", false)){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(70, vibrate))
             }
