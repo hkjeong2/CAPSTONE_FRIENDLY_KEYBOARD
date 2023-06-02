@@ -418,6 +418,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         buttons.add(actionButton)
                         myOnClickListener = object :View.OnClickListener{
                             override fun onClick(p0: View?) {
+                                playVibrate()
                                 keyboardInterationListener.modechange(0)
                             }
                         }
@@ -428,6 +429,7 @@ class KeyboardKorean constructor(var context:Context, var layoutInflater: Layout
                         buttons.add(actionButton)
                         myOnClickListener = object :View.OnClickListener{
                             override fun onClick(p0: View?) {
+                                playVibrate()
                                 keyboardInterationListener.modechange(2)
                             }
                         }
