@@ -43,7 +43,7 @@ class KeyboardChunjiin{
         val layoutLines = ArrayList<LinearLayout>()
         var downView:View? = null
         var sound = 0
-        var vibrate = 0
+        var vibrate = 1
 
         fun newInstance(context:Context, layoutInflater: LayoutInflater, inputConnection: InputConnection, keyboardInterationListener: KeyboardInteractionListener): LinearLayout {
             chunjiinLayout = layoutInflater.inflate(R.layout.keyboard_chunjiin, null) as LinearLayout
