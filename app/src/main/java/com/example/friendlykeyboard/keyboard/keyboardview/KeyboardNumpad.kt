@@ -144,7 +144,7 @@ class KeyboardNumpad constructor(var context: Context, var layoutInflater: Layou
                 buttons.add(actionButton)
 
                 val clickListener = (View.OnClickListener {
-                    if(vibrate > 0){
+                    if(context.getSharedPreferences("setting", Context.MODE_PRIVATE).getBoolean("vibrate", false)){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             vibrator.vibrate(VibrationEffect.createOneShot(70, vibrate))
                         }

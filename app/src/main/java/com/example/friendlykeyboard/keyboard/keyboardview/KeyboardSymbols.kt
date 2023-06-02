@@ -182,14 +182,14 @@ class KeyboardSymbols constructor(var context:Context, var layoutInflater: Layou
 
 
     private fun playVibrate(){
-//        if(vibrate > 0){
+        if(sharedPreferences.getBoolean("vibrate", false)){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(70, vibrate))
             }
             else{
                 vibrator.vibrate(70)
             }
-//        }
+        }
     }
 
     private fun getMyClickListener(actionButton:Button):View.OnClickListener{
